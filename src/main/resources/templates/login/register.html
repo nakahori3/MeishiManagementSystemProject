@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>新規登録</title>
+    <!--<link rel="stylesheet" th:href="@{/css/layout.css}" />
+    <link rel="stylesheet" th:href="@{/css/login/login.css}">-->
+</head>
+<body>
+	<header>
+        <h1>名刺管理システム</h1>
+    </header>
+
+
+<form method="post" th:action="@{/new/confirm}" th:object="${userForm}">
+	<h2 class="form-login-heading">新規ユーザー登録</h2>
+	
+	<div class="center-container">
+    <div class="form-container">
+		
+	<div th:if="${errorMessage}" class="alert-danger">
+        <p th:text="${errorMessage}" class="alert-danger"></p>
+    </div>
+    
+    <small class="alert-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></small>
+	<br>
+	<small class="alert-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></small>
+    
+    
+    <div class="h4">
+		<h3>ユーザー名:
+        <input type="text" class="form-username" id="username" th:field="*{username}">
+        </h3>
+
+    </div>
+  
+    <div class="h4">
+		<h3>パスワード:
+       <!-- <label class="h3" for="password">パスワード:</label>-->
+        <input type="password" class="form-pass" id="password" th:field="*{password}">
+		</h3>
+    </div>
+ 
+ 	 <div class="btn">
+			<a th:href="@{/}" class="btn-success2">ログイン画面へ</a>
+			<input type="submit" class="btn-submit2" value="確認">    	
+	    	
+	  </div>
+ 
+    </div>
+	</div>
+</form>
+	
+<!--<div th:replace="~{common/layout::common_footer}"></div>-->
+</body>
+</html>
