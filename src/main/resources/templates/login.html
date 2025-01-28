@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+    <head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>ログイン画面 </title>
+        <link rel="stylesheet" th:href="@{/css/layout.css}" />
+        <link rel="stylesheet" th:href="@{/css/login.css}" />
+    </head>
+    <body>
+		<header class="header">
+		<h1>名刺管理システム</h1>
+	</header>
+	
+	<form class="form-login" th:method="post" th:action="@{/login}">
+		<h2 class="form-login-heading">ログイン画面</h2>
+		
+		
+		 <!-- ログイン失敗時のエラーメッセージ表示 -->
+	    <div th:if="${param.error}" class="alert-danger" th:text="${ErrorMessage}">            
+	    </div> 
+			
+    
+        <form class="main-form" th:action="@{/login}" th:method="post">
+            <h3> ユーザー名:
+				<input type="text" class="form-username" name="username" required="required" autofocus="autofocus" pattern="^[a-zA-Z0-9]+$"/> </h3>
+            
+            <h3> パスワード: 
+				<input type="password" class="form-pass" name="password" required="required" pattern="^[a-zA-Z0-9]+$"/> </h3>
+           
+           <br>
+           <div class="btn">
+			   <a th:href="@{/new/register}" class="btn-success2">新規登録</a>
+           		<input type="submit" class="btn-submit2" value="ログイン">
+        	
+			
+			</div>
+			
+		</form>
+    </form>
+        
+        
+     <!--上記はサイトの中身-->
+	
+	<div th:replace="~{common/layout::common_footer}"></div>
+</body>
+</html>
