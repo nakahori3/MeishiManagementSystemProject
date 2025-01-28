@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ユーザー登録確認</title>
+    <!--<link rel="stylesheet" th:href="@{/css/layout.css}" />
+    <link rel="stylesheet" th:href="@{/css/login/login.css}" /> -->
+</head>
+<body>
+<header>
+        <h1>名刺管理システム</h1>
+</header>
+
+	<div class="container">
+
+<h2 class="form-login-heading">ユーザー確認</h2>
+
+<form class="main-form" method="post" th:action="@{/new/complete}" th:object="${userForm}">
+  <!-- 確認内容の表示 -->
+  
+    <div class="form-container">
+    <h3>ユーザー名:
+		<input type="text" class="form-username" th:field="*{username}" autofocus="autofocus" pattern="^[0-9A-Za-z]+$" readonly>
+    </h3>
+    <h3>パスワード:
+		<input type="password" class="form-pass" id="password" name="password" autofocus="autofocus" th:value="${userForm.password}" >
+    </h3>
+    <br>
+    <div class="btn">
+		<a th:href="@{/new/register}" class="btn-success2">戻る</a> 
+		<input type="submit" class="btn-submit2" value="登録">
+    　　
+    </div>
+  </div>
+</form>
+	</div>
+
+<!--<div th:replace="~{common/layout::common_footer}"></div>-->
+</body>
+</html>
+
