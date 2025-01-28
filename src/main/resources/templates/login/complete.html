@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ユーザー登録完了</title>
+<!--<link rel="stylesheet" th:href="@{/css/layout.css}" />
+<link rel="stylesheet" th:href="@{/css/login/login.css}" /> -->
+</head>
+<body>
+	<header>
+        <h1>名刺管理システム</h1>
+    </header>
+	<form class="main-form" method="get" th:action="@{/login}" th:object="${userForm}">
+    <!-- 登録完了メッセージ -->
+    <br>
+    <p class="h4">ユーザー登録が完了録しました。</p>
+    <br>
+    
+    <p class="h5">そのままログインされる場合は、下記ユーザー名と</p>
+    <p class="h5">パスワードでログインしてください。</p>
+    
+    <div class="usericon">
+		ユーザー名：<span sec:authentication="name"></span>
+		
+	</div>
+    
+    
+    <div class="btn">
+        <a th:href="@{/}" class="btn-success">ログイン画面へ</a>
+    </div>
+    </form>
+	<!--<div th:replace="~{common/layout::common_footer}"></div>-->
+</body>
+</html>
