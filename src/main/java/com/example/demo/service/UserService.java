@@ -91,6 +91,8 @@ public class UserService {
 		return authRepository.findByUsername(username);
 	}
 	
+
+	
 	//新規ユーザー登録
     public void register(UserForm userForm) {
     	userDetailsManager.createUser(makeUser(userForm.getUsername(),userForm.getPassword()));

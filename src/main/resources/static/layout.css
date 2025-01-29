@@ -1,0 +1,83 @@
+@charset "UTF-8";
+
+
+header{
+	position: sticky;
+	background-color:powderblue ;
+	top: 0;
+}
+
+h1{
+	text-align: center;
+	font-size: 40px;
+	padding: 30px;
+	
+}
+
+.main-form{
+	text-align: center;
+	font-size: 25px;
+	
+}
+
+
+.center-container{
+	text-align: center;
+	font-size: 30px;
+}
+
+.loginuser{
+	text-align: center;
+	padding-right: 10px;
+	font-size: 20px;
+	position: absolute;
+	top: 11%;
+	right: 10px;
+	-webkit-transform: translate(0, -10%);
+	transform: translate(0, -10%); 
+}
+
+.logout-main{
+	text-align: center;
+	padding-right: 10px;
+	font-size: 30px;
+	position: absolute;
+	top: 30%;
+	right: 10px;
+	-webkit-transform: translate(0, -10%);
+	transform: translate(0, -10%); 
+}
+
+.logout-position{
+	position: absolute;
+	right: 10px;
+	top: 65px;
+}
+
+.logout-button{
+	font-size: 100%;
+	font-weight: bold;
+	margin-top: 20px;
+    width: 10em;
+    max-width: 100%;
+    height: 2em;
+    max-height: 100%;
+    margin-top: 5rem;
+		
+}
+
+
+
+footer{
+	position: sticky;
+	background-color: powderblue;
+    bottom: 0;
+    
+}
+
+p {
+	text-align: center;
+	font-size: 15px;
+	
+		
+}

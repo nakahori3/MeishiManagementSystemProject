@@ -78,9 +78,14 @@ public class LoginController {
 	
 	// ユーザー情報をデータベースに登録し、登録完了画面に遷移する
     @PostMapping("/new/complete")
-    public String complete(@ModelAttribute("userForm") UserForm userForm) {
-        // データベースにユーザー情報を登録
-        userService.register(userForm);
+    public String complete(@ModelAttribute("userForm") UserForm userForm,
+    						Model model) {
+    	
+    	userService.register(userForm);
+        model.addAttribute("username", userForm.getUsername());
+    	
+		/* // データベースにユーザー情報を登録
+		userService.register(userForm);*/
         // 登録が成功したらログイン画面にリダイレクト
         return "/login/complete";
     }
