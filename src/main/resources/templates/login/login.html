@@ -5,7 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>ログイン画面 </title>
         <link rel="stylesheet" th:href="@{/css/layout.css}" />
-        <link rel="stylesheet" th:href="@{/css/login.css}" />
+        <link rel="stylesheet" th:href="@{/css/login/login.css}" />
     </head>
     <body>
 		<header class="header">
@@ -13,7 +13,9 @@
 	</header>
 	
 	<form class="form-login" th:method="post" th:action="@{/login}">
-		<h2 class="form-login-heading">ログイン画面</h2>
+		<h2 class="form-login-heading">
+			<input src="icon_use/login/loginmark.png">
+			ログイン画面</h2>
 		
 		
 		 <!-- ログイン失敗時のエラーメッセージ表示 -->
@@ -22,11 +24,15 @@
 			
     
         <form class="main-form" th:action="@{/login}" th:method="post">
-            <h3> ユーザー名:<br>
-				<input type="text" class="form-username" name="username" required="required" autofocus="autofocus" pattern="^[a-zA-Z0-9]+$"/> </h3>
+            <h3> 
+				<input src="icon_use/login/usermark.png">
+				ユーザー名:</h3>
+				<input type="text" class="form-username" name="username" required="required" autofocus="autofocus" pattern="^[a-zA-Z0-9]+$"/> 
             
-            <h3> パスワード: <br>
-				<input type="password" class="form-pass" name="password" required="required" pattern="^[a-zA-Z0-9]+$"/> </h3>
+            <h3> 
+				<input src="icon_use/login/passkeymark.png">
+				パスワード: </h3>
+				<input type="password" class="form-pass" name="password" required="required" pattern="^[a-zA-Z0-9]+$"/> 
            
            <br>
            <div class="btn">
@@ -35,7 +41,7 @@
         	
 			
 			</div>
-			
+			<br>
 		</form>
     </form>
         

@@ -23,13 +23,14 @@
 
 h3{
 	text-align: center;
-	font-size: 28px;
+	font-size: 25px;
+	margin-bottom: -5px;
+	margin-right: 190px;
 	
 }
 
 .h3{
-	font-size: 28px;
-	padding-right: 400px;
+	font-size: 25px;
 	margin: 0;
 	font-weight: bold;
 }
@@ -42,12 +43,14 @@ h3{
 
 
 .form-username{
-	font-size: 25px
+	font-size: 25px;
+	margin: 0;
 	
 }
 
 .form-pass{
 	font-size: 25px;
+	margin: 0;
 }
 
 .btn{
