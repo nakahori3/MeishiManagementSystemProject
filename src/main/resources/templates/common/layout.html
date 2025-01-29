@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+      <!--xmlns:sec="http://www.thymeleaf.org/extras/spring-security-->
+<head>
+<meta charset="UTF-8">
+
+<title></title>
+<link rel="stylesheet" th:href="@{/css/layout.css}">
+</head>
+<body>
+<!--共通ヘッダー-->
+<div th:fragment="common_header">
+<header>
+        <h1>名刺管理システム</h1>
+
+		<!--    ログインユーザー名-->
+		<p class="loginuser" sec:authorize="isAuthenticated()">
+			<br>
+			<br>
+			<!--ログインユーザー：<span sec:authentication="name"></span>-->
+		</p>
+</header>
+<!-- ログアウトボタンの表示 -->
+  <form method="post" th:action="@{/logout}" class="logout-position">
+        <button type="submit" class="logout-button">ログアウト</button>
+  </form>
+
+</div>
+
+	
+<!-- 共通フッター -->
+<footer th:fragment="common_footer">
+	<div class="footer">
+	  <p>Copyright (C) Network Soft Associates, Inc.</p>
+	</div>
+</footer>
+</body>
+</html>

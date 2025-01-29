@@ -3,13 +3,13 @@
 
 header{
 	position: sticky;
-	background-color:powderblue ;
+	background-color:rgb(223, 233, 154);
 	top: 0;
 }
 
 h1{
-	text-align: center;
-	font-size: 40px;
+	text-align: left;
+	font-size: 35px;
 	padding: 30px;
 	
 }
@@ -70,14 +70,14 @@ h1{
 
 footer{
 	position: sticky;
-	background-color: powderblue;
+	background-color:rgb(223, 233, 154);
     bottom: 0;
     
 }
 
 p {
 	text-align: center;
-	font-size: 15px;
+	font-size: 12px;
 	
 		
 }
