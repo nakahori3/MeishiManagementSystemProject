@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>トップページ</title>
+<link rel="stylesheet" th:href="@{/css/layout.css}" />
+<!--<link rel="stylesheet" th:href="@{/css/menu.css}">-->
+</head>
+<body>
+	<div th:replace="~{common/layout::common_header}"></div>
+    <div th:replace="~{common/menu::navigation}"></div>
+ 
+ <form th:action="@{/adminChange}" method="get">
+<input type="submit" sec:authorize="hasRole('ADMIN')" class="menu-button" value="ユーザー情報確認">
+</form>
+<div th:replace="~{common/layout::common_footer}"></div>
+</body>
+
+</html>
