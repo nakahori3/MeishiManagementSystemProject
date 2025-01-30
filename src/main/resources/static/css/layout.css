@@ -5,6 +5,7 @@ header{
 	position: sticky;
 	background-color:rgb(223, 233, 154);
 	top: 0;
+	margin-bottom: 70px;
 }
 
 h1{
@@ -69,6 +70,7 @@ h1{
 
 
 footer{
+	margin-top: 40px;
 	position: sticky;
 	background-color:rgb(223, 233, 154);
     bottom: 0;

@@ -12,7 +12,7 @@
     </header>
 
 
-<form method="post" th:action="@{/new/confirm}" th:object="${userForm}">
+<form method="post" th:action="@{/new/confirm}" th:object="${userForm}" class="form-register">
 	<h2 class="form-login-heading">新規ユーザー登録</h2>
 	
 	<div class="center-container">
@@ -28,17 +28,20 @@
     
     
     <div class="h4">
-		<h3>ユーザー名:
+		<h3>
+		<img class="usermark" th:src="@{/img/usermark.png}" alt="ユーザー画像">
+		ユーザー名:</h3>
         <input type="text" class="form-username" id="username" th:field="*{username}">
-        </h3>
+        
 
     </div>
   
     <div class="h4">
-		<h3>パスワード:
-       <!-- <label class="h3" for="password">パスワード:</label>-->
+		<h3>
+		<img class="passkeymark" th:src="@{/img/passkeymark.png}" alt="パスワード画像">
+		パスワード:</h3>
         <input type="password" class="form-pass" id="password" th:field="*{password}">
-		</h3>
+		
     </div>
  
  	 <div class="btn">
