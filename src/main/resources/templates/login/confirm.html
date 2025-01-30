@@ -12,20 +12,25 @@
         <h1>名刺管理システム</h1>
 </header>
 
-	<div class="container">
+<form class="form-register2" method="post" th:action="@{/new/complete}" th:object="${userForm}">
+<h2 class="form-login-heading">
+	<img class="newuser"  th:src="@{/img/newuser.png}" alt="ユーザー登録画像">
+	&ensp;新規ユーザー登録（確認）</h2>
 
-<h2 class="form-login-heading">新規ユーザー登録（確認）</h2>
-
-<form class="main-form" method="post" th:action="@{/new/complete}" th:object="${userForm}">
+<!--<form class="main-form" method="post" th:action="@{/new/complete}" th:object="${userForm}">-->
   <!-- 確認内容の表示 -->
   
-    <div class="form-container">
-    <h3>ユーザー名:
+    <div class="form-container2">
+    <h3>
+		<img class="usermark" th:src="@{/img/usermark.png}" alt="ユーザー画像">
+		ユーザー名:</h3>
 		<input type="text" class="form-username" th:field="*{username}" autofocus="autofocus" pattern="^[0-9A-Za-z]+$" readonly>
-    </h3>
-    <h3>パスワード:
+    
+    <h3>
+		<img class="passkeymark" th:src="@{/img/passkeymark.png}" alt="パスワード画像">
+		パスワード:</h3>
 		<input type="password" class="form-pass" id="password" name="password" autofocus="autofocus" th:value="${userForm.password}" >
-    </h3>
+    
     <br>
     <div class="btn">
 		<a th:href="@{/new/register}" class="btn-success2">戻る</a> 
@@ -33,8 +38,9 @@
     　　
     </div>
   </div>
+
 </form>
-	</div>
+
 
 <div th:replace="~{common/layout::common_footer}"></div>
 </body>
