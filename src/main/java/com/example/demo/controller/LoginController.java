@@ -36,7 +36,7 @@ public class LoginController {
     @GetMapping("/success")
     public String loginSuccess(Model model) {
         // トップ画面に遷移
-        return "/top";
+        return "redirect:/top";
     }
     
 	@GetMapping("/logout")
