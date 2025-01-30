@@ -8,11 +8,11 @@
 </head>
 <body>
 	<div th:replace="~{common/layout::common_header}"></div>
-    <div th:replace="~{common/menu::navigation}"></div>
+   <!-- <div th:replace="~{common/menu::navigation}"></div>-->
  
- <form th:action="@{/adminChange}" method="get">
+<!-- <form th:action="@{/adminChange}" method="get">
 <input type="submit" sec:authorize="hasRole('ADMIN')" class="menu-button" value="ユーザー情報確認">
-</form>
+</form>-->
 <div th:replace="~{common/layout::common_footer}"></div>
 </body>
 

@@ -15,7 +15,7 @@
 	<form class="form-login" th:method="post" th:action="@{/login}">
 		<div>
 		<h2 class="form-login-heading">
-			<img th:src="@{/img/loginmark.png}" alt="ログイン画像">
+			<img class="loginmark"  th:src="@{/img/loginmark.png}" alt="ログイン画像">
 			
 
 			ログイン画面</h2>
@@ -28,12 +28,12 @@
     
         <form class="main-form" th:action="@{/login}" th:method="post">
             <h3> 
-				<img th:src="@{/img/usermark.png}" alt="ユーザー画像">
+				<img class="usermark" th:src="@{/img/usermark.png}" alt="ユーザー画像">
 				ユーザー名:</h3>
 				<input type="text" class="form-username" name="username" required="required" autofocus="autofocus" pattern="^[a-zA-Z0-9]+$"/> 
             
             <h3> 
-				<img th:src="@{/img/passkeymark.png}" alt="パスワード画像">
+				<img class="passkeymark" th:src="@{/img/passkeymark.png}" alt="パスワード画像">
 				パスワード: </h3>
 				<input type="password" class="form-pass" name="password" required="required" pattern="^[a-zA-Z0-9]+$"/> 
            
@@ -53,4 +53,4 @@
 	
 	<div th:replace="~{common/layout::common_footer}"></div>
 </body>
-</html>-->
+</html>

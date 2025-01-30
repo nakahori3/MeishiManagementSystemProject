@@ -28,7 +28,7 @@ public class LoginController {
 	//認証失敗時、ログイン画面に遷移し、エラーメッセージを表示する
 	@GetMapping(value="/login", params = "error")
 	public String loginError(Model model) {
-		model.addAttribute("ErrorMessage", "ユーザー名もしくはパスワードが間違っています。");
+		model.addAttribute("ErrorMessage", "※ユーザー名もしくはパスワードが間違っています。");
 		return "/login/login";
 	}
 	
