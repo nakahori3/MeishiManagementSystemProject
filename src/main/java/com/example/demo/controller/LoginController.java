@@ -21,7 +21,7 @@ public class LoginController {
 	
 	//ログイン画面に遷移する
 	@GetMapping("/")
-	public String loginForm() {
+	public String loginForm(Model model) {
 		return "/login/login";
 	}
 	
@@ -36,7 +36,7 @@ public class LoginController {
     @GetMapping("/success")
     public String loginSuccess(Model model) {
         // トップ画面に遷移
-        return "redirect:/top";
+        return "/top";
     }
     
 	@GetMapping("/logout")

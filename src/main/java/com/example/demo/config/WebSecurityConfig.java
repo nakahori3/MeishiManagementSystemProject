@@ -1,6 +1,69 @@
 package com.example.demo.config;
 
+
 import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.security.provisioning.UserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+@Configuration
+@EnableWebSecurity
+public class WebSecurityConfig {
+	
+	@Autowired
+	private DataSource dataSource;
+
+	@Bean
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests(authorize -> authorize
+            .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+            .requestMatchers(new AntPathRequestMatcher("/img/**")).permitAll()
+            .requestMatchers(new MvcRequestMatcher(null,"/new/**")).permitAll() 
+            .anyRequest().authenticated()
+        ).formLogin(login -> login
+            .loginProcessingUrl("/login")
+            .loginPage("/")
+            .defaultSuccessUrl("/success", true)
+            .failureUrl("/login?error")
+            .permitAll()
+        ).logout(logout -> logout
+            .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+            .logoutSuccessUrl("/afterlogout")
+            .deleteCookies("JSESSIONID")
+            .invalidateHttpSession(true)
+            .permitAll()
+        );
+
+        return http.build();
+    }
+    
+ // UserDetailsManagerの設定
+ 	@Bean
+ 	UserDetailsManager users() {
+ 		JdbcUserDetailsManager users = new JdbcUserDetailsManager(this.dataSource);
+ 		return users;
+ 	}
+
+ 	// PasswordEncoderの設定
+ 	@Bean
+ 	PasswordEncoder passwordEncoder() {
+ 		return new BCryptPasswordEncoder();
+ 	}
+}
+
+
+/*import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -66,4 +129,4 @@ public class WebSecurityConfig {
 	PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-}
+}*/

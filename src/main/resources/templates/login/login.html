@@ -15,26 +15,25 @@
 	<form class="form-login" th:method="post" th:action="@{/login}">
 		<div>
 		<h2 class="form-login-heading">
-			<img th:src="@{/loginmark.png}" alt="Icon 1">
+			<img th:src="@{/img/loginmark.png}" alt="ログイン画像">
+			
 
 			ログイン画面</h2>
 		</div>
 		
-		 <!-- ログイン失敗時のエラーメッセージ表示 -->
+		 <!--ログイン失敗時のエラーメッセージ表示 -->
 	    <div th:if="${param.error}" class="alert-danger" th:text="${ErrorMessage}">            
 	    </div> 
 			
     
         <form class="main-form" th:action="@{/login}" th:method="post">
             <h3> 
-				<img src="/img/usermark.png" alt="Icon 2">
-				<!--<img src="/img/usermark.png" alt="ユーザーの画像">-->
+				<img th:src="@{/img/usermark.png}" alt="ユーザー画像">
 				ユーザー名:</h3>
 				<input type="text" class="form-username" name="username" required="required" autofocus="autofocus" pattern="^[a-zA-Z0-9]+$"/> 
             
             <h3> 
-				<img src="/img/passkeymark.png" alt="Icon 3">
-				<!--<img src="/img/passkeymark.png" alt="パスワードの画像">-->
+				<img th:src="@{/img/passkeymark.png}" alt="パスワード画像">
 				パスワード: </h3>
 				<input type="password" class="form-pass" name="password" required="required" pattern="^[a-zA-Z0-9]+$"/> 
            
@@ -54,4 +53,4 @@
 	
 	<div th:replace="~{common/layout::common_footer}"></div>
 </body>
-</html>
+</html>-->
