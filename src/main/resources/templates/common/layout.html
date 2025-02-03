@@ -15,15 +15,28 @@
 
 		<!--    ログインユーザー名-->
 		<p class="loginuser" sec:authorize="isAuthenticated()">
-			<br>
-			<br>
-			<!--ログインユーザー：<span sec:authentication="name"></span>-->
+			いつもお疲れ様です。<span sec:authentication="name"></span>さん。
 		</p>
+		
+		<!--ヘッダー部分のメニューボタン-->
+		<form method="Get" th:action="@{/inputMeishi}">
+			<img class="registericon" th:src="@{/img/newsuser.png}" alt="名刺情報登録画像">
+        	<input type="submit" value="名刺情報登録" class="menu-button">
+  		</form>
+  		<form method="Get" th:action="@{/searchMeishi}">
+			 <img class="searchicon" th:src="@{/img/searchicon.png}" alt="名刺情報検索画像">
+        	<input type="submit" value="名刺情報検索" class="menu-button">
+  		</form>
+  		
+  		
+  		<!-- ログアウトボタンの表示 -->
+  		<form method="post" th:action="@{/logout}" class="logout-position">
+			 <img class="logouticon" th:src="@{/img/logouticon.png}" alt="ログアウト画像">
+        	<button type="submit" class="logout-button">ログアウト</button>
+  		</form>
+		
 </header>
-<!-- ログアウトボタンの表示 -->
-  <form method="post" th:action="@{/logout}" class="logout-position">
-        <button type="submit" class="logout-button">ログアウト</button>
-  </form>
+
 
 </div>
 

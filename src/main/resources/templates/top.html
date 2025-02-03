@@ -8,11 +8,23 @@
 </head>
 <body>
 	<div th:replace="~{common/layout::common_header}"></div>
-   <!-- <div th:replace="~{common/menu::navigation}"></div>-->
- 
+	
 <!-- <form th:action="@{/adminChange}" method="get">
-<input type="submit" sec:authorize="hasRole('ADMIN')" class="menu-button" value="ユーザー情報確認">
+<input type="submit" sec:authorize="hasRole('ADMIN')" class="menu-button" value="ユーザー管理権限">
 </form>-->
+
+	<!--ヘッダー部分のメニューボタン-->
+	<form method="Get" th:action="@{/inputMeishi}">
+        <input type="submit" value="名刺情報登録" class="menu-gazou">
+        <img class="registericon" th:src="@{/img/newsuser.png}" alt="名刺情報登録画像">
+        <p class="menu-description">新規の名刺情報の登録はこちら</p>
+    </form>
+  	<form method="Get" th:action="@{/searchMeishi}">
+        <input type="submit" value="名刺情報検索" class="menu-gazou">
+        <img class="searchicon" th:src="@{/img/searchicon.png}" alt="名刺情報検索画像">
+         <p class="menu-description">検索・情報の修正＆削除はこちら</p>
+  	</form>
+
 <div th:replace="~{common/layout::common_footer}"></div>
 </body>
 
