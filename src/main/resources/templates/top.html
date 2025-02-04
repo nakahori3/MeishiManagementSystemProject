@@ -12,18 +12,19 @@
 <!-- <form th:action="@{/adminChange}" method="get">
 <input type="submit" sec:authorize="hasRole('ADMIN')" class="menu-button" value="ユーザー管理権限">
 </form>-->
-
+	<div class="inline2">
 	<!--ヘッダー部分のメニューボタン-->
-	<form method="Get" th:action="@{/inputMeishi}">
-        <input type="submit" value="名刺情報登録" class="menu-gazou">
-        <img class="registericon" th:src="@{/img/newsuser.png}" alt="名刺情報登録画像">
+	<form method="Get" class="inputMeishi2" th:action="@{/inputMeishi}">
+		<p class="menu-title">名刺情報登録</p>
+        <input type="image" th:src="@{/img/newuser.png}" alt="名刺情報登録画像"  class="menu-gazou">
         <p class="menu-description">新規の名刺情報の登録はこちら</p>
     </form>
-  	<form method="Get" th:action="@{/searchMeishi}">
-        <input type="submit" value="名刺情報検索" class="menu-gazou">
-        <img class="searchicon" th:src="@{/img/searchicon.png}" alt="名刺情報検索画像">
+  	<form method="Get" class="searchMeishi2" th:action="@{/searchMeishi}">
+		 <p class="menu-title">名刺情報検索</p>
+        <input type="image"  th:src="@{/img/searchicon.png}" alt="名刺情報検索画像" class="menu-gazou">
          <p class="menu-description">検索・情報の修正＆削除はこちら</p>
   	</form>
+  	</div>
 
 <div th:replace="~{common/layout::common_footer}"></div>
 </body>

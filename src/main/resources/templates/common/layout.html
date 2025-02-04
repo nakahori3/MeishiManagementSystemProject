@@ -18,15 +18,21 @@
 			いつもお疲れ様です。<span sec:authentication="name"></span>さん。
 		</p>
 		
+		<div class="inline">
 		<!--ヘッダー部分のメニューボタン-->
-		<form method="Get" th:action="@{/inputMeishi}">
-			<img class="registericon" th:src="@{/img/newsuser.png}" alt="名刺情報登録画像">
-        	<input type="submit" value="名刺情報登録" class="menu-button">
+		<form method="Get" class="inputMeishi" th:action="@{/inputMeishi}">
+			<img class="registericon" th:src="@{/img/newuser.png}" alt="名刺情報登録画像">
+        	<input type="submit" value="名刺情報登録" class="menu-button1">
   		</form>
-  		<form method="Get" th:action="@{/searchMeishi}">
+  		<form method="Get" class="searchMeishi" th:action="@{/searchMeishi}">
 			 <img class="searchicon" th:src="@{/img/searchicon.png}" alt="名刺情報検索画像">
-        	<input type="submit" value="名刺情報検索" class="menu-button">
+        	<input type="submit" value="名刺情報検索" class="menu-button2">
   		</form>
+  		
+  		<form th:action="@{/adminChange}" method="get">
+			<img class="adminicon" sec:authorize="hasRole('ADMIN')" th:src="@{/img/adminicon.png}" alt="管理権限画像">
+			<input type="submit" sec:authorize="hasRole('ADMIN')" class="menu-button3" value="ユーザー管理権限">
+		</form>
   		
   		
   		<!-- ログアウトボタンの表示 -->
@@ -34,6 +40,7 @@
 			 <img class="logouticon" th:src="@{/img/logouticon.png}" alt="ログアウト画像">
         	<button type="submit" class="logout-button">ログアウト</button>
   		</form>
+  		</div>
 		
 </header>
 
