@@ -39,15 +39,22 @@ public class LoginController {
         return "/top";
     }
     
-	@GetMapping("/logout")
-	public String logout() {
-		return "/logout";
-	}
-	
-	@GetMapping("/afterlogout")
-	public String afterlogout() {
-		return "/login/logout";
-	}
+ // ログアウト確認画面に遷移する
+    @GetMapping("/logout/confirm")
+    public String logoutConfirm() {
+        return "/login/logoutConfirm";
+    }
+    
+ // ログアウト処理を行う
+    @PostMapping("/logout")
+    public String logout() {
+        return "redirect:/perform_logout";
+    }
+
+    @GetMapping("/afterlogout")
+    public String afterlogout() {
+        return "/login/logout";
+    }
 	
 	
 	

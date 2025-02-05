@@ -36,7 +36,7 @@
   		
   		
   		<!-- ログアウトボタンの表示 -->
-  		<form method="post" th:action="@{/logout}" class="logout-position">
+  		<form method="get" th:action="@{/logout/confirm}" class="logout-position">
 			 <img class="logouticon" th:src="@{/img/logouticon.png}" alt="ログアウト画像">
         	<button type="submit" class="logout-button">ログアウト</button>
   		</form>

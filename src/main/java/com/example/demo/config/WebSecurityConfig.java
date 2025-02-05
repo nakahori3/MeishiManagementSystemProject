@@ -30,6 +30,7 @@ public class WebSecurityConfig {
             .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
             .requestMatchers(new AntPathRequestMatcher("/img/**")).permitAll()
             .requestMatchers(new MvcRequestMatcher(null,"/new/**")).permitAll() 
+            .requestMatchers(new AntPathRequestMatcher("/logout/confirm")).permitAll()
             .anyRequest().authenticated()
         ).formLogin(login -> login
             .loginProcessingUrl("/login")
@@ -38,7 +39,7 @@ public class WebSecurityConfig {
             .failureUrl("/login?error")
             .permitAll()
         ).logout(logout -> logout
-            .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+        	.logoutRequestMatcher(new AntPathRequestMatcher("/perform_logout"))
             .logoutSuccessUrl("/afterlogout")
             .deleteCookies("JSESSIONID")
             .invalidateHttpSession(true)
