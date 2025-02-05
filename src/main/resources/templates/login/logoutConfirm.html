@@ -1,4 +1,45 @@
 <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ログアウト確認画面</title>
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
+    <link rel="stylesheet" th:href="@{/css/login/login.css}">
+    <link rel="stylesheet" th:href="@{/css/login/logout.css}">
+</head>
+<body>
+    
+    <div th:replace="~{common/layout::common_header}"></div>
+    
+    <div class="confirm">
+        <img class="attentionicon"  th:src="@{/img/attentionicon.png}" alt="注意マーク">
+        <h2 class="logout-confirm">確認    
+            <br>ログアウトします。よろしいですか？
+        </h2>
+        <p class="descriotion">※ログアウトしますと、再度ログインが必要になります</p>
+        
+        <div class="btn-control">
+            <div class="return-top">
+                <img class="toppage"  th:src="@{/img/toppage.png}" alt="トップページ画像">
+                <a th:href="@{/return_top}" class="btn-top">トップページへ</a>
+            </div>
+            
+            <form method="post" th:action="@{/perform_logout}" class="go-logout">
+                <img class="logoutmark"  th:src="@{/img/logouticon.png}" alt="ログアウト画像">
+                <button type="submit" class="btn-logout">ログアウトする</button>
+            </form>
+        </div>
+    </div>
+    
+    <div th:replace="~{common/layout::common_footer}"></div>
+
+</body>
+</html>
+
+
+
+
+<!--<!DOCTYPE html>
 <html xmlns="http:www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
@@ -38,4 +79,4 @@
 	<div th:replace="~{common/layout::common_footer}"></div>
 
 </body>
-</html>
+</html>-->

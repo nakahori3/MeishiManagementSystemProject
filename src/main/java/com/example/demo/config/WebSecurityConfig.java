@@ -16,6 +16,7 @@ import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 @Configuration
 @EnableWebSecurity
@@ -25,11 +26,11 @@ public class WebSecurityConfig {
 	private DataSource dataSource;
 
 	@Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception {
         http.authorizeHttpRequests(authorize -> authorize
             .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
             .requestMatchers(new AntPathRequestMatcher("/img/**")).permitAll()
-            .requestMatchers(new MvcRequestMatcher(null,"/new/**")).permitAll() 
+            .requestMatchers(new MvcRequestMatcher(introspector,"/new/**")).permitAll() 
             .requestMatchers(new AntPathRequestMatcher("/logout/confirm")).permitAll()
             .anyRequest().authenticated()
         ).formLogin(login -> login
@@ -44,7 +45,7 @@ public class WebSecurityConfig {
             .deleteCookies("JSESSIONID")
             .invalidateHttpSession(true)
             .permitAll()
-        );
+        	).csrf().disable(); // CSRFを無効化してテスト
 
         return http.build();
     }
@@ -61,8 +62,9 @@ public class WebSecurityConfig {
  	PasswordEncoder passwordEncoder() {
  		return new BCryptPasswordEncoder();
  	}
-}
 
+
+}
 
 /*import javax.sql.DataSource;
 

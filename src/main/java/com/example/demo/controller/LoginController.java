@@ -39,23 +39,29 @@ public class LoginController {
         return "/top";
     }
     
+ // トップページへの遷移
+    @GetMapping("/return_top")
+    public String returnTop() {
+        return "/top";
+    }
+    
  // ログアウト確認画面に遷移する
     @GetMapping("/logout/confirm")
     public String logoutConfirm() {
         return "/login/logoutConfirm";
     }
+	
     
  // ログアウト処理を行う
-    @PostMapping("/logout")
+    @PostMapping("//perform_logout")
     public String logout() {
-        return "redirect:/perform_logout";
+        return "redirect:/afterlogout";
     }
-
-    @GetMapping("/afterlogout")
-    public String afterlogout() {
-        return "/login/logout";
-    }
-	
+    
+	@GetMapping("/afterlogout")
+	public String afterlogout() {
+	    return "/login/logout";
+	}
 	
 	
 	//新規登録画面に遷移する

@@ -38,9 +38,6 @@
 	
 }
 
-/*.go-logout {
-	margin-left: 300px;
-}*/
 
 .toppage {
 	height: 50px;
@@ -63,7 +60,7 @@
 	height: 50px;
 	width: 50px;
 	position: absolute;
-	margin-left: 200px;
+	margin-left: -150px;
 }
 
 .btn-logout{
@@ -74,13 +71,38 @@
 	height: 37px;
 	width: 170px;
 	position: absolute;
-	margin-right: -420px;
+	margin-left: -100px;
 	margin-top: 12px;
+}
+
+
+.logoutwaku {
+	margin: auto;
+	border: 2px solid black;
+	height: 175%;
+	width: 600px;
+}
+
+
+.completeicon {
+	height: 100px;
+	width: 100px;
+	position: absolute;
+	margin-top: -75px;
+	margin-left: -105px;
+}
+
+.loginmark2 {
+	height: 70px;
+	width: 70px;
+	position: absolute;
+	margin-right: 275px;
 }
 
 .form-logout{
 	position: relative;
 	font-size: 25px;
+	margin-top: 50px;
 	margin-bottom: 55px;
 	display: flex;
     justify-content: center;
@@ -88,5 +110,13 @@
 	
 }
 
+.login-button {
+	background-color: white;
+	border: 1px solid black;
+	text-align: center;
+	font-size: 18px;
+	height: 30px;
+	width: 200px;
+}
 
 
