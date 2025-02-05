@@ -97,6 +97,8 @@ public class UserService {
     public void register(UserForm userForm) {
     	userDetailsManager.createUser(makeUser(userForm.getUsername(),userForm.getPassword()));
 	}
+
+
     
     
 
