@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>檀家入力ページ</title>
+<link rel="stylesheet" th:href="@{/css/layout.css}" />
+<link rel="stylesheet" th:href="@{/css/meishi/registermeishi.css}">
+<link rel="stylesheet" th:href="@{/css/login/login.css}">
+</head>
+<body>
+  <div th:replace="~{common/layout::common_header}"></div>
+
+<!--<form th:action="@{/adminChange}" method="get">
+<input type="submit" sec:authorize="hasRole('ADMIN')" class="menu-button" value="ユーザー情報確認">
+</form>-->
+
+<div class="content">	
+<!--檀家登録画面メイン部分の表示とフォーム送信先-->
+  <form method="post" th:action="@{/confirmDanka}" th:object="${meishiForm}">
+	<div class="error">
+	<div class="errormsg">
+	  <div th:errors="*{companyname}"><br></div>
+	  <div th:errors="*{companykananame}"><br></div>
+	  <div th:errors="*{personalname}"><br></div>
+	  <div th:errors="*{personalkananame}"><br></div>
+	  <div th:errors="*{address}"><br></div>
+	  <div th:errors="*{comlanytel}"><br></div>  
+	  <div th:errors="*{email}"><br></div>
+	  <div th:errors="*{photoomote}"><br></div>
+	</div>
+	</div>
+	
+	<div class="all-inputmeishi2">
+	<div class="input-form">
+	<div class="input-meishiform">
+		
+	   <!--姓名フォーム -->
+	  <div>
+		<label for="companyname">企業名 ※必須</label>
+		<br>
+		<input type="text" id="companyname" name="companyname" th:field="*{companyname}" pattern="[^ 　]+">
+      </div>
+	  <div>
+		<label for="companykananame">企業名（カナ） ※必須</label>
+		<br>
+		<input type="text" id="companykananame" name="companykananame" th:field="*{companykananame}" pattern="[\u30A1-\u30F6]*" placeholder="全角カナのみ"  required>
+	  </div>
+	  
+	  <div>
+		<label for="personalname">担当者名 ※必須</label>
+		<br>
+		<input type="text" id="personalname" name="personalname" th:field="*{personalname}" pattern="[^ 　]+" required>
+      </div>
+	  <div>
+		<label for="personalkananame">企業名（カナ） ※必須</label>
+		<br>
+		<input type="text" id="personalkananame" name="personalkananame" th:field="*{personalkananame}" pattern="[\u30A1-\u30F6]*" placeholder="全角カナのみ" required >
+	  </div>
+	  
+	   <div>
+		<label for="belong">所属</label>
+		<br>
+		<input type="text" id="belong" name="belong" th:field="*{belong}" pattern="[^ 　]+">
+      </div>
+       <div>
+		<label for="position">役職</label>
+		<br>
+		<input type="text" id="position" name="position" th:field="*{position}" pattern="[^ 　]+">
+      </div>
+	  
+	  <div>
+		<label for="address">所在地 ※必須</label>
+		<br>
+		<input type="text" id="address" name="address" th:field="*{address}" pattern="[^ 　]+" required>
+      </div>
+      <div>
+		<label for="companytel">会社電話番号 ※必須</label>
+		<br>
+		<input type="text" id="companytel" name="companytel" th:field="*{companytel}" pattern="^0\d{9,10}$" placeholder="半角数字のみ" required >
+	  </div>
+	  <div>
+		<label for="mobiletel">携帯電話番号</label>
+		<br>
+		<input type="text" id="mobiletel" name="mobiletel" th:field="*{mobiletel}" pattern="^0\d{9,10}$" placeholder="半角数字のみ">
+	  </div>
+	   <div>
+		<label for="email">Eメールアドレス ※必須</label>
+		<br>
+		<input type="text" id="email" name="email" th:field="*{email}" pattern="^[a-zA-Z0-9-_\.]+@[a-zA-Z0-9-_\.]+$" placeholder="default@example.com" required>
+	  </div>
+	   <div>
+		<label for="photoomote">名刺写真（表面） ※必須</label>
+		<br>
+		<input type="file" id="photoomote" name="mobiletel" th:field="*{photoomote}" required>
+	  </div>
+	   <div>
+		<label for="photoura">名刺写真（裏面）</label>
+		<br>
+		<input type="file" id="photofile" name="photoura" th:field="*{photoura}" >
+	  </div>
+	</div>
+	
+
+	</div>
+	</div>
+  
+   <!--入力内容確認画面に遷移する -->
+  <div class="btn">
+  <div class="button-container">
+	   <a th:href="@{/return_top}" class="btn-return2">戻る</a>
+	    <input type="submit" class="btn-submit2" value="確認">
+  </div>
+  </div>
+      
+  </form>
+  
+</div>
+
+<div th:replace="~{common/layout::common_footer}"></div>
+</body>
+</html>
