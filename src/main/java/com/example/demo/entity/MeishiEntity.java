@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,9 +31,11 @@ public class MeishiEntity {
 	@Column(name="companykananame")
 	private String companykananame;
 	
+	@Lob
 	@Column(name="personalname")
 	private byte[] personalname; //bytea型
 	
+	@Lob
 	@Column(name="personalkananame")
 	private byte[] personalkananame;  //bytea型
 	
@@ -48,15 +51,19 @@ public class MeishiEntity {
 	@Column(name="companytel")
 	private String companytel;
 	
+	@Lob
 	@Column(name="mobiletel")
 	private byte[] mobiletel;  //bytea型
 	
+	@Lob
 	@Column(name="email")
 	private byte[] email;  //bytea型
 	
+	@Lob
 	@Column(name="photoomote")
 	private byte[] photoomote;  //bytea型
 	
+	@Lob
 	@Column(name="photoura")
 	private byte[] photoura;  //bytea型
 	
