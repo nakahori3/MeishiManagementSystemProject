@@ -48,11 +48,11 @@ public class MeishiController {
 			return new MeishiForm();
 		}
 		
-		//トップ画面へ遷移
+		/*//トップ画面へ遷移
 		@GetMapping("/return_top")
 		public String top() {
 			return "/top";
-		}
+		}*/
 		
 		// 名刺情報登録画面へ遷移
 		@GetMapping("/inputMeishi")
