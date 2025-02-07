@@ -57,55 +57,44 @@ public class MeishiService {
 	//リポジトリのsaveMeishiを呼び出してデータを保存
 	
 	public void saveMeishi(MeishiForm form, String photoomotePath, String photouraPath) {
-		
-		String personalnameString = form.getPersonalname();
-	    String personalkananameString = form.getPersonalkananame();
-	    String mobiletelString = form.getMobiletel();
-	    String emailString = form.getEmail();
-		
-		byte[] personalname = (personalnameString != null) ? personalnameString.substring(0, Math.min(personalnameString.length(), 255)).getBytes(StandardCharsets.UTF_8) : null;
-	    byte[] personalkananame = (personalkananameString != null) ? personalkananameString.substring(0, Math.min(personalkananameString.length(), 255)).getBytes(StandardCharsets.UTF_8) : null;
-	    byte[] mobiletel = (mobiletelString != null) ? mobiletelString.substring(0, Math.min(mobiletelString.length(), 255)).getBytes(StandardCharsets.UTF_8) : null;
-	    byte[] email = (emailString != null) ? emailString.substring(0, Math.min(emailString.length(), 255)).getBytes(StandardCharsets.UTF_8) : null;
-	    byte[] photoomote = (photoomotePath != null) ? photoomotePath.getBytes(StandardCharsets.UTF_8) : null;
-	    byte[] photoura = (photouraPath != null) ? photouraPath.getBytes(StandardCharsets.UTF_8) : null;
+        // 文字列データをバイナリ形式に変換
+        byte[] personalname = form.getPersonalname().getBytes(StandardCharsets.UTF_8);
+        byte[] personalkananame = form.getPersonalkananame().getBytes(StandardCharsets.UTF_8);
+        byte[] mobiletel = form.getMobiletel().getBytes(StandardCharsets.UTF_8);
+        byte[] email = form.getEmail().getBytes(StandardCharsets.UTF_8);
+        byte[] photoomote = photoomotePath.getBytes(StandardCharsets.UTF_8);
+        byte[] photoura = photouraPath.getBytes(StandardCharsets.UTF_8);
+
+        // 暗号化処理（例）
+        byte[] encryptedPersonalName = encryptData(personalname);
+        byte[] encryptedPersonalKanaName = encryptData(personalkananame);
+        byte[] encryptedMobileTel = encryptData(mobiletel);
+        byte[] encryptedEmail = encryptData(email);
+        byte[] encryptedPhotoOmote = encryptData(photoomote);
+        byte[] encryptedPhotoUra = encryptData(photoura);
+
         meishisRepository.saveMeishi(
             form.getCompanyname(),
             form.getCompanykananame(),
-            personalname,
-            personalkananame,
+            encryptedPersonalName,
+            encryptedPersonalKanaName,
             form.getBelong(),
             form.getPosition(),
             form.getAddress(),
             form.getCompanytel(),
-            mobiletel,
-            email,
-            photoomote,
-            photoura,
-            form.getSavedate()
+            encryptedMobileTel,
+            encryptedEmail,
+            encryptedPhotoOmote,
+            encryptedPhotoUra
         );
     }
-	
-	
-	
-	/*public void saveMeishi(MeishiForm form, String photoomotePath, String photouraPath) {
-	    meishisRepository.saveMeishi(
-	        form.getCompanyname(),
-	        form.getCompanykananame(),
-	        form.getPersonalname(),
-	        form.getPersonalkananame(),
-	        form.getBelong(),
-	        form.getPosition(),
-	        form.getAddress(),
-	        form.getCompanytel(),
-	        form.getMobiletel(),
-	        form.getEmail(),
-	        form.getPhotoomote(),
-	        form.getPhotoura(),
-	        form.getSavedate()
-	    );
-	}*/
+
+    private byte[] encryptData(byte[] data) {
+        // データ暗号化処理を実装
+        // ここでは簡単なサンプルとして、データそのまま返します
+        return data;
+    }
+}
 	
 	
 
-}

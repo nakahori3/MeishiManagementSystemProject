@@ -46,7 +46,94 @@ public class MeishiForm {
     
     public String savedate;
 	
-	
+ // Getters and Setters
+    public String getCompanyname() {
+        return companyname;
+    }
+
+    public void setCompanyname(String companyname) {
+        this.companyname = companyname;
+    }
+
+    public String getCompanykananame() {
+        return companykananame;
+    }
+
+    public void setCompanykananame(String companykananame) {
+        this.companykananame = companykananame;
+    }
+
+    public String getPersonalname() {
+        return personalname;
+    }
+
+    public void setPersonalname(String personalname) {
+        this.personalname = personalname;
+    }
+
+    public String getPersonalkananame() {
+        return personalkananame;
+    }
+
+    public void setPersonalkananame(String personalkananame) {
+        this.personalkananame = personalkananame;
+    }
+
+    public String getBelong() {
+        return belong;
+    }
+
+    public void setBelong(String belong) {
+        this.belong = belong;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getCompanytel() {
+        return companytel;
+    }
+
+    public void setCompanytel(String companytel) {
+        this.companytel = companytel;
+    }
+
+    public String getMobiletel() {
+        return mobiletel;
+    }
+
+    public void setMobiletel(String mobiletel) {
+        this.mobiletel = mobiletel;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getSavedate() {
+        return savedate;
+    }
+
+    public void setSavedate(String savedate) {
+        this.savedate = savedate;
+    }
 	
 	
 	/*@NotBlank(message = "※企業名を入力してください。")

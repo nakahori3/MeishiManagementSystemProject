@@ -71,4 +71,117 @@ public class MeishiEntity {
 	public String savedate;
 	
 	
+	// Getters and Setters
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getCompanyname() {
+        return companyname;
+    }
+
+    public void setCompanyname(String companyname) {
+        this.companyname = companyname;
+    }
+
+    public String getCompanykananame() {
+        return companykananame;
+    }
+
+    public void setCompanykananame(String companykananame) {
+        this.companykananame = companykananame;
+    }
+
+    public byte[] getPersonalname() {
+        return personalname;
+    }
+
+    public void setPersonalname(byte[] personalname) {
+        this.personalname = personalname;
+    }
+
+    public byte[] getPersonalkananame() {
+        return personalkananame;
+    }
+
+    public void setPersonalkananame(byte[] personalkananame) {
+        this.personalkananame = personalkananame;
+    }
+
+    public String getBelong() {
+        return belong;
+    }
+
+    public void setBelong(String belong) {
+        this.belong = belong;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getCompanytel() {
+        return companytel;
+    }
+
+    public void setCompanytel(String companytel) {
+        this.companytel = companytel;
+    }
+
+    public byte[] getMobiletel() {
+        return mobiletel;
+    }
+
+    public void setMobiletel(byte[] mobiletel) {
+        this.mobiletel = mobiletel;
+    }
+
+    public byte[] getEmail() {
+        return email;
+    }
+
+    public void setEmail(byte[] email) {
+        this.email = email;
+    }
+
+    public byte[] getPhotoomote() {
+        return photoomote;
+    }
+
+    public void setPhotoomote(byte[] photoomote) {
+        this.photoomote = photoomote;
+    }
+
+    public byte[] getPhotoura() {
+        return photoura;
+    }
+
+    public void setPhotoura(byte[] photoura) {
+        this.photoura = photoura;
+    }
+
+    public String getSavedate() {
+        return savedate;
+    }
+
+    public void setSavedate(String savedate) {
+        this.savedate = savedate;
+    }
+	
 }
