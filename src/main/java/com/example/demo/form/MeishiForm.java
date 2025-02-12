@@ -11,14 +11,14 @@ public class MeishiForm {
     public String companyname;
     
     @NotBlank(message = "※企業名(カナ）を入力してください。")
-    @Pattern(regexp = "/\\A[ァ-ヴー]+\\z/u\n", message = "企業名（カナ）は全角カタカナで入力して下さい。")
+	@Pattern(regexp = "^[ァ-ヴー]+$", message = "企業名（カナ）は全角カタカナで入力して下さい。")
     public String companykananame;
     
     @NotBlank(message = "※担当者名を入力してください。")
     public String personalname;  // String型に変更
     
     @NotBlank(message = "※担当者名(カナ）を入力してください。")
-    @Pattern(regexp = "/\\A[ァ-ヴー]+\\z/u\n", message = "担当者名（カナ）は全角カタカナで入力して下さい。")
+	@Pattern(regexp = "^[ァ-ヴー]+$", message = "担当者名（カナ）は全角カタカナで入力して下さい。")
     public String personalkananame; // String型に変更
     
     public String belong;
@@ -29,14 +29,14 @@ public class MeishiForm {
     public String address;
     
     @NotBlank(message = "※会社電話番号を入力してください。")
-    @Pattern(regexp = "/^[0-9]+$/\n", message = "会社電話番号は半角数字で入力して下さい。")
+	@Pattern(regexp = "^[0-9]+$", message = "会社電話番号は半角数字で入力して下さい。")
     public String companytel;
     
-    @Pattern(regexp = "/^[0-9]+$/\n", message = "携帯電話番号は半角数字で入力して下さい。")
+    @Pattern(regexp = "^[0-9]+$", message = "携帯電話番号は半角数字で入力して下さい。")
     public String mobiletel; // String型に変更
     
     @NotBlank(message = "※Eメールアドレスを入力してください。")
-    @Pattern(regexp = "[a-zA-Z0-9]*", message = "Eメールアドレスは半角英数字で入力して下さい。")
+	@Pattern(regexp = "^[a-zA-Z0-9_.+-]+@([a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\\.)+[a-zA-Z]{2,}$", message = "Eメールアドレスは半角英数字で入力して下さい。")
     public String email;  // String型に変更
     
     @NotBlank(message = "※名刺写真（表面）を選択してください。")

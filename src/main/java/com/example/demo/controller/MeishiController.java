@@ -43,7 +43,7 @@ public class MeishiController {
 		private String savedate;
 	
 	    		
-		@ModelAttribute
+		@ModelAttribute("meishiForm")
 		public MeishiForm setupMeishiForm() {
 			return new MeishiForm();
 		}
@@ -52,6 +52,7 @@ public class MeishiController {
 		// 名刺情報登録画面へ遷移
 		@GetMapping("/inputMeishi")
 		public String registerMeishi(Model model) {
+			model.addAttribute("meishiForm", new MeishiForm());
 			return "/meishi/registerMeishi";
 		}
 		
@@ -81,7 +82,7 @@ public class MeishiController {
 		public String meishiConfirm(@Validated MeishiForm meishiForm, BindingResult result, Model model) {
 			if (result.hasErrors()) {
 				// バリデーションエラーありの場合、新規登録画面
-				
+				model.addAttribute("meishiForm", meishiForm);
 				return "/meishi/registerMeishi";
 			}
 			//エラーなしの場合、確認画面へ遷移
@@ -89,31 +90,29 @@ public class MeishiController {
 		}
 		
 		//名刺情報とDBへの接続
+		
 		@PostMapping("/completeMeishi")
-		public String meishiComplete(@Validated  MeishiForm meishiForm, @RequestParam("photoomoteFile") MultipartFile photoomoteFile, @RequestParam("photouraFile") MultipartFile photouraFile, Model model) {
-			
-			// 画像を保存するディレクトリ
-	        String uploadDir = "C:\\\\Users\\\\NSA059\\\\Desktop\\\\名刺管理ソフト\\\\upload\\\\";
+		public String meishiComplete(@Validated MeishiForm meishiForm, 
+		                             @RequestParam("photoomote") String photoomotePath, 
+		                             @RequestParam("photoura") String photouraPath, 
+		                             Model model) {
+		    try {
+		        // Meishiエンティティを作成して保存
+		        LocalDateTime today = LocalDateTime.now();
+		        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+		        String formatDate = today.format(formatter);
 
-	        // ファイルの保存処理
-	        try {
-	            String photoomotePath = saveFile(uploadDir, photoomoteFile);
-	            String photouraPath = saveFile(uploadDir, photouraFile);
+		        meishiService.saveMeishi(meishiForm, photoomotePath, photouraPath);
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		        model.addAttribute("message", "Error occurred while saving the files");
+		        return "/meishi/registerMeishi";
+		    }
 
-	            // Meishiエンティティを作成して保存
-	            LocalDateTime today = LocalDateTime.now();
-	            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-	            String formatDate = today.format(formatter);
+		    return "/meishi/completeMeishi";
+		}
 
-	            meishiService.saveMeishi(meishiForm, photoomotePath, photouraPath);
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	            model.addAttribute("message", "Error occurred while saving the files");
-	            return "/meishi/registerMeishi";
-	        }
-
-	        return "/meishi/completeMeishi";
-	    }
+		
 
 	    private String saveFile(String uploadDir, MultipartFile file) throws IOException {
 	        if (file.isEmpty()) {

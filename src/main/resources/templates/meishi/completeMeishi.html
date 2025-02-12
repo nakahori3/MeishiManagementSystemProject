@@ -1,10 +1,33 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>名刺情報登録完了ページ</title>
+<link rel="stylesheet" th:href="@{/css/layout.css}" />
+<link rel="stylesheet" th:href="@{/css/login/login.css}">
+<link rel="stylesheet" th:href="@{/css/meishi/registermeishi.css}">
 </head>
-<body>
 
+<body>
+  <div th:replace="~{common/layout::common_header}"></div>
+ 
+
+	<img class="completeaicon" th:src="@{/img/completeicon.png}" alt="登録完了マーク">
+	<p class="inputcomp">名刺情報登録完了</p>
+	<br>
+		<p class="h4">名刺情報の登録が完了しました。</p>
+    <br>
+    <p class="h5">上記メニューバーより引き続きご利用ください。</p>
+
+
+<div class="btn-ctl">
+  	<div class="button-container">
+		 <img class="toppage" th:src="@{/img/toppage.png}" alt="トップページ画像">
+      <a th:href="@{/return_top}" class="btn-return">トップページへ戻る</a>
+  	</div>
+  	
+  
+</div>
+<div th:replace="~{common/layout::common_footer}"></div>
 </body>
 </html>

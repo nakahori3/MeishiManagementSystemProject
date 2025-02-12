@@ -19,25 +19,25 @@
   <form method="post" th:action="@{/confirmMeishi}" th:object="${meishiForm}">
 	<div class="error">
 	<div class="errormsg">
-		 <div th:if="${#fields.hasErrors('companyname')}" th:errors="*{companyname}"><br></div>
+		 <!--<div th:if="${#fields.hasErrors('companyname')}" th:errors="*{companyname}"><br></div>-->
           <div th:if="${#fields.hasErrors('companykananame')}" th:errors="*{companykananame}"><br></div>
-          <div th:if="${#fields.hasErrors('personalname')}" th:errors="*{personalname}"><br></div>
+          <!--<div th:if="${#fields.hasErrors('personalname')}" th:errors="*{personalname}"><br></div>-->
           <div th:if="${#fields.hasErrors('personalkananame')}" th:errors="*{personalkananame}"><br></div>
-          <div th:if="${#fields.hasErrors('address')}" th:errors="*{address}"><br></div>
+          <!--<div th:if="${#fields.hasErrors('address')}" th:errors="*{address}"><br></div>-->
           <div th:if="${#fields.hasErrors('companytel')}" th:errors="*{companytel}"><br></div>  
           <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"><br></div>
-          <div th:if="${#fields.hasErrors('photoomote')}" th:errors="*{photoomote}"><br></div>
+          <!--<div th:if="${#fields.hasErrors('photoomote')}" th:errors="*{photoomote}"><br></div>-->
+		　
+		　	<div id="validate_msg1" style="color: red;"></div>
+			<div id="validate_msg2" style="color: red;"></div>
+			<div id="validate_msg3" style="color: red;"></div>
+			<div id="validate_msg4" style="color: red;"></div>
+			<div id="validate_msg5" style="color: red;"></div>
+			<div id="validate_msg6" style="color: red;"></div>
+			<div id="validate_msg7" style="color: red;"></div>
+			<div id="validate_msg8" style="color: red;"></div>
 		
-		
-	 <!-- <div th:errors="*{companyname}"><br></div>
-	  <div th:errors="*{companykananame}"><br></div>
-	  <div th:errors="*{personalname}"><br></div>
-	  <div th:errors="*{personalkananame}"><br></div>
-	  <div th:errors="*{address}"><br></div>
-	  <div th:errors="*{companytel}"><br></div>  
-	  <div th:errors="*{email}"><br></div>
-	  <div th:errors="*{photoomote}"><br></div>-->
-	</div>
+	  	</div>
 	</div>
 	
 	<div class="all-inputmeishi2">
@@ -72,12 +72,12 @@
 	   <div>
 		<label for="belong">所属</label>
 		<br>
-		<input class="input" type="text" id="belong" name="belong" th:field="*{belong}" pattern="[^ 　]+">
+		<input class="input2" type="text" id="belong" name="belong" th:field="*{belong}" pattern="[^ 　]+">
       </div>
        <div>
 		<label for="position">役職</label>
 		<br>
-		<input class="input" type="text" id="position" name="position" th:field="*{position}" pattern="[^ 　]+">
+		<input class="input2" type="text" id="position" name="position" th:field="*{position}" pattern="[^ 　]+">
       </div>
 	  
 	  <div>
@@ -122,9 +122,112 @@
   <div class="btn">
   <div class="button-container">
 	   <a th:href="@{/return_top}" class="btn-return2">戻る</a>
-	    <input type="submit" class="btn-submit2" value="確認">
+	    <input type="submit" class="btn-submit2"  onclick="testCheck1();testCheck2();testCheck3();testCheck4();testCheck5();testCheck6();testCheck7();testCheck8()" value="確認">
   </div>
   </div>
+  
+  
+  
+  
+  		<script>
+		    function testCheck1(){
+		  	var companyname = document.getElementById("companyname").value;
+		  	if(companyname.length == 0){
+		    var validate = "※企業名を入力して下さい。";
+		  document.getElementById("validate_msg1").innerHTML = validate; 
+		  return false; 
+	  		}
+		}
+		</script>
+		
+		<script>
+		    function testCheck2(){
+		    var companykananame = document.getElementById("companykananame").value;
+		  	if(companykananame.length == 0){
+		    var validate = "※企業名(カナ）を入力して下さい。";
+		   	document.getElementById("validate_msg2").innerHTML = validate;
+		   	return false; 
+	  		}
+		}
+		</script>
+		
+		
+		<script>  
+		    function testCheck3(){
+		    var personalname = document.getElementById("personalname").value;
+		  	if(personalname.length == 0){
+		    var validate = "※担当者名を入力してください。";
+		    document.getElementById("validate_msg3").innerHTML = validate;
+		    return false; 
+		    }
+			}
+		 </script>  
+		    
+		 
+		 <script>
+		    function testCheck4(){
+		  	var personalkananame = document.getElementById("personalkananame").value;
+		  	if(personalkananame.length == 0){
+		    var validate = "※担当者名（カナ）を入力してください。";
+		    
+		    document.getElementById("validate_msg4").innerHTML = validate; 
+		    return false; 
+	  		}
+			}
+		
+		</script>
+		
+		
+		<script>  
+		    function testCheck5(){
+		    var address = document.getElementById("address").value;
+		  	if(address.length == 0){
+		    var validate = "※所在地を入力してください。";
+		    document.getElementById("validate_msg5").innerHTML = validate;
+		    return false; 
+		    }
+			}
+		
+		</script>
+		
+		
+		<script>  
+		    function testCheck6(){
+		    var companytel = document.getElementById("companytel").value;
+		  	if(companytel.length == 0){
+		    var validate = "※会社電話番号を入力してください。";
+		    document.getElementById("validate_msg6").innerHTML = validate;
+		    return false; 
+		    }
+			}
+		
+		</script>
+		
+		
+		<script>  
+		    function testCheck7(){
+		    var email = document.getElementById("email").value;
+		  	if(email.length == 0){
+		    var validate = "※Eメールアドレスを入力してください。";
+		    document.getElementById("validate_msg7").innerHTML = validate;
+		    return false; 
+		    }
+			}
+		</script>
+		
+		
+		<script>  
+		    function testCheck8(){
+		    var photoomote = document.getElementById("photoomote").value;
+		  	if(photoomote.length == 0){
+		    var validate = "※名刺写真(表面）を選択してください。。";
+		    document.getElementById("validate_msg8").innerHTML = validate;
+		    return false; 
+		    }
+			}
+				
+		</script>	
+		
       
   </form>
   

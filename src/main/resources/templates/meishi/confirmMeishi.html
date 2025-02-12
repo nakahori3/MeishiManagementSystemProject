@@ -1,10 +1,244 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>名刺情報入力確認ページ</title>
+<link rel="stylesheet" th:href="@{/css/layout.css}">
+<link rel="stylesheet" th:href="@{/css/meishi/registermeishi.css}">
+<link rel="stylesheet" th:href="@{/css/login/login.css}">
 </head>
-<body>
 
+<body>
+  <div th:replace="~{common/layout::common_header}"></div>
+
+<div class="content">
+    <!--DBに登録した情報の確認 -->
+    <form method="post" th:action="@{/completeMeishi}" th:object="${meishiForm}" enctype="multipart/form-data">
+    <div class="all-inputmeishi3">
+        <h2>名刺情報入力確認ページ</h2>
+        <div class="input-form">
+            <div class="input-meishiform">
+    
+                <!--確認フォーム -->
+                <div>
+                    <label>企業名 ※必須</label>
+                    <br>
+                    <div class="confirm_text" th:text="${meishiForm.companyname}"></div>
+                </div>
+                <div>
+                    <label>企業名(カナ) ※必須</label>
+                    <br>
+                    <div class="confirm_text" th:text="${meishiForm.companykananame}"></div>
+                </div>
+                <div>
+                    <label>担当者名 ※必須</label>
+                    <br>
+                    <div class="confirm_text" th:text="${meishiForm.personalname}"></div>
+                </div>
+                <div>
+                    <label>担当者名（カナ) ※必須</label>
+                    <br>
+                    <div class="confirm_text" th:text="${meishiForm.personalkananame}"></div>
+                </div>
+                <div>
+                    <label>所属</label>
+                    <br>
+                    <div class="confirm_text2" th:text="${meishiForm.belong}"></div>
+                </div>
+                <div>
+                    <label>役職</label>
+                    <br>
+                    <div class="confirm_text2" th:text="${meishiForm.position}"></div>
+                </div>
+                <div>
+                    <label>所在地 ※必須</label>
+                    <br>
+                    <div class="confirm_text" th:text="${meishiForm.address}"></div>
+                </div>
+                <div>
+                    <label>会社電話番号 ※必須</label>
+                    <br>
+                    <div class="confirm_text" th:text="${meishiForm.companytel}"></div>
+                </div>
+                <div>
+                    <label>携帯電話番号</label>
+                    <br>
+                    <div class="confirm_text" th:text="${meishiForm.mobiletel}"></div>
+                </div>
+                <div>
+                    <label>Eメールアドレス ※必須</label>
+                    <br>
+                    <div class="confirm_text" th:text="${meishiForm.email}"></div>
+                </div>
+                <div>
+                    <label>名刺写真（表面） ※必須</label>
+                    <br>
+                    <div class="confirm_text" th:text="${meishiForm.photoomote}"></div>
+                </div>
+                <div>
+                    <label>名刺写真（裏面）</label>
+                    <br>
+                    <div class="confirm_text" th:text="${meishiForm.photoura}"></div>
+                </div>
+            </div>
+
+            <div th:with="today=${#dates.createNow()}">
+                <label>登録日</label>
+                <div class="registration_date" th:text="${#dates.format(today, 'yyyy年MM月dd日')}"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!--入力内容確認画面に遷移するボタン -->
+    <div class="btn">
+        <div class="button-container">
+            <a th:href="@{/inputMeishi}" class="btn-return2">入力画面に戻る</a>
+            
+            <input type="hidden" th:field="*{companyname}">
+            <input type="hidden" th:field="*{companykananame}">
+            <input type="hidden" th:field="*{personalname}">
+            <input type="hidden" th:field="*{personalkananame}">
+            <input type="hidden" th:field="*{belong}">
+            <input type="hidden" th:field="*{position}">
+            <input type="hidden" th:field="*{address}">
+            <input type="hidden" th:field="*{companytel}">
+            <input type="hidden" th:field="*{mobiletel}">
+            <input type="hidden" th:field="*{email}">
+            <input type="hidden" th:field="*{photoomote}">
+            <input type="hidden" th:field="*{photoura}">
+            <input type="submit" class="btn-submit2" value="登録">
+        </div>
+    </div>
+
+    </form>
+</div>
+<div th:replace="~{common/layout::common_footer}"></div>
 </body>
 </html>
+
+
+
+
+
+<!--<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>名刺情報入力確認ページ</title>
+<link rel="stylesheet" th:href="@{/css/layout.css}">
+<link rel="stylesheet" th:href="@{/css/meishi/registemeishi.css}">
+<link rel="stylesheet" th:href="@{/css/login/login.css}">
+</head>
+
+<body>
+  <div th:replace="~{common/layout::common_header}"></div>
+  
+  <form th:action="@{/adminChange}" method="get">
+<input type="submit" sec:authorize="hasRole('ADMIN')" class="menu-button" value="ユーザー情報確認">
+</form>
+
+<div class="content">
+	DBに登録した情報の確認 
+	<form method="post" th:action="@{/completeMeishi}" th:object="${meishiForm}">
+  <div class="all-inputmeishi2">
+	<h2>名刺情報入力確認ページ</h2>
+	<div class="input-form">
+	<div class="input-meishiform">
+	
+	確認フォーム 
+	　<div>
+		<label>企業名 ※必須</label>
+		<br>
+		<div class="confirm_text" th:text="${meishiForm.companyname}"></div>
+      </div>
+	  <div>
+		<label>企業名(カナ) ※必須</label>
+		<br>
+		<div class="confirm_text" th:text="${meishiForm.companykananame}"></div>
+	  </div>
+	  <div>
+		<label>担当者名 ※必須</label>
+		<br>
+		<div class="confirm_text" th:text="${meishiForm.personalname}"></div>
+      </div>
+      <div>
+		<label>担当者名（カナ) ※必須</label>
+		<br>
+		<div class="confirm_text" th:text="${meishiForm.personalkananame}"></div>
+	  </div>
+	  <div>
+		<label>所属</label>
+		<br>
+		<div class="confirm_text" th:text="${meishiForm.belong}"></div>
+	  </div>
+	  <div>
+		<label>役職</label>
+		<br>
+		<div class="confirm_text" th:text="${meishiForm.position}"></div>
+	  </div>
+	  <div>
+		<label>所在地 ※必須</label>
+		<br>
+		<div class="confirm_text" th:text="${meishiForm.address}"></div>
+	  </div>
+	  <div>
+		<label>会社電話番号 ※必須</label>
+		<br>
+		<div class="confirm_text" th:text="${meishiForm.companytel}"></div>
+	  </div>
+	  <div>
+		<label>携帯電話番号</label>
+		<br>
+		<div class="confirm_text" th:text="${meishiForm.mobiletel}"></div>
+	  </div>
+	  <div>
+		<label>Eメールアドレス ※必須</label>
+		<br>
+		<div class="confirm_text" th:text="${meishiForm.email}"></div>
+	  </div>
+	  <div>
+		<label>名刺写真（表面） ※必須</label>
+		<br>
+		<div class="confirm_text" th:text="${meishiForm.photoomote}"></div>
+	  </div>
+	  <div>
+		<label>名刺写真（裏面）</label>
+		<br>
+		<div class="confirm_text" th:text="${meishiForm.photoura}"></div>
+	  </div>
+  	</div>
+  
+
+	    <div th:with="today=${#dates.createNow()}">
+		  <label>登録日</label>
+		  <div class="registration_date" th:text="${#dates.format(today, 'yyyy年MM月dd日')}"></div>
+		</div>
+	</div>
+  </div>
+  </div>
+	
+  入力内容確認画面に遷移するボタン 
+  <div class="btn">
+	  <div class="button-container">
+	  <a th:href="@{/inputMeishi}" class="btn-return3">入力画面に戻る</a>
+      
+		<input type="hidden" th:field="*{companyname}">
+		<input type="hidden" th:field="*{companykananame}">
+		<input type="hidden" th:field="*{personalname}">
+		<input type="hidden" th:field="*{personalkananame}">
+		<input type="hidden" th:field="*{belong}">
+		<input type="hidden" th:field="*{position}">
+		<input type="hidden" th:field="*{address}">
+		<input type="hidden" th:field="*{companytel}">
+		<input type="hidden" th:field="*{mobiletel}">
+		<input type="hidden" th:field="*{email}">
+		<input type="hidden" th:field="*{photoomote}">
+		<input type="hidden" th:field="*{photoura}">
+  	<input type="submit" class="btn-submit3" value="登録">
+  </div>
+
+</form>
+</div>
+<div th:replace="~{common/layout::common_footer}"></div>
+</body>
+</html>-->
