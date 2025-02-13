@@ -128,68 +128,16 @@ public class MeishiController {
 	        return filePath.toString();
 	    
 	    }
-			
-			
-			
-			
-			/*// 画像を保存するディレクトリ
-	        String uploadDir = "C:\\Users\\NSA059\\Desktop\\名刺管理ソフト\\upload\\";
-			
-			
-	    // ファイルの保存処理
-	     try {
-	          String photoomotePath = saveFile(uploadDir, photoomoteFile);
-	          String photouraPath = saveFile(uploadDir, photouraFile);
-			
-			// データベースに登録する値を保持するインスタンス
-			MeishiEntity meishi = new MeishiEntity();
+				    
+	    
+	    
+	    
+//------------名刺情報検索------------------------	    
+	    
+	    
 
-			//現在日時を取得
-			LocalDateTime today = LocalDateTime.now();
-			// 表示形式を指定
-			DateTimeFormatter fomatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-			String formatDate = today.format(fomatter);
-
-			// 画面から受け取った値をデータベースに保存するインスタンスに渡す
-			meishi.setCompanyname(meishiForm.getCompanyname());
-			meishi.setCompanykananame(meishiForm.getCompanykananame());
-			meishi.setPersonalname(meishiForm.getPersonalname());
-			meishi.setPersonalkananame(meishiForm.getPersonalkananame());
-			meishi.setBelong(meishiForm.getBelong());
-			meishi.setPosition(meishiForm.getPosition());
-			meishi.setAddress(meishiForm.getAddress());
-			meishi.setCompanytel(meishiForm.getCompanytel());
-			meishi.setMobiletel(meishiForm.getMobiletel());
-			meishi.setEmail(meishiForm.getEmail());
-			meishi.setPhotoomote(photoomotePath);
-			meishi.setPhotoura(photouraPath);
-			meishi.setSavedate(formatDate);
-
-			//データベースに登録する
-			meishisRepository.save(meishi);
-			return "/meishi/completeMeishi";
-		} catch (IOException e) {
-            e.printStackTrace();
-            model.addAttribute("message", "Error occurred while saving the files");
-            return "/meishi/registerMeishi";
-        }
-
-        return "/meishi/completeMeishi";
-    }
-
-    private String saveFile(String uploadDir, MultipartFile file) throws IOException {
-        if (file.isEmpty()) {
-            return null;
-        }
-        Path uploadPath = Paths.get(uploadDir);
-        if (!Files.exists(uploadPath)) {
-            Files.createDirectories(uploadPath);
-        }
-        String fileName = file.getOriginalFilename();
-        Path filePath = uploadPath.resolve(fileName);
-        Files.copy(file.getInputStream(), filePath);
-        return filePath.toString();
-    }*/
-	        
-	
+	    
+	    
+	    
+	    
 }
