@@ -1,0 +1,50 @@
+@charset "UTF-8";
+
+.kensaku {
+	margin-left: -550px;
+	font-size: 25px;
+
+}
+
+.search_form {
+	text-align: center; 
+	
+}
+
+
+.search-type{
+	font-size: 18px;
+	 display: flex;
+     justify-content: center;
+}
+
+.search-type div {
+    margin-right: 35px; /* 右側の間隔を追加 */
+   }
+
+
+.search_box{
+    padding: 5px; /* 入力欄やセレクトボックスの内部の余白を調整 */
+    box-sizing: border-box; /* 内部の余白も含めたボックスサイズを設定 */
+    font-size: 22px;
+    margin-top: 20px;
+    margin-left: -75px;
+    width: 310px;
+    }
+
+    
+ .searchicon3 {
+	position: absolute;
+	height: 50px;
+	width: 50px;
+	margin-top: 10px;
+	margin-left: 20px;
+	
+}
+
+.error-message {
+		text-align: center;
+        color: red;
+        margin-top: 5px;
+        font-size: 18px;
+    }

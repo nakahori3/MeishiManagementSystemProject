@@ -94,6 +94,25 @@ public class MeishiService {
         // ここでは簡単なサンプルとして、データそのまま返します
         return data;
     }
+    
+    
+  //企業名（カナ）で完全一致検索
+    public List<MeishiEntity> searchMeishiByCompanyKana(String keyword) {
+        return meishisRepository.findByExactCompanyKanaName(keyword);
+    }
+
+    //企業名（カナ）で部分一致検索
+    public List<MeishiEntity> searchMeishiByCompanyKana_Pertial(String keyword) {
+        keyword = "%" + keyword + "%";
+        return meishisRepository.findByPertialCompanyKanaName(keyword);
+    }
+
+    //担当者名（カナ）の部分一致検索
+    public List<MeishiEntity> searchMeishiByPersonalKana_Pertial(String keyword) {
+        keyword = "%" + keyword + "%";
+        return meishisRepository.findByPertialPersonalKanaName(keyword);
+    }
+    
 }
 	
 	

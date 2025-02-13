@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>検索結果</title>
+<link rel="stylesheet" th:href="@{/css/layout.css}">
+<link rel="stylesheet" th:href="@{/css/meishi/searchmeishi.css}">
+<link rel="stylesheet" th:href="@{/css/login/login.css}">
+</head>
+<body>
+  <div th:replace="~{common/layout::common_header}"></div>
+
+<div class="content">
+    <h2>検索結果一覧</h2>
+    
+    <div th:if="${#lists.isEmpty(results)}">
+        <p>検索結果が見つかりませんでした。</p>
+    </div>
+    
+    <div th:if="${not #lists.isEmpty(results)}">
+        <ul>
+            <li th:each="result : ${results}">
+                <div>
+                    <strong>企業名:</strong> <span th:text="${result.companyname}"></span>
+                </div>
+                <div>
+                    <strong>企業名（カナ）:</strong> <span th:text="${result.companykananame}"></span>
+                </div>
+                <div>
+                    <strong>担当者名:</strong> <span th:text="${result.personalname}"></span>
+                </div>
+                <div>
+                    <strong>担当者名（カナ）:</strong> <span th:text="${result.personalkananame}"></span>
+                </div>
+                <div>
+                    <strong>所在地:</strong> <span th:text="${result.address}"></span>
+                </div>
+                <div>
+                    <strong>会社電話番号:</strong> <span th:text="${result.companytel}"></span>
+                </div>
+                <div>
+                    <strong>携帯電話番号:</strong> <span th:text="${result.mobiletel}"></span>
+                </div>
+                <div>
+                    <strong>Eメールアドレス:</strong> <span th:text="${result.email}"></span>
+                </div>
+                <div>
+                    <strong>名刺写真（表面）:</strong> <img th:src="@{/upload/{photoomote}(photoomote=${result.photoomote})}" alt="名刺写真（表面）">
+                </div>
+                <div>
+                    <strong>名刺写真（裏面）:</strong> <img th:src="@{/upload/{photoura}(photoura=${result.photoura})}" alt="名刺写真（裏面）">
+                </div>
+                <hr>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div th:replace="~{common/layout::common_footer}"></div>
+</body>
+</html>

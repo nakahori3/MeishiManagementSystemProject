@@ -134,7 +134,31 @@ public class MeishiController {
 	    
 //------------名刺情報検索------------------------	    
 	    
-	    
+	  //企業名（カナ）で完全一致検索
+	    @GetMapping("/searchByCompanyKana")
+	    public String searchByCompanyKana(@RequestParam("keyword") String keyword, Model model) {
+	        List<MeishiEntity> results = meishiService.searchMeishiByCompanyKana(keyword);
+	        model.addAttribute("results", results);
+	        return "/meishi/searchResults";
+	    }
+
+	    //企業名（カナ）で部分一致検索
+	    @GetMapping("/searchByCompanyKanaPartial")
+	    public String searchByCompanyKanaPartial(@RequestParam("keyword") String keyword, Model model) {
+	        List<MeishiEntity> results = meishiService.searchMeishiByCompanyKana_Pertial(keyword);
+	        model.addAttribute("results", results);
+	        return "/meishi/searchResults";
+	    }
+
+	    //担当者名（カナ）で部分一致検索
+	    @GetMapping("/searchByPersonalKanaPartial")
+	    public String searchByPersonalKanaPartial(@RequestParam("keyword") String keyword, Model model) {
+	        List<MeishiEntity> results = meishiService.searchMeishiByPersonalKana_Pertial(keyword);
+	        model.addAttribute("results", results);
+	        return "/meishi/searchResults";
+
+		}
+
 
 	    
 	    
