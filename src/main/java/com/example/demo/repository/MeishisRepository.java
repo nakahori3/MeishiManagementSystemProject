@@ -14,20 +14,20 @@ public interface MeishisRepository extends JpaRepository<MeishiEntity, Integer> 
 
     @Modifying
     @Transactional
-    @Query(value = "INSERT INTO meishis (companyname, companykananame, personalname, personalkananame, belong, position, address, companytel, mobiletel, email, photoomote, photoura, savedate) VALUES (:companyname, :companykananame, :personalname, :personalkananame, :belong, :position, :address, :companytel, :mobiletel, :email, :photoomote, :photoura, CURRENT_DATE)", nativeQuery = true)
+    @Query(value = "INSERT INTO meishis (companyname, companykananame, personalname, personalkananame, belong, position, address, companytel, mobiletel, email, photoomote, photoura, savedate) VALUES (:companyname, :companykananame, pgp_sym_encrypt(:personalname, get_passwd()), pgp_sym_encrypt(:personalkananame, get_passwd()), :belong, :position, :address, :companytel, pgp_sym_encrypt(:mobiletel, get_passwd()), pgp_sym_encrypt(:email, get_passwd()), pgp_sym_encrypt(:photoomote, get_passwd()), pgp_sym_encrypt(:photoura, get_passwd()), CURRENT_DATE)", nativeQuery = true)
     void saveMeishi(
         @Param("companyname") String companyname,
         @Param("companykananame") String companykananame,
-        @Param("personalname") byte[] personalname,
-        @Param("personalkananame") byte[] personalkananame,
+        @Param("personalname") String personalname,
+        @Param("personalkananame") String personalkananame,
         @Param("belong") String belong,
         @Param("position") String position,
         @Param("address") String address,
         @Param("companytel") String companytel,
-        @Param("mobiletel") byte[] mobiletel,
-        @Param("email") byte[] email,
-        @Param("photoomote") byte[] photoomote,
-        @Param("photoura") byte[] photoura
+        @Param("mobiletel") String mobiletel,
+        @Param("email") String email,
+        @Param("photoomote") String photoomote,
+        @Param("photoura") String photoura
     );
 
     @Query(value = "SELECT id, companyname, companykananame, convert_from(CAST(pgp_sym_decrypt(personalname::bytea, get_passwd()) AS bytea), 'UTF8') AS personalname, convert_from(CAST(pgp_sym_decrypt(personalkananame::bytea, get_passwd()) AS bytea), 'UTF8') AS personalkananame, belong, position, address, companytel, convert_from(CAST(pgp_sym_decrypt(mobiletel::bytea, get_passwd()) AS bytea), 'UTF8') AS mobiletel, convert_from(CAST(pgp_sym_decrypt(email::bytea, get_passwd()) AS bytea), 'UTF8') AS email, convert_from(CAST(pgp_sym_decrypt(photoomote::bytea, get_passwd()) AS bytea), 'UTF8') AS photoomote, convert_from(CAST(pgp_sym_decrypt(photoura::bytea, get_passwd()) AS bytea), 'UTF8') AS photoura, savedate FROM meishis", nativeQuery = true)
@@ -45,6 +45,7 @@ public interface MeishisRepository extends JpaRepository<MeishiEntity, Integer> 
     @Query(value = "SELECT id, companyname, companykananame, convert_from(CAST(pgp_sym_decrypt(personalname::bytea, get_passwd()) AS bytea), 'UTF8') AS personalname, convert_from(CAST(pgp_sym_decrypt(personalkananame::bytea, get_passwd()) AS bytea), 'UTF8') AS personalkananame, belong, position, address, companytel, convert_from(CAST(pgp_sym_decrypt(mobiletel::bytea, get_passwd()) AS bytea), 'UTF8') AS mobiletel, convert_from(CAST(pgp_sym_decrypt(email::bytea, get_passwd()) AS bytea), 'UTF8') AS email, convert_from(CAST(pgp_sym_decrypt(photoomote::bytea, get_passwd()) AS bytea), 'UTF8') AS photoomote, convert_from(CAST(pgp_sym_decrypt(photoura::bytea, get_passwd()) AS bytea), 'UTF8') AS photoura, savedate FROM meishis WHERE companykananame LIKE %:companykananame%", nativeQuery = true)
     List<MeishiEntity> findByPertialCompanyKanaName(@Param("companykananame") String companykananame);
 }
+
 
 
 

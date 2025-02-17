@@ -26,6 +26,17 @@
 		<tag/>
 		<url/>
 	</scm>
+	
+	
+	<repositories>
+	    <repository>
+	        <id>central</id>
+	        <url>https://repo.maven.apache.org/maven2</url>
+	    </repository>
+	</repositories>
+	
+	
+	
 	<properties>
 		<java.version>21</java.version>
 	</properties>
@@ -129,15 +140,17 @@
 			<scope>test</scope>
 		</dependency>
 		
-		<!-- BouncyCastle依存関係 -->
-	    <dependency>
+		<dependency>
 		    <groupId>org.bouncycastle</groupId>
-		    <artifactId>bcprov-jdk18on</artifactId>
+		    <artifactId>bcprov-jdk15on</artifactId>
+		    <version>1.68</version>
 		</dependency>
-	    <dependency>
-	        <groupId>org.bouncycastle</groupId>
-	        <artifactId>bcpkix-jdk18on</artifactId>
-	    </dependency>
+		<dependency>
+		    <groupId>org.bouncycastle</groupId>
+		    <artifactId>bcpkix-jdk15on</artifactId>
+		    <version>1.68</version>
+		</dependency>
+   
 		
 	</dependencies>
 
