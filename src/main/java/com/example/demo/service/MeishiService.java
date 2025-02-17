@@ -12,9 +12,12 @@ import com.example.demo.entity.UserEntity;
 import com.example.demo.form.MeishiForm;
 import com.example.demo.repository.MeishisRepository;
 import com.example.demo.repository.UsersRepository;
+import com.example.demo.util.PGPUtil;
 
 @Service
 public class MeishiService {
+	
+	private static final String ENCRYPTION_KEY = "P4ssW0rd";
 
     @Autowired
     UsersRepository usersRepository;
@@ -59,13 +62,24 @@ public class MeishiService {
         byte[] photoomote = photoomotePath.getBytes(StandardCharsets.UTF_8);
         byte[] photoura = photouraPath.getBytes(StandardCharsets.UTF_8);
 
-        // 暗号化処理（例）
-        byte[] encryptedPersonalName = encryptData(personalname);
-        byte[] encryptedPersonalKanaName = encryptData(personalkananame);
-        byte[] encryptedMobileTel = encryptData(mobiletel);
-        byte[] encryptedEmail = encryptData(email);
-        byte[] encryptedPhotoOmote = encryptData(photoomote);
-        byte[] encryptedPhotoUra = encryptData(photoura);
+        // 暗号化処理
+        byte[] encryptedPersonalName;
+        byte[] encryptedPersonalKanaName;
+        byte[] encryptedMobileTel;
+        byte[] encryptedEmail;
+        byte[] encryptedPhotoOmote;
+        byte[] encryptedPhotoUra;
+        try {
+            encryptedPersonalName = PGPUtil.encrypt(personalname, ENCRYPTION_KEY);
+            encryptedPersonalKanaName = PGPUtil.encrypt(personalkananame, ENCRYPTION_KEY);
+            encryptedMobileTel = PGPUtil.encrypt(mobiletel, ENCRYPTION_KEY);
+            encryptedEmail = PGPUtil.encrypt(email, ENCRYPTION_KEY);
+            encryptedPhotoOmote = PGPUtil.encrypt(photoomote, ENCRYPTION_KEY);
+            encryptedPhotoUra = PGPUtil.encrypt(photoura, ENCRYPTION_KEY);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
 
         meishisRepository.saveMeishi(
             form.getCompanyname(),
@@ -82,12 +96,69 @@ public class MeishiService {
             encryptedPhotoUra
         );
     }
-
+    
+    
+    
+	/*public void saveMeishi(MeishiForm form, String photoomotePath, String photouraPath) {
+	    // 文字列データをバイナリ形式に変換
+	    byte[] personalname = form.getPersonalname().getBytes(StandardCharsets.UTF_8);
+	    byte[] personalkananame = form.getPersonalkananame().getBytes(StandardCharsets.UTF_8);
+	    byte[] mobiletel = form.getMobiletel().getBytes(StandardCharsets.UTF_8);
+	    byte[] email = form.getEmail().getBytes(StandardCharsets.UTF_8);
+	    byte[] photoomote = photoomotePath.getBytes(StandardCharsets.UTF_8);
+	    byte[] photoura = photouraPath.getBytes(StandardCharsets.UTF_8);
+	
+	    // 暗号化処理（例）
+	    byte[] encryptedPersonalName = encryptData(personalname);
+	    byte[] encryptedPersonalKanaName = encryptData(personalkananame);
+	    byte[] encryptedMobileTel = encryptData(mobiletel);
+	    byte[] encryptedEmail = encryptData(email);
+	    byte[] encryptedPhotoOmote = encryptData(photoomote);
+	    byte[] encryptedPhotoUra = encryptData(photoura);
+	
+	    meishisRepository.saveMeishi(
+	        form.getCompanyname(),
+	        form.getCompanykananame(),
+	        encryptedPersonalName,
+	        encryptedPersonalKanaName,
+	        form.getBelong(),
+	        form.getPosition(),
+	        form.getAddress(),
+	        form.getCompanytel(),
+	        encryptedMobileTel,
+	        encryptedEmail,
+	        encryptedPhotoOmote,
+	        encryptedPhotoUra
+	    );
+	}*/
+    
+    
     private byte[] encryptData(byte[] data) {
-        // データ暗号化処理を実装
-        // ここでは簡単なサンプルとして、データそのまま返します
-        return data;
+        try {
+            // 暗号化処理
+            return PGPUtil.encrypt(data, ENCRYPTION_KEY);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
+
+    private byte[] decryptData(byte[] data) {
+        try {
+            // 復号化処理
+            return PGPUtil.decrypt(data, ENCRYPTION_KEY);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+
+	/*private byte[] encryptData(byte[] data) {
+	    // データ暗号化処理を実装
+	    // ここでは簡単なサンプルとして、データそのまま返します
+	    return data;
+	}*/
 
     // 企業名（カナ）で完全一致検索
     public List<MeishiEntity> searchMeishiByCompanyKananame(String keyword) {
