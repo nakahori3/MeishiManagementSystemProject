@@ -64,6 +64,7 @@ public class MeishiController {
 		
 		
 		
+		
 //------------名刺情報登録------------------------
 	
 		
@@ -135,11 +136,181 @@ public class MeishiController {
 //------------名刺情報検索------------------------	    
 	    
 	    
+	 // 検索結果の処理と復号化
+	    @GetMapping("/searchResults")
+	    public String searchResults(@RequestParam("searchType") String searchType,
+	                                @RequestParam("keyword") String keyword,
+	                                Model model) {
+	        System.out.println("Received searchType: " + searchType);
+	        System.out.println("Received keyword: " + keyword);
 
+	        List<MeishiEntity> searchResults;
+	        if (searchType.equals("companyKanaExact")) {
+	            searchResults = meishiService.findByCompanykananame(keyword);
+	        } else if (searchType.equals("companyKanaPartial")) {
+	            searchResults = meishiService.findByPertialCompanyKanaName(keyword);
+	        } else if (searchType.equals("personalKanaPartial")) {
+	            searchResults = meishiService.findByPertialPersonalKanaName(keyword);
+	        } else {
+	            searchResults = null;
+	        }
+
+	        if (searchResults != null) {
+	            // 復号化されたデータを表示
+	            for (MeishiEntity meishi : searchResults) {
+	                System.out.println("Personal Name: " + meishi.getPersonalname());
+	                System.out.println("Personal Kana Name: " + meishi.getPersonalkananame());
+	                System.out.println("Belong: " + meishi.getBelong());
+	                System.out.println("Position: " + meishi.getPosition());
+	                System.out.println("Address: " + meishi.getAddress());
+	                System.out.println("Company Tel: " + meishi.getCompanytel());
+	                System.out.println("Mobile Tel: " + meishi.getMobiletel());
+	                System.out.println("Email: " + meishi.getEmail());
+	                System.out.println("Photo Omote: " + meishi.getPhotoomote());
+	                System.out.println("Photo Ura: " + meishi.getPhotoura());
+	            }
+	            model.addAttribute("meishis", searchResults);
+	        }
+
+	        return "/meishi/searchResults";
+	    }
 	    
 	    
 	    
 	    
+/*//企業名（カナ）を検索時の復号化
+   @GetMapping("/searchByCompanyKana")
+   public String getMeishis(@RequestParam("companykananame") String companykananame, Model model) {
+   	
+   	// リクエストパラメータの確認
+       System.out.println("Received companykananame: " + companykananame);
+   	
+   	
+       // 企業名（カナ）で検索して復号化されたデータを取得
+       List<MeishiEntity> decryptedMeishis = meishiService.findByCompanykananame(companykananame);
+       
+       // 復号化されたデータを表示
+       for (MeishiEntity meishi : decryptedMeishis) {
+           System.out.println("Personal Name: " + meishi.getPersonalname());
+           System.out.println("Personal Kana Name: " + meishi.getPersonalkananame());
+           System.out.println("Belong: " + meishi.getBelong());
+           System.out.println("Position: " + meishi.getPosition());
+           System.out.println("Address: " + meishi.getAddress());
+           System.out.println("Company Tel: " + meishi.getCompanytel());
+           System.out.println("Mobile Tel: " + meishi.getMobiletel());
+           System.out.println("Email: " + meishi.getEmail());
+           System.out.println("Photo Omote: " + meishi.getPhotoomote());
+           System.out.println("Photo Ura: " + meishi.getPhotoura());
+       }
+       
+       // モデルにデータを追加してビューに渡す
+       model.addAttribute("meishis", decryptedMeishis);
+       return "/meishi/searchResults";
+   }
+   
+   
+ //担当者名（カナ）の場合の検索時の復号化
+   @GetMapping("/searchByPersonalkananame")
+   public String searchByPersonalkananame(@RequestParam("personalkananame") String personalkananame, Model model) {
+      
+   	// リクエストパラメータの確認
+       System.out.println("Received personalkananame: " + personalkananame);
+   	
+   	
+   	// 担当者名（カナ）で検索して復号化されたデータを取得
+       List<MeishiEntity> decryptedMeishis = meishiService.findByPertialPersonalKanaName(personalkananame);
+       
+       // 復号化されたデータを表示
+       for (MeishiEntity meishi : decryptedMeishis) {
+           System.out.println("Personal Name: " + meishi.getPersonalname());
+           System.out.println("Personal Kana Name: " + meishi.getPersonalkananame());
+           System.out.println("Belong: " + meishi.getBelong());
+           System.out.println("Position: " + meishi.getPosition());
+           System.out.println("Address: " + meishi.getAddress());
+           System.out.println("Company Tel: " + meishi.getCompanytel());
+           System.out.println("Mobile Tel: " + meishi.getMobiletel());
+           System.out.println("Email: " + meishi.getEmail());
+           System.out.println("Photo Omote: " + meishi.getPhotoomote());
+           System.out.println("Photo Ura: " + meishi.getPhotoura());
+       }
+       
+       // モデルにデータを追加してビューに渡す
+       model.addAttribute("meishis", decryptedMeishis);
+       return "meishi/searchResults";
+   }
+      
+   
+// 完全一致検索
+   @GetMapping("/searchByCompanyKana")
+   public String searchByCompanyKana(@RequestParam("companykananame") String companykananame, Model model) {
+   	
+   	// リクエストパラメータの確認
+   	System.out.println("Received companykananame: " + companykananame);
+   	
+       List<MeishiEntity> exactMatches = meishiService.findByCompanykananame(companykananame);
+       for (MeishiEntity meishi : exactMatches) {
+           System.out.println("Personal Name: " + meishi.getPersonalname());
+           System.out.println("Personal Kana Name: " + meishi.getPersonalkananame());
+           System.out.println("Belong: " + meishi.getBelong());
+           System.out.println("Position: " + meishi.getPosition());
+           System.out.println("Address: " + meishi.getAddress());
+           System.out.println("Company Tel: " + meishi.getCompanytel());
+           System.out.println("Mobile Tel: " + meishi.getMobiletel());
+           System.out.println("Email: " + meishi.getEmail());
+           System.out.println("Photo Omote: " + meishi.getPhotoomote());
+           System.out.println("Photo Ura: " + meishi.getPhotoura());
+       }
+       model.addAttribute("meishis", exactMatches);
+       return "/meishi/searchResults";
+   }
+   
+   
+// 部分一致検索
+   @GetMapping("/searchByCompanyKana")
+   public String searchMeishis(@RequestParam("companykananame") String companykananame, Model model) {
+   	
+   	System.out.println("Received companykananame: " + companykananame);
+   	
+   	
+       List<MeishiEntity> partialMatches = meishiService.findByPertialCompanyKanaName(companykananame);
+       for (MeishiEntity meishi : partialMatches) {
+           System.out.println("Personal Name: " + meishi.getPersonalname());
+           System.out.println("Personal Kana Name: " + meishi.getPersonalkananame());
+           System.out.println("Belong: " + meishi.getBelong());
+           System.out.println("Position: " + meishi.getPosition());
+           System.out.println("Address: " + meishi.getAddress());
+           System.out.println("Company Tel: " + meishi.getCompanytel());
+           System.out.println("Mobile Tel: " + meishi.getMobiletel());
+           System.out.println("Email: " + meishi.getEmail());
+           System.out.println("Photo Omote: " + meishi.getPhotoomote());
+           System.out.println("Photo Ura: " + meishi.getPhotoura());
+       }
+       model.addAttribute("meishis", partialMatches);
+       return "/meishi/searchResults";
+   }
+   
+// personalkananameの部分一致検索
+   @GetMapping("/searchMeishisByPersonalkananame")
+   public String searchMeishisByPersonalkananame(@RequestParam("personalkananame") String personalkananame, Model model) {
+      
+   	System.out.println("Received personalkananame: " + personalkananame);
+   	
+   	List<MeishiEntity> partialMatches = meishiService.findByPertialPersonalKanaName(personalkananame);
+       for (MeishiEntity meishi : partialMatches) {
+           System.out.println("Personal Name: " + meishi.getPersonalname());
+           System.out.println("Personal Kana Name: " + meishi.getPersonalkananame());
+           System.out.println("Belong: " + meishi.getBelong());
+           System.out.println("Position: " + meishi.getPosition());
+           System.out.println("Address: " + meishi.getAddress());
+           System.out.println("Company Tel: " + meishi.getCompanytel());
+           System.out.println("Mobile Tel: " + meishi.getMobiletel());
+           System.out.println("Email: " + meishi.getEmail());
+           System.out.println("Photo Omote: " + meishi.getPhotoomote());
+           System.out.println("Photo Ura: " + meishi.getPhotoura());
+       }
+       model.addAttribute("meishis", partialMatches);
+       return "/meishi/searchResults";
+   }*/
 }
 
 
