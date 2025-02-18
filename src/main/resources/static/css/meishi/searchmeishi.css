@@ -48,3 +48,42 @@
         margin-top: 5px;
         font-size: 18px;
     }
+    
+    
+    
+ /*検索結果後のcss*/
+ 
+ .meishiresult {
+	 width: 700px;
+	 margin: 0 auto;
+	 display: flex;
+	 justify-content: center;
+}
+ 
+ 
+ .meishi-info {
+	 margin-top: 45px;
+	 border: 1px solid black;
+	 	height: 125px;
+	 	width: 500px;
+ }
+ 
+ 
+ .result-item1 {
+	 width: 175px;
+	 height: 125px;
+	 margin-right: 100px;
+
+ }
+ 
+ .result-info {
+	 position: absolute;
+	 margin-left: 225px;
+	 margin-top: -115px;
+	
+	
+ }
+ 
+ .result-item2 {
+	 margin: 8px;
+ }
