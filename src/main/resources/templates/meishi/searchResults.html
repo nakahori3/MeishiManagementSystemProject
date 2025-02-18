@@ -2,60 +2,102 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>検索結果</title>
+<title>名刺情報検索ページ</title>
 <link rel="stylesheet" th:href="@{/css/layout.css}">
 <link rel="stylesheet" th:href="@{/css/meishi/searchmeishi.css}">
 <link rel="stylesheet" th:href="@{/css/login/login.css}">
+
 </head>
 <body>
   <div th:replace="~{common/layout::common_header}"></div>
 
+<div id="errorMessage" class="error-message"></div>
 <div class="content">
-    <h2>検索結果一覧</h2>
-    
-    <div th:if="${#lists.isEmpty(results)}">
-        <p>検索結果が見つかりませんでした。</p>
-    </div>
-    
-    <div th:if="${not #lists.isEmpty(results)}">
-        <ul>
-            <li th:each="result : ${results}">
-                <div>
-                    <strong>企業名:</strong> <span th:text="${result.companyname}"></span>
-                </div>
-                <div>
-                    <strong>企業名（カナ）:</strong> <span th:text="${result.companykananame}"></span>
-                </div>
-                <div>
-                    <strong>担当者名:</strong> <span th:text="${result.personalname}"></span>
-                </div>
-                <div>
-                    <strong>担当者名（カナ）:</strong> <span th:text="${result.personalkananame}"></span>
-                </div>
-                <div>
-                    <strong>所在地:</strong> <span th:text="${result.address}"></span>
-                </div>
-                <div>
-                    <strong>会社電話番号:</strong> <span th:text="${result.companytel}"></span>
-                </div>
-                <div>
-                    <strong>携帯電話番号:</strong> <span th:text="${result.mobiletel}"></span>
-                </div>
-                <div>
-                    <strong>Eメールアドレス:</strong> <span th:text="${result.email}"></span>
-                </div>
-                <div>
-                    <strong>名刺写真（表面）:</strong> <img th:src="@{/upload/{photoomote}(photoomote=${result.photoomote})}" alt="名刺写真（表面）">
-                </div>
-                <div>
-                    <strong>名刺写真（裏面）:</strong> <img th:src="@{/upload/{photoura}(photoura=${result.photoura})}" alt="名刺写真（裏面）">
-                </div>
-                <hr>
-            </li>
-        </ul>
-    </div>
+    <form id="searchForm" class="search_form" method="get" th:action="@{/searchResults}" onsubmit="return validateForm()">
+        <h2 class="kensaku">検索ページ</h2>
+         
+        <div class="search-type">
+            <div>
+                <input type="radio" id="companyKanaExact" name="searchType" value="companyKanaExact" onclick="updateSearchForm()" checked>
+                <label for="companyKanaExact">企業名（カナ）完全一致</label>
+            </div>
+            <div>
+                <input type="radio" id="companyKanaPartial" name="searchType" value="companyKanaPartial" onclick="updateSearchForm()">
+                <label for="companyKanaPartial">企業名（カナ）部分一致</label>
+            </div>
+            <div>
+                <input type="radio" id="personalKanaPartial" name="searchType" value="personalKanaPartial" onclick="updateSearchForm()">
+                <label for="personalKanaPartial">担当者名（カナ）部分一致</label>
+            </div>
+        </div>
+        
+        <input type="text" id="keyword" name="keyword" class="search_box" placeholder="全角カナを入力" required>
+        <input type="image" class="searchicon3" th:src="@{/img/searchicon.png}" alt="検索マーク画像">
+       
+    </form>
 </div>
 
-<div th:replace="~{common/layout::common_footer}"></div>
+<script>
+    function validateForm() {
+        var keyword = document.getElementById("keyword").value;
+        var regex = /^[ァ-ヴー]+$/;
+        var errorMessage = document.getElementById("errorMessage");
+
+        if (!regex.test(keyword)) {
+            errorMessage.textContent = "※全角カナを入力してください。";
+            return false; // フォーム送信をキャンセル
+        } else {
+            errorMessage.textContent = ""; // エラーメッセージをクリア
+            return true; // フォーム送信を続行
+        }
+    }
+
+    function updateSearchForm() {
+        var searchType = document.querySelector('input[name="searchType"]:checked').value;
+        var searchForm = document.getElementById("searchForm");
+
+        if (searchType === "companyKanaExact") {
+            searchForm.setAttribute("action", "@{/searchByCompanyKana}");
+        } else if (searchType === "companyKanaPartial") {
+            searchForm.setAttribute("action", "@{/searchByCompanyKanaPartial}");
+        } else if (searchType === "personalKanaPartial") {
+            searchForm.setAttribute("action", "@{/searchByPersonalKanaPartial}");
+        }
+    }
+</script>
+
+
+	<div th:if="${meishis != null}">
+        <h2>検索結果:</h2>
+        <div th:if="${meishis.isEmpty()}">
+            検索結果はありません。
+	    </div>
+	        <div th:each="meishis : ${meishis}" class="result-container">
+				<div class="result-item">
+	            <img th:src="${meishi.photoomote}" alt="名刺写真（表面）">
+	        	</div>
+	            <div class="result-item">
+	            <span th:text="${meishi.companyname}"></span>
+	        	</div>
+	        	<div class="result-item">
+	            <span th:text="${meishi.personalname}"></span>
+	        	</div>
+	        	<divv class="result-item">
+	           <span th:text="${meishi.email}"></span>
+	        	</div>
+                	
+        	 <div class="btn-ctl">
+  				<div class="button-container">
+			        <form method="post" th:action="@{/detailperson}">
+					<input type="hidden" name="id" th:value="${meishi.id}"/>
+			        <input type="submit" value="選択" class="choice">
+			        </form>
+        
+          		</div>
+  			</div>
+    </div>
+
+
+	<div th:replace="~{common/layout::common_footer}"></div>
 </body>
 </html>
