@@ -16,26 +16,26 @@
 
 <div class="content">	
 <!--名刺情報登録画面メイン部分の表示とフォーム送信先-->
-  <form method="post" th:action="@{/confirmMeishi}" th:object="${meishiForm}">
+  <form method="post" th:action="@{/confirmMeishi}" th:object="${meishiForm}" enctype="multipart/form-data" >
 	<div class="error">
 	<div class="errormsg">
-		 <!--<div th:if="${#fields.hasErrors('companyname')}" th:errors="*{companyname}"><br></div>-->
+		  <div th:if="${#fields.hasErrors('companyname')}" th:errors="*{companyname}"><br></div>
           <div th:if="${#fields.hasErrors('companykananame')}" th:errors="*{companykananame}"><br></div>
-          <!--<div th:if="${#fields.hasErrors('personalname')}" th:errors="*{personalname}"><br></div>-->
+          <div th:if="${#fields.hasErrors('personalname')}" th:errors="*{personalname}"><br></div>
           <div th:if="${#fields.hasErrors('personalkananame')}" th:errors="*{personalkananame}"><br></div>
-          <!--<div th:if="${#fields.hasErrors('address')}" th:errors="*{address}"><br></div>-->
+          <div th:if="${#fields.hasErrors('address')}" th:errors="*{address}"><br></div>
           <div th:if="${#fields.hasErrors('companytel')}" th:errors="*{companytel}"><br></div>  
           <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"><br></div>
-          <!--<div th:if="${#fields.hasErrors('photoomote')}" th:errors="*{photoomote}"><br></div>-->
+          <div th:if="${#fields.hasErrors('photoomote')}" th:errors="*{photoomote}"><br></div>
 		　
-		　	<div id="validate_msg1" style="color: red;"></div>
+		　	<!--<div id="validate_msg1" style="color: red;"></div>
 			<div id="validate_msg2" style="color: red;"></div>
 			<div id="validate_msg3" style="color: red;"></div>
 			<div id="validate_msg4" style="color: red;"></div>
 			<div id="validate_msg5" style="color: red;"></div>
 			<div id="validate_msg6" style="color: red;"></div>
 			<div id="validate_msg7" style="color: red;"></div>
-			<div id="validate_msg8" style="color: red;"></div>
+			<div id="validate_msg8" style="color: red;"></div>-->
 		
 	  	</div>
 	</div>
@@ -50,23 +50,23 @@
 	  <div>
 		<label for="companyname">企業名 ※必須</label>
 		<br>
-		<input  class="input" type="text" id="companyname" name="companyname" th:field="*{companyname}" pattern="[^ 　]+" required>
+		<input  class="input" type="text" id="companyname" name="companyname" th:field="*{companyname}" pattern="[^ 　]+">
       </div>
 	  <div>
 		<label for="companykananame">企業名（カナ） ※必須</label>
 		<br>
-		<input  class="input" type="text" id="companykananame" name="companykananame" th:field="*{companykananame}" pattern="[\u30A1-\u30F6]*" placeholder="全角カナのみ"  required>
+		<input  class="input" type="text" id="companykananame" name="companykananame" th:field="*{companykananame}" pattern="[\u30A1-\u30F6]*" placeholder="全角カナのみ">
 	  </div>
 	  
 	  <div>
 		<label for="personalname">担当者名 ※必須</label>
 		<br>
-		<input class="input" type="text" id="personalname" name="personalname" th:field="*{personalname}" pattern="[^ 　]+" required>
+		<input class="input" type="text" id="personalname" name="personalname" th:field="*{personalname}" pattern="[^ 　]+">
       </div>
 	  <div>
 		<label for="personalkananame">担当者名（カナ） ※必須</label>
 		<br>
-		<input class="input" type="text" id="personalkananame" name="personalkananame" th:field="*{personalkananame}" pattern="[\u30A1-\u30F6]*" placeholder="全角カナのみ" required >
+		<input class="input" type="text" id="personalkananame" name="personalkananame" th:field="*{personalkananame}" pattern="[\u30A1-\u30F6]*" placeholder="全角カナのみ">
 	  </div>
 	  
 	   <div>
@@ -88,7 +88,7 @@
       <div>
 		<label for="companytel">会社電話番号 ※必須</label>
 		<br>
-		<input class="input" type="text" id="companytel" name="companytel" th:field="*{companytel}" pattern="^0\d{9,10}$" placeholder="半角数字のみ" required >
+		<input class="input" type="text" id="companytel" name="companytel" th:field="*{companytel}" pattern="^0\d{9,10}$" placeholder="半角数字のみ">
 	  </div>
 	  <div>
 		<label for="mobiletel">携帯電話番号</label>
@@ -98,13 +98,13 @@
 	   <div>
 		<label for="email">Eメールアドレス ※必須</label>
 		<br>
-		<input class="input" type="text" id="email" name="email" th:field="*{email}" pattern="^[a-zA-Z0-9-_\.]+@[a-zA-Z0-9-_\.]+$" placeholder="default@example.com" required>
+		<input class="input" type="text" id="email" name="email" th:field="*{email}" pattern="^[a-zA-Z0-9-_\.]+@[a-zA-Z0-9-_\.]+$" placeholder="default@example.com">
 	  </div>
 	   <div>
 		<label for="photoomote">名刺写真（表面） ※必須 
 			<span class="mini">ファイル形式は.pngのみ</span> </label>
 		<br>
-		<input class="file" type="file" id="photoomote" name="photoomote" th:field="*{photoomote}" required>
+		<input class="file" type="file" id="photoomote" name="photoomote" th:field="*{photoomote}">
 	  </div>
 	   <div>
 		<label for="photoura">名刺写真（裏面）
@@ -129,7 +129,7 @@
   
   
   
-  		<script>
+  		<!--<script>
 		    function testCheck1(){
 		  	var companyname = document.getElementById("companyname").value;
 		  	if(companyname.length == 0){
@@ -226,7 +226,7 @@
 		    }
 			}
 				
-		</script>	
+		</script>	-->
 		
       
   </form>

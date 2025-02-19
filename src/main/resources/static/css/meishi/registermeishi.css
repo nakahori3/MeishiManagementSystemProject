@@ -12,9 +12,8 @@
 
 
 .content {
-	margin-top: 175px;
 	display: flex;
-  justify-content: center;
+	justify-content:center;
 	
 }
 
@@ -25,6 +24,7 @@ h2 {
 }
 
 .all-inputmeishi {
+	
 	font-size: 25px;
     margin-top: -200px;
     text-align: center;
@@ -33,8 +33,9 @@ h2 {
 
 /*名刺情報入力ページのフォームの中（ボタンは除く）*/
 .all-inputmeishi2 {
+	margin: auto;
 	font-size: 25px;
-    margin-top: -20px;
+    margin-top: -50px;
    	text-align: center;
    	border: 2px solid black;
 	height: 1080px;
@@ -45,9 +46,11 @@ h2 {
 /*名刺情報入力ページの入力欄*/
 .input-form{
 	display: inline-block;
+	
     text-align: left;
     top: 10px;
     padding-left: 20px;
+   
 	
 }
 
@@ -56,15 +59,17 @@ h2 {
 	text-align: center;
 	font-size: 18px;
 	color: red;
+	display: inline-block;
+	justify-content: center;
 	margin-top: -170px;
 	margin-left: 50px;
 	margin-bottom: 50px;
 }
 
-.errormsg {
+/*.errormsg {
 	display: inline-block;
 	text-align: left;
-}
+}*/
 
 
 /* 入力欄のスタイル */

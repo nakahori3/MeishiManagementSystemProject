@@ -1,48 +1,50 @@
 package com.example.demo.form;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 @Data
 public class MeishiForm {
 	
-	@NotBlank(message = "※企業名を入力してください。")
-    public String companyname;
-    
-    @NotBlank(message = "※企業名(カナ）を入力してください。")
-	@Pattern(regexp = "^[ァ-ヴー]+$", message = "企業名（カナ）は全角カタカナで入力して下さい。")
-    public String companykananame;
-    
-    @NotBlank(message = "※担当者名を入力してください。")
-    public String personalname;  // String型に変更
-    
-    @NotBlank(message = "※担当者名(カナ）を入力してください。")
-	@Pattern(regexp = "^[ァ-ヴー]+$", message = "担当者名（カナ）は全角カタカナで入力して下さい。")
-    public String personalkananame; // String型に変更
-    
-    public String belong;
-    
-    public String position;
-    
-    @NotBlank(message = "※所在地を入力してください。")
-    public String address;
-    
-    @NotBlank(message = "※会社電話番号を入力してください。")
-	@Pattern(regexp = "^[0-9]+$", message = "会社電話番号は半角数字で入力して下さい。")
-    public String companytel;
-    
+	@NotBlank(message = "企業名を入力してください。")
+	    private String companyname;
+
+    @NotBlank(message = "企業名（カナ）を入力してください。")
+    @Pattern(regexp = "^[ァ-ヴー]+$", message = "企業名（カナ）は全角カタカナで入力して下さい。")
+    private String companykananame;
+
+    @NotBlank(message = "担当者名を入力してください。")
+    private String personalname;
+
+    @NotBlank(message = "担当者名（カナ）を入力してください。")
+    @Pattern(regexp = "^[ァ-ヴー]+$", message = "担当者名（カナ）は全角カタカナで入力して下さい。")
+    private String personalkananame;
+
+    private String belong;
+    private String position;
+
+    @NotBlank(message = "所在地を入力してください。")
+    private String address;
+
+    @NotBlank(message = "会社電話番号を入力してください。")
+    @Pattern(regexp = "^[0-9]+$", message = "会社電話番号は半角数字で入力して下さい。")
+    private String companytel;
+
     @Pattern(regexp = "^[0-9]+$", message = "携帯電話番号は半角数字で入力して下さい。")
-    public String mobiletel; // String型に変更
-    
-    @NotBlank(message = "※Eメールアドレスを入力してください。")
-	@Pattern(regexp = "^[a-zA-Z0-9_.+-]+@([a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\\.)+[a-zA-Z]{2,}$", message = "Eメールアドレスは半角英数字で入力して下さい。")
-    public String email;  // String型に変更
-    
-    @NotBlank(message = "※名刺写真（表面）を選択してください。")
-    public String photoomote;  // String型に変更
-    
-    public String photoura;  // String型に変更
+    private String mobiletel;
+
+    @NotBlank(message = "Eメールアドレスを入力してください。")
+    @Pattern(regexp = "^[a-zA-Z0-9_.+-]+@([a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\\.)+[a-zA-Z]{2,}$", message = "Eメールアドレスは半角英数字で入力して下さい。")
+    private String email;
+
+    @NotNull(message = "名刺写真（表面）を選択してください。")
+	/*private MultipartFile photoomote;*/
+	 private String photoomote;
+
+		/*private MultipartFile photoura;*/
+	 private String photoura;
     
     public String savedate;
 	
@@ -126,6 +128,39 @@ public class MeishiForm {
     public void setEmail(String email) {
         this.email = email;
     }
+    
+    
+	/* public MultipartFile getPhotoomote() {
+	    return photoomote;
+	}
+	
+	public void setPhotoomote(MultipartFile photoomote) {
+	    this.photoomote = photoomote;
+	}
+	
+	public MultipartFile getPhotoura() {
+	    return photoura;
+	}
+	
+	public void setPhotoura(MultipartFile photoura) {
+	    this.photoura = photoura;
+	}*/
+    
+	public String getPhotoomote() {
+	    return photoomote;
+	}
+	
+	public void setPhotoomote(String photoomote) {
+	    this.photoomote = photoomote;
+	}
+	
+	public String getPhotoura() {
+	    return photoura;
+	}
+	
+	public void setPhotoura(String photoura) {
+	    this.photoura = photoura;
+	}
 
     public String getSavedate() {
         return savedate;
@@ -134,21 +169,21 @@ public class MeishiForm {
     public void setSavedate(String savedate) {
         this.savedate = savedate;
     }
-	
-	
-	/*@NotBlank(message = "※企業名を入力してください。")
+}
+    
+    /*@NotBlank(message = "※企業名を入力してください。")
 	public String companyname;
 	
 	@NotBlank(message = "※企業名(カナ）を入力してください。")
-	@Pattern(regexp = "/\\A[ァ-ヴー]+\\z/u\n", message = "企業名（カナ）は全角カタカナで入力して下さい。")
+	@Pattern(regexp = "^[ァ-ヴー]+$", message = "企業名（カナ）は全角カタカナで入力して下さい。")
 	public String companykananame;
 	
 	@NotBlank(message = "※担当者名を入力してください。")
-	public byte[] personalname;  //bytea型
+	public String personalname;  // String型に変更
 	
 	@NotBlank(message = "※担当者名(カナ）を入力してください。")
-	@Pattern(regexp = "/\\A[ァ-ヴー]+\\z/u\n", message = "担当者名（カナ）は全角カタカナで入力して下さい。")
-	public byte[] personalkananame; //bytea型
+	@Pattern(regexp = "^[ァ-ヴー]+$", message = "担当者名（カナ）は全角カタカナで入力して下さい。")
+	public String personalkananame; // String型に変更
 	
 	public String belong;
 	
@@ -158,22 +193,19 @@ public class MeishiForm {
 	public String address;
 	
 	@NotBlank(message = "※会社電話番号を入力してください。")
-	@Pattern(regexp = "/^[0-9]+$/\n", message = "会社電話番号は半角数字で入力して下さい。")
+	@Pattern(regexp = "^[0-9]+$", message = "会社電話番号は半角数字で入力して下さい。")
 	public String companytel;
 	
-	@Pattern(regexp = "/^[0-9]+$/\n", message = "携帯電話番号は半角数字で入力して下さい。")
-	public byte[] mobiletel; //bytea型
+	@Pattern(regexp = "^[0-9]+$", message = "携帯電話番号は半角数字で入力して下さい。")
+	public String mobiletel; // String型に変更
 	
 	@NotBlank(message = "※Eメールアドレスを入力してください。")
-	@Pattern(regexp = "[a-zA-Z0-9]*", message = "Eメールアドレスは半角英数字で入力して下さい。")
-	public byte[] email;  //bytea型
+	@Pattern(regexp = "^[a-zA-Z0-9_.+-]+@([a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\\.)+[a-zA-Z]{2,}$", message = "Eメールアドレスは半角英数字で入力して下さい。")
+	public String email;  // String型に変更
 	
 	@NotBlank(message = "※名刺写真（表面）を選択してください。")
-	public byte[] photoomote;  //bytea型
+	public String photoomote;  // String型に変更
 	
-	public byte[] photoura;  //bytea型
+	public String photoura;  // String型に変更
 	
 	public String savedate;*/
-	
-	
-}
