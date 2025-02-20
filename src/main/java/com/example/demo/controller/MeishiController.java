@@ -1,12 +1,10 @@
 package com.example.demo.controller;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+
+import javax.crypto.SecretKey;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +24,9 @@ import com.example.demo.entity.MeishiEntity;
 import com.example.demo.form.MeishiForm;
 import com.example.demo.repository.MeishisRepository;
 import com.example.demo.service.MeishiService;
+import com.example.demo.util.EncryptionUtil;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -65,49 +65,110 @@ public class MeishiController {
         return meishiService.getAllDecryptedMeishis();
     }
 
-    // エラーありの場合、新規登録画面
-    // エラーなしの場合、確認画面へ遷移
+   
+    
     @PostMapping("/confirmMeishi")
-    public String meishiConfirm(@Validated MeishiForm meishiForm, BindingResult result, Model model) {
+    public String meishiConfirm(@Validated MeishiForm meishiForm, BindingResult result, Model model,
+                                @RequestParam("photoomote") MultipartFile photoomoteFile,
+                                @RequestParam("photoura") MultipartFile photouraFile, HttpSession session) {
         if (result.hasErrors()) {
-            // バリデーションエラーありの場合、新規登録画面
             model.addAttribute("meishiForm", meishiForm);
             return "/meishi/registerMeishi";
         }
-        // エラーなしの場合、確認画面へ遷移
-        model.addAttribute("meishiForm", meishiForm);
-        return "/meishi/confirmMeishi";
+
+        try {
+            // 暗号化キーの生成
+            SecretKey key = EncryptionUtil.generateKey();
+            String encodedKey = EncryptionUtil.encodeKey(key);
+
+            // ファイルをバイト配列として取得
+            byte[] photoomoteBytes = photoomoteFile.getBytes();
+            byte[] photouraBytes = photouraFile.getBytes();
+
+            // ファイルを暗号化
+            byte[] encryptedPhotoomote = EncryptionUtil.encrypt(photoomoteBytes, key);
+            byte[] encryptedPhotoura = EncryptionUtil.encrypt(photouraBytes, key);
+
+         // 暗号化ファイルをセッションに保存
+            session.setAttribute("encryptedPhotoomote", encryptedPhotoomote);
+            session.setAttribute("encryptedPhotoura", encryptedPhotoura);
+            session.setAttribute("encodedKey", encodedKey);
+
+            model.addAttribute("meishiForm", meishiForm);
+            return "/meishi/confirmMeishi";
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("message", "Error occurred while saving the files");
+            return "/meishi/registerMeishi";
+        }
+        
     }
 
     
-    
- // 名刺情報とDBへの接続
+	/*@PostMapping("/confirmMeishi")
+	public String meishiConfirm(@Validated MeishiForm meishiForm, BindingResult result, Model model,
+	                            @RequestParam("photoomote") MultipartFile photoomoteFile,
+	                            @RequestParam("photoura") MultipartFile photouraFile, HttpSession session) {
+	    if (result.hasErrors()) {
+	        // バリデーションエラーありの場合、新規登録画面
+	        model.addAttribute("meishiForm", meishiForm);
+	        return "/meishi/registerMeishi";
+	    }
+	
+	    try {
+	        // ファイルを一時的に保存
+	        String uploadDir = "src/main/resources/static/images";
+	        String photoomotePath = FileUtil.saveFile(uploadDir, photoomoteFile);
+	        String photouraPath = FileUtil.saveFile(uploadDir, photouraFile);
+	
+	        if (photoomotePath == null || photouraPath == null) {
+	            model.addAttribute("message", "ファイルが保存されていません");
+	            return "/meishi/registerMeishi";
+	        }
+	
+	        // ファイルパスをフォームに設定
+	        meishiForm.setPhotoomotePath(photoomotePath);
+	        meishiForm.setPhotouraPath(photouraPath);
+	
+	        // セッションにファイルパスを保存
+	        session.setAttribute("photoomotePath", photoomotePath);
+	        session.setAttribute("photouraPath", photouraPath);
+	
+	        // 確認画面へ遷移
+	        model.addAttribute("meishiForm", meishiForm);
+	        return "/meishi/confirmMeishi";
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	        model.addAttribute("message", "Error occurred while saving the files");
+	        return "/meishi/registerMeishi";
+	    }
+	}*/
+ 
+	
     @PostMapping("/completeMeishi")
-    public String meishiComplete(@Validated MeishiForm meishiForm,
-                                 @RequestParam("photoomote") MultipartFile photoomoteFile,
-                                 @RequestParam("photoura") MultipartFile photouraFile,
-                                 Model model) {
+    public String meishiComplete(@Validated MeishiForm meishiForm, HttpSession session, Model model) {
         try {
-            logger.info("Received photoomote file: " + photoomoteFile.getOriginalFilename());
-            logger.info("Received photoura file: " + photouraFile.getOriginalFilename());
+            // セッションからファイルパスと暗号化キーを取得
+        	byte[] encryptedPhotoomote = (byte[]) session.getAttribute("encryptedPhotoomote");
+            byte[] encryptedPhotoura = (byte[]) session.getAttribute(
+            String encodedKey = (String) session.getAttribute("encodedKey");
 
             // 今日の日付を保存
             LocalDateTime today = LocalDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
             String formatDate = today.format(formatter);
 
-            meishiService.saveMeishi(meishiForm, photoomoteFile, photouraFile, formatDate);
+            // 暗号化されたファイルを保存する処理
+            meishiService.saveEncryptedMeishi(meishiForm, encryptedPhotoomote, encryptedPhotoura, encodedKey, formatDate);
+
+            return "/meishi/completeMeishi";
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("message", "Error occurred while saving the files");
             return "/meishi/registerMeishi";
         }
-
-        return "/meishi/completeMeishi";
     }
-
-    
-    
+        
     
 	/*// 名刺情報とDBへの接続
 	@PostMapping("/completeMeishi")
@@ -141,20 +202,20 @@ public class MeishiController {
     
     
     
-    private String saveFile(String uploadDir, MultipartFile file) throws IOException {
-        if (file.isEmpty()) {
-            return null;
-        }
-        Path uploadPath = Paths.get(uploadDir);
-        if (!Files.exists(uploadPath)) {
-            Files.createDirectories(uploadPath);
-        }
-        String fileName = file.getOriginalFilename();
-        Path filePath = uploadPath.resolve(fileName);
-        Files.copy(file.getInputStream(), filePath);
-        logger.info("Saved file: " + filePath.toString());
-        return "/images/" + fileName;
-    }
+	/*  private String saveFile(String uploadDir, MultipartFile file) throws IOException {
+	    if (file.isEmpty()) {
+	        return null;
+	    }
+	    Path uploadPath = Paths.get(uploadDir);
+	    if (!Files.exists(uploadPath)) {
+	        Files.createDirectories(uploadPath);
+	    }
+	    String fileName = file.getOriginalFilename();
+	    Path filePath = uploadPath.resolve(fileName);
+	    Files.copy(file.getInputStream(), filePath);
+	    logger.info("Saved file: " + filePath.toString());
+	    return "/images/" + fileName;
+	}*/
 
     // 検索結果の処理と復号化
     @GetMapping("/searchResults")

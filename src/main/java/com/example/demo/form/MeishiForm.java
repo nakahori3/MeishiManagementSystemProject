@@ -1,5 +1,7 @@
 package com.example.demo.form;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -40,11 +42,14 @@ public class MeishiForm {
     private String email;
 
     @NotNull(message = "名刺写真（表面）を選択してください。")
-	/*private MultipartFile photoomote;*/
-	 private String photoomote;
+	private MultipartFile photoomote;
+	/* private String photoomote;*/
 
-		/*private MultipartFile photoura;*/
-	 private String photoura;
+	private MultipartFile photoura;
+	/*private String photoura;*/
+	
+	private String photoomotePath; // 新しく追加するフィールド
+    private String photouraPath; // 新しく追加するフィールド
     
     public String savedate;
 	
@@ -130,7 +135,7 @@ public class MeishiForm {
     }
     
     
-	/* public MultipartFile getPhotoomote() {
+	 public MultipartFile getPhotoomote() {
 	    return photoomote;
 	}
 	
@@ -144,9 +149,9 @@ public class MeishiForm {
 	
 	public void setPhotoura(MultipartFile photoura) {
 	    this.photoura = photoura;
-	}*/
+	}
     
-	public String getPhotoomote() {
+	/*public String getPhotoomote() {
 	    return photoomote;
 	}
 	
@@ -161,7 +166,26 @@ public class MeishiForm {
 	public void setPhotoura(String photoura) {
 	    this.photoura = photoura;
 	}
+	*/
+	
+	
+	public String getPhotoomotePath() {
+        return photoomotePath;
+    }
 
+    public void setPhotoomotePath(String photoomotePath) {
+        this.photoomotePath = photoomotePath;
+    }
+
+    public String getPhotouraPath() {
+        return photouraPath;
+    }
+
+    public void setPhotouraPath(String photouraPath) {
+        this.photouraPath = photouraPath;
+    }
+	
+	
     public String getSavedate() {
         return savedate;
     }

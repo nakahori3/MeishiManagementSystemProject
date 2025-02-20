@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,11 +29,15 @@ public class MeishiEntity {
     @Column(name = "companykananame")
     private String companykananame;
 
+    @Lob
     @Column(name = "personalname")
-    private String personalname;
+    private byte[] personalname;
+	/*private String personalname;*/
 
+    @Lob
     @Column(name = "personalkananame")
-    private String personalkananame;
+    private byte[] personalkananame;
+	/* private String personalkananame;*/
 
     @Column(name = "belong")
     private String belong;
@@ -46,22 +51,29 @@ public class MeishiEntity {
     @Column(name = "companytel")
     private String companytel;
 
+    @Lob
     @Column(name = "mobiletel")
-    private String mobiletel;
+    private byte[] mobiletel;
+	/*private String mobiletel;*/
 
+    @Lob
     @Column(name = "email")
-    private String email;
+    private byte[] email;
+	/* private String email;*/
 
     @Column(name = "photoomote")
-    private String photoomote;
+    private byte[] photoomote;
+    /*private String photoomote;*/
 
     @Column(name = "photoura")
-    private String photoura;
+    private byte[] photoura;
+	/* private String photoura;*/
 
     @Column(name = "savedate")
     private String savedate;
+}
 
-    // Getters and Setters
+  /*  // Getters and Setters
     public int getId() {
         return id;
     }
@@ -173,7 +185,7 @@ public class MeishiEntity {
     public void setSavedate(String savedate) {
         this.savedate = savedate;
     }
-}
+}*/
 
 
 
