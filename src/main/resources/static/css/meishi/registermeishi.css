@@ -15,6 +15,7 @@
 	display: flex;
 	justify-content:center;
 	
+	
 }
 
 /*ページタイトル*/
@@ -61,7 +62,7 @@ h2 {
 	color: red;
 	display: inline-block;
 	justify-content: center;
-	margin-top: -170px;
+	margin-top: -25px;
 	margin-left: 50px;
 	margin-bottom: 50px;
 }
@@ -146,7 +147,7 @@ label {
 /*名刺情報入力確認ページの中*/
 .all-inputmeishi3 {
 	font-size: 25px;
-    margin-top: -100px;
+   /* margin-top: -0px;*/
    	text-align: center;
    	border: 2px solid black;
 	height: 1100px;

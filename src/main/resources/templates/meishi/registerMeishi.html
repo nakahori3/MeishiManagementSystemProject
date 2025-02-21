@@ -16,7 +16,7 @@
 
 <div class="content">	
 <!--名刺情報登録画面メイン部分の表示とフォーム送信先-->
-  <form method="post" th:action="@{/confirmMeishi}" th:object="${meishiForm}" enctype="multipart/form-data" >
+  <form method="post" th:action="@{/confirmMeishi}" th:object="${meishiForm}"  >
 	<div class="error">
 	<div class="errormsg">
 		  <div th:if="${#fields.hasErrors('companyname')}" th:errors="*{companyname}"><br></div>
@@ -122,112 +122,10 @@
   <div class="btn">
   <div class="button-container2">
 	   <a th:href="@{/return_top}" class="btn-return2">戻る</a>
-	    <input type="submit" class="btn-submit2" value="確認">
+	    <input type="submit" class="btn-submit2"   value="確認">
   </div>
   </div>
   
-  
-  
-  
-  		<!--<script>
-		    function testCheck1(){
-		  	var companyname = document.getElementById("companyname").value;
-		  	if(companyname.length == 0){
-		    var validate = "※企業名を入力して下さい。";
-		  document.getElementById("validate_msg1").innerHTML = validate; 
-		  return false; 
-	  		}
-		}
-		</script>
-		
-		<script>
-		    function testCheck2(){
-		    var companykananame = document.getElementById("companykananame").value;
-		  	if(companykananame.length == 0){
-		    var validate = "※企業名(カナ）を入力して下さい。";
-		   	document.getElementById("validate_msg2").innerHTML = validate;
-		   	return false; 
-	  		}
-		}
-		</script>
-		
-		
-		<script>  
-		    function testCheck3(){
-		    var personalname = document.getElementById("personalname").value;
-		  	if(personalname.length == 0){
-		    var validate = "※担当者名を入力してください。";
-		    document.getElementById("validate_msg3").innerHTML = validate;
-		    return false; 
-		    }
-			}
-		 </script>  
-		    
-		 
-		 <script>
-		    function testCheck4(){
-		  	var personalkananame = document.getElementById("personalkananame").value;
-		  	if(personalkananame.length == 0){
-		    var validate = "※担当者名（カナ）を入力してください。";
-		    
-		    document.getElementById("validate_msg4").innerHTML = validate; 
-		    return false; 
-	  		}
-			}
-		
-		</script>
-		
-		
-		<script>  
-		    function testCheck5(){
-		    var address = document.getElementById("address").value;
-		  	if(address.length == 0){
-		    var validate = "※所在地を入力してください。";
-		    document.getElementById("validate_msg5").innerHTML = validate;
-		    return false; 
-		    }
-			}
-		
-		</script>
-		
-		
-		<script>  
-		    function testCheck6(){
-		    var companytel = document.getElementById("companytel").value;
-		  	if(companytel.length == 0){
-		    var validate = "※会社電話番号を入力してください。";
-		    document.getElementById("validate_msg6").innerHTML = validate;
-		    return false; 
-		    }
-			}
-		
-		</script>
-		
-		
-		<script>  
-		    function testCheck7(){
-		    var email = document.getElementById("email").value;
-		  	if(email.length == 0){
-		    var validate = "※Eメールアドレスを入力してください。";
-		    document.getElementById("validate_msg7").innerHTML = validate;
-		    return false; 
-		    }
-			}
-		</script>
-		
-		
-		<script>  
-		    function testCheck8(){
-		    var photoomote = document.getElementById("photoomote").value;
-		  	if(photoomote.length == 0){
-		    var validate = "※名刺写真(表面）を選択してください。。";
-		    document.getElementById("validate_msg8").innerHTML = validate;
-		    return false; 
-		    }
-			}
-				
-		</script>	-->
-		
       
   </form>
   

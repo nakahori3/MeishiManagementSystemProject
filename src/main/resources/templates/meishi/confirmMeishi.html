@@ -13,7 +13,7 @@
 
     <div class="content">
         <!-- DBに登録した情報の確認 -->
-        <form method="post" th:action="@{/completeMeishi}" th:object="${meishiForm}" enctype="multipart/form-data">
+        <form method="post" th:action="@{/completeMeishi}" th:object="${meishiForm}" >
             <div class="all-inputmeishi3">
                 <h2>名刺情報入力確認ページ</h2>
                 <div class="input-form">
@@ -115,9 +115,6 @@
     <div th:replace="~{common/layout::common_footer}"></div>
 </body>
 </html>
-
-
-
 
 
 
@@ -237,4 +234,5 @@
 </div>
 <div th:replace="~{common/layout::common_footer}"></div>
 </body>
-</html>-->
+</html>
+-->
