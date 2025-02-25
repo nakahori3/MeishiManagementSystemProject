@@ -16,7 +16,7 @@
 
 <div class="content">	
 <!--名刺情報登録画面メイン部分の表示とフォーム送信先-->
-  <form method="post" th:action="@{/confirmMeishi}" th:object="${meishiForm}"  >
+  <form method="post" th:action="@{/confirmMeishi}" th:object="${meishiForm}" enctype="multipart/form-data" >
 	<div class="error">
 	<div class="errormsg">
 		  <div th:if="${#fields.hasErrors('companyname')}" th:errors="*{companyname}"><br></div>
@@ -28,14 +28,6 @@
           <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"><br></div>
           <div th:if="${#fields.hasErrors('photoomote')}" th:errors="*{photoomote}"><br></div>
 		　
-		　	<!--<div id="validate_msg1" style="color: red;"></div>
-			<div id="validate_msg2" style="color: red;"></div>
-			<div id="validate_msg3" style="color: red;"></div>
-			<div id="validate_msg4" style="color: red;"></div>
-			<div id="validate_msg5" style="color: red;"></div>
-			<div id="validate_msg6" style="color: red;"></div>
-			<div id="validate_msg7" style="color: red;"></div>
-			<div id="validate_msg8" style="color: red;"></div>-->
 		
 	  	</div>
 	</div>

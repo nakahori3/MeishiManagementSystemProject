@@ -72,13 +72,18 @@
                         <div>
                             <label>名刺写真（表面） ※必須</label>
                             <br>
-                            <div class="confirm_text" th:text="${meishiForm.photoomote}"></div>
+                            <div class="confirm_text" th:if="${photoomoteFileName != null}" th:text="${photoomoteFileName}"></div>
+                            <div class="confirm_text" th:if="${photoomoteFileName == null}">ファイルが選択されていません。</div>
+                            <input type="hidden" th:field="*{photoomote}">
+                            <!--<div class="confirm_text" th:text="${meishiForm.photoomote}"></div>-->
                             <input type="hidden" th:field="*{photoomote}">
                         </div>
                         <div>
                             <label>名刺写真（裏面）</label>
                             <br>
-                            <div class="confirm_text" th:text="${meishiForm.photoura}"></div>
+                            <div class="confirm_text" th:if="${photouraFileName != null}" th:text="${photouraFileName}"></div>
+                            <div class="confirm_text" th:if="${photouraFileName == null}">ファイルが選択されていません。</div>
+                            <!--<div class="confirm_text" th:text="${meishiForm.photoura}"></div>-->
                             <input type="hidden" th:field="*{photoura}">
                         </div>
                     </div>

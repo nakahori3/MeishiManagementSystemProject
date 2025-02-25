@@ -1,6 +1,9 @@
 package com.example.demo.form;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
@@ -32,17 +35,19 @@ public class MeishiForm {
 	@Pattern(regexp = "^[0-9]+$", message = "会社電話番号は半角数字で入力して下さい。")
     public String companytel;
     
-    @Pattern(regexp = "^[0-9]+$", message = "携帯電話番号は半角数字で入力して下さい。")
+    @Pattern(regexp = "^[0-9]*$", message = "携帯電話番号は半角数字で入力して下さい。")
     public String mobiletel; // String型に変更
     
     @NotBlank(message = "※Eメールアドレスを入力してください。")
 	@Pattern(regexp = "^[a-zA-Z0-9_.+-]+@([a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\\.)+[a-zA-Z]{2,}$", message = "Eメールアドレスは半角英数字で入力して下さい。")
     public String email;  // String型に変更
     
-    @NotBlank(message = "※名刺写真（表面）を選択してください。")
-    public String photoomote;  // String型に変更
+    @NotNull(message = "※名刺写真（表面）を選択してください。")
+	/*public String photoomote;  // String型に変更
+	*/    private MultipartFile photoomote;
     
-    public String photoura;  // String型に変更
+	/*public String photoura;  // String型に変更
+	*/    private MultipartFile photoura;
     
     public String savedate;
 	
@@ -125,6 +130,22 @@ public class MeishiForm {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+    
+    public MultipartFile getPhotoomote() {
+        return photoomote;
+    }
+
+    public void setPhotoomote(MultipartFile photoomote) {
+        this.photoomote = photoomote;
+    }
+
+    public MultipartFile getPhotoura() {
+        return photoura;
+    }
+
+    public void setPhotoura(MultipartFile photoura) {
+        this.photoura = photoura;
     }
 
     public String getSavedate() {
