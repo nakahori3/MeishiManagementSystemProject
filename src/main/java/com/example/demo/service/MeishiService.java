@@ -58,6 +58,12 @@ public class MeishiService {
 	
 	
 	public void saveMeishi(MeishiForm form, String photoomotePath, String photouraPath) {
+		
+		// 画像ファイルパスがNULLでないことを確認
+		if (photoomotePath == null || photouraPath == null) {
+		    throw new IllegalArgumentException("画像ファイルパスがNULLです。");
+		}
+		
         // 文字列データをバイナリ形式に変換
         byte[] personalname = form.getPersonalname().getBytes(StandardCharsets.UTF_8);
         byte[] personalkananame = form.getPersonalkananame().getBytes(StandardCharsets.UTF_8);

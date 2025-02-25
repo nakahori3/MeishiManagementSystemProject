@@ -83,63 +83,76 @@ public class MeishiController {
 
 		@PostMapping("/confirmMeishi")
 		public String meishiConfirm(@Validated MeishiForm meishiForm, BindingResult result, Model model, HttpSession session) {
-			if (result.hasErrors()) {
-				// バリデーションエラーありの場合、新規登録画面
-				model.addAttribute("meishiForm", meishiForm);
-				return "/meishi/registerMeishi";
-			}
-			
-			// ファイルアップロード処理
-	        String photoomotePath = saveFile(UPLOAD_DIR, meishiForm.getPhotoomote());
-	        String photouraPath = saveFile(UPLOAD_DIR, meishiForm.getPhotoura());
-	        
-			if (photoomotePath == null || photouraPath == null) {
-			    // ファイル保存に失敗した場合、新規登録画面にリダイレクト
-			    model.addAttribute("message", "ファイルの保存に失敗しました。もう一度お試しください。");
-			    return "/meishi/registerMeishi";
-			}
-			
-			// ファイルパスをセッションに保存
-			session.setAttribute("photoomotePath", photoomotePath);
-			session.setAttribute("photouraPath", photouraPath);
-	        
-	     // ファイル名をモデルに追加
-	        model.addAttribute("photoomoteFileName", meishiForm.getPhotoomote().getOriginalFilename());
-	        model.addAttribute("photouraFileName", meishiForm.getPhotoura().getOriginalFilename());
+		    if (result.hasErrors()) {
+		        // バリデーションエラーが発生した場合のログ出力
+		        logger.error("Validation errors occurred: " + result.getAllErrors());
+		        // バリデーションエラーありの場合、新規登録画面
+		        model.addAttribute("meishiForm", meishiForm);
+		        return "/meishi/registerMeishi";
+		    }
+		    
+		    // ファイルアップロード処理
+		    String photoomotePath = saveFile(UPLOAD_DIR, meishiForm.getPhotoomote());
+		    String photouraPath = null;
+		    if (meishiForm.getPhotoura() != null && !meishiForm.getPhotoura().isEmpty()) {
+		        photouraPath = saveFile(UPLOAD_DIR, meishiForm.getPhotoura());
+		    }
 
-			/*// サービス層に渡す
-			meishiService.saveMeishi(meishiForm,  photoomotePath, photouraPath);*/
-			
-			
-			//エラーなしの場合、確認画面へ遷移
-			return "/meishi/confirmMeishi";
+		    if (photoomotePath == null) {
+		        // ファイル保存に失敗した場合のログ出力
+		        logger.error("Failed to save photoomote file: photoomotePath=" + photoomotePath);
+		        // ファイル保存に失敗した場合、新規登録画面にリダイレクト
+		        model.addAttribute("message", "表面のファイルの保存に失敗しました。もう一度お試しください。");
+		        return "/meishi/registerMeishi";
+		    }
+
+		    // photouraがnullの場合の処理
+		    if (photouraPath == null) {
+		        // 裏面のファイルが選択されていない場合のログ出力
+		        logger.warn("No file selected for photoura. Continuing without photoura.");
+		    }
+
+		    // ファイルパスをセッションに保存
+		    session.setAttribute("photoomotePath", photoomotePath);
+		    session.setAttribute("photouraPath", photouraPath);
+
+		    // ファイル名をモデルに追加
+		    model.addAttribute("photoomoteFileName", meishiForm.getPhotoomote().getOriginalFilename());
+		    model.addAttribute("photouraFileName", meishiForm.getPhotoura() != null && !meishiForm.getPhotoura().isEmpty() 
+		                        ? meishiForm.getPhotoura().getOriginalFilename() : "ファイルが選択されていません。");
+
+		       // エラーなしの場合、確認画面へ遷移
+		    logger.info("Transitioning to confirmMeishi page with photoomoteFileName=" + meishiForm.getPhotoomote().getOriginalFilename() +
+		            " and photouraFileName=" + (meishiForm.getPhotoura() != null ? meishiForm.getPhotoura().getOriginalFilename() : "ファイルが選択されていません。"));
+		    
+		    // エラーなしの場合、確認画面へ遷移
+		    return "/meishi/confirmMeishi";
 		}
-		
-		
+
 		private String saveFile(String uploadDir, MultipartFile file) {
-	        if (file.isEmpty()) {
-	            return null;
-	        }
-	        try {
-	            Path uploadPath = Paths.get(uploadDir);
-	            if (!Files.exists(uploadPath)) {
-	                Files.createDirectories(uploadPath);
-	            }
-	            String originalFileName = file.getOriginalFilename();
-	            String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
-	            String fileName = timestamp + "_" + originalFileName;
-	            Path filePath = uploadPath.resolve(fileName);
-	            Files.copy(file.getInputStream(), filePath);
-				/*String fileName = file.getOriginalFilename();
-				Path filePath = uploadPath.resolve(fileName);
-				Files.copy(file.getInputStream(), filePath);*/
-	            return filePath.toString();
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	            return null;
-	        }
-	    }
-	
+		    if (file.isEmpty()) {
+		        return null;
+		    }
+		    try {
+		        Path uploadPath = Paths.get(uploadDir);
+		        if (!Files.exists(uploadPath)) {
+		            Files.createDirectories(uploadPath);
+		        }
+		        String originalFileName = file.getOriginalFilename();
+		        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+		        String fileName = timestamp + "_" + originalFileName;
+		        Path filePath = uploadPath.resolve(fileName);
+		        Files.copy(file.getInputStream(), filePath);
+		        return filePath.toString();
+		    } catch (IOException e) {
+		        e.printStackTrace();
+		        return null;
+		    }
+		}
+
+
+
+
 		
 		
 		//名刺情報とDBへの接続
@@ -151,6 +164,19 @@ public class MeishiController {
 				 @RequestParam("photoura") String photouraPath, */
 		                             Model model) {
 		    try {
+		    	
+				/*// ファイルアップロード処理
+				String photoomotePath = saveFile(UPLOAD_DIR, meishiForm.getPhotoomote());
+				String photouraPath = saveFile(UPLOAD_DIR, meishiForm.getPhotoura());
+				
+				if (photoomotePath == null || photouraPath == null) {
+				    // ファイル保存に失敗した場合、新規登録画面にリダイレクト
+					model.addAttribute("message", "ファイルの保存に失敗しました。もう一度お試しください。");
+				    return "/meishi/registerMeishi";
+				}
+				*/
+		    	
+		    	
 		        // Meishiエンティティを作成して保存
 		        LocalDateTime today = LocalDateTime.now();
 		        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
@@ -171,23 +197,7 @@ public class MeishiController {
 		}
 
 		
-
-		/*  private String saveFile(String uploadDir, MultipartFile file) throws IOException {
-		      if (file.isEmpty()) {
-		          return null;
-		      }
-		      Path uploadPath = Paths.get(uploadDir);
-		      if (!Files.exists(uploadPath)) {
-		          Files.createDirectories(uploadPath);
-		      }
-		      String fileName = file.getOriginalFilename();
-		      Path filePath = uploadPath.resolve(fileName);
-		      Files.copy(file.getInputStream(), filePath);
-		      return filePath.toString();
-		  
-		  }*/
-				    
-	    
+   
 	    
 	    
 //------------名刺情報検索------------------------	 
