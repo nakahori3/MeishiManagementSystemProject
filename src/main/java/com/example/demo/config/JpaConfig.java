@@ -1,4 +1,4 @@
-/*package com.example.demo.config;
+package com.example.demo.config;
 
 import javax.sql.DataSource;
 
@@ -27,4 +27,3 @@ public class JpaConfig {
         return new JpaTransactionManager(entityManagerFactory);
     }
 }
-*/
