@@ -73,20 +73,15 @@
                             <label>名刺写真（表面） ※必須</label>
                             <br>
                             <div class="confirm_text" th:if="${photoomoteFileName != null}" th:text="${photoomoteFileName}"></div>
-                            <div class="confirm_text" th:if="${photoomoteFileName == null}">
-                            <!--<div class="confirm_text" th:text="${meishiForm.photoomote}"></div>-->
-                    		<input type="hidden" name="photoomoteFileName" th:value="${photoomoteFileName}">
-                            <!--<input type="hidden" th:field="*{photoomote}">-->
-                            
+                            <div class="confirm_text" th:if="${photoomoteFileName == null}">ファイルが選択されていません。</div>
+                            <input type="hidden" name="photoomotePath" th:value="${photoomotePath}">
                         </div>
                         <div>
                             <label>名刺写真（裏面）</label>
                             <br>
                             <div class="confirm_text" th:if="${photouraFileName != null}" th:text="${photouraFileName}"></div>
                             <div class="confirm_text" th:if="${photouraFileName == null}">ファイルが選択されていません。</div>
-                            <!--<div class="confirm_text" th:text="${meishiForm.photoura}"></div>-->
-                            <input type="hidden" name="photouraFileName" th:value="${photouraFileName}">
-                            <!--<input type="hidden" th:field="*{photoura}">-->
+                            <input type="hidden" name="photouraPath" th:value="${photouraPath}">
                         </div>
                     </div>
 
@@ -112,20 +107,17 @@
                     <input type="hidden" th:field="*{companytel}">
                     <input type="hidden" th:field="*{mobiletel}">
                     <input type="hidden" th:field="*{email}">
-                    <input type="hidden" th:field="*{photoomote}">
-                    <input type="hidden" th:field="*{photoura}">
-                    <!-- photoomoteFileNameとphotouraFileNameをhiddenフィールドとして追加 -->
-                 	<input type="hidden" th:name="photoomoteFileName" th:value="${photoomoteFileName}">
-                    <input type="hidden" th:name="photouraFileName" th:value="${photouraFileName}">
+                    <input type="hidden" th:field="*{photoomotePath}">
+                    <input type="hidden" th:field="*{photouraPath}">
                     <input type="submit" class="btn-submit2" value="登録">
                 </div>
-            </div>
             </div>
         </form>
     </div>
     <div th:replace="~{common/layout::common_footer}"></div>
 </body>
 </html>
+
 
 
 

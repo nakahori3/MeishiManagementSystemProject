@@ -54,49 +54,103 @@ public class MeishiService {
     }
 	
 	
-	//リポジトリのsaveMeishiを呼び出してデータを保存
-	
+	 // リポジトリのsaveMeishiを呼び出してデータを保存
 	
 	public void saveMeishi(MeishiForm form, String photoomotePath, String photouraPath) {
+
+	    // 画像ファイルパスがNULLでないことを確認
+	    if (photoomotePath == null) {
+	        System.out.println("photoomotePath is NULL");
+	        throw new IllegalArgumentException("photoomotePath がNULLです。");
+	    }
+
+	    // photouraPath が NULL でも問題ない場合、エラーチェックは不要
+	    if (photouraPath == null) {
+	        System.out.println("photouraPath is NULL");
+	    }
+
+	    // 文字列データをバイナリ形式に変換
+	    byte[] personalname = form.getPersonalname().getBytes(StandardCharsets.UTF_8);
+	    byte[] personalkananame = form.getPersonalkananame().getBytes(StandardCharsets.UTF_8);
+	    byte[] mobiletel = form.getMobiletel() != null ? form.getMobiletel().getBytes(StandardCharsets.UTF_8) : null;
+	    byte[] email = form.getEmail().getBytes(StandardCharsets.UTF_8);
+	    byte[] photoOmoteData = photoomotePath.getBytes(StandardCharsets.UTF_8);
+	    byte[] photoUraData = photouraPath != null ? photouraPath.getBytes(StandardCharsets.UTF_8) : null;
+
+	    // 暗号化処理
+	    byte[] encryptedPersonalName = encryptData(personalname);
+	    byte[] encryptedPersonalKanaName = encryptData(personalkananame);
+	    byte[] encryptedMobileTel = mobiletel != null ? encryptData(mobiletel) : null;
+	    byte[] encryptedEmail = encryptData(email);
+	    byte[] encryptedPhotoOmotePath = encryptData(photoOmoteData);
+	    byte[] encryptedPhotoUraPath = photoUraData != null ? encryptData(photoUraData) : null;
+
+	    meishisRepository.saveMeishi(
+	            form.getCompanyname(),
+	            form.getCompanykananame(),
+	            encryptedPersonalName,
+	            encryptedPersonalKanaName,
+	            form.getBelong(),
+	            form.getPosition(),
+	            form.getAddress(),
+	            form.getCompanytel(),
+	            encryptedMobileTel,
+	            encryptedEmail,
+	            encryptedPhotoOmotePath,
+	            encryptedPhotoUraPath,
+	            form.getSavedate() // savedate 追加
+	    );
+	}
+
+
+	
+	
+	
+	
+	
+		/*public void saveMeishi(MeishiForm form, String photoomotePath, String photouraPath) {
 		
-		// 画像ファイルパスがNULLでないことを確認
-		if (photoomotePath == null || photouraPath == null) {
-		    throw new IllegalArgumentException("画像ファイルパスがNULLです。");
-		}
+		    // 画像ファイルパスがNULLでないことを確認
+		    if (photoomotePath == null || photouraPath == null) {
+		        throw new IllegalArgumentException("画像ファイルパスがNULLです。");
+		    }
 		
-        // 文字列データをバイナリ形式に変換
-        byte[] personalname = form.getPersonalname().getBytes(StandardCharsets.UTF_8);
-        byte[] personalkananame = form.getPersonalkananame().getBytes(StandardCharsets.UTF_8);
-        byte[] mobiletel = form.getMobiletel().getBytes(StandardCharsets.UTF_8);
-        byte[] email = form.getEmail().getBytes(StandardCharsets.UTF_8);
-
-        // 画像ファイルパスをバイナリ形式に変換
-        byte[] photoOmoteData = photoomotePath != null ? photoomotePath.getBytes(StandardCharsets.UTF_8) : null;
-        byte[] photoUraData = photouraPath != null ? photouraPath.getBytes(StandardCharsets.UTF_8) : null;
-
-        // 暗号化処理（例）
-        byte[] encryptedPersonalName = encryptData(personalname);
-        byte[] encryptedPersonalKanaName = encryptData(personalkananame);
-        byte[] encryptedMobileTel = encryptData(mobiletel);
-        byte[] encryptedEmail = encryptData(email);
-        byte[] encryptedPhotoOmote = photoOmoteData != null ? encryptData(photoOmoteData) : null;
-        byte[] encryptedPhotoUra = photoUraData != null ? encryptData(photoUraData) : null;
-
-        meishisRepository.saveMeishi(
-            form.getCompanyname(),
-            form.getCompanykananame(),
-            encryptedPersonalName,
-            encryptedPersonalKanaName,
-            form.getBelong(),
-            form.getPosition(),
-            form.getAddress(),
-            form.getCompanytel(),
-            encryptedMobileTel,
-            encryptedEmail,
-            encryptedPhotoOmote,
-            encryptedPhotoUra
-        );
-    }
+		    // 文字列データをバイナリ形式に変換
+		    byte[] personalname = form.getPersonalname().getBytes(StandardCharsets.UTF_8);
+		    byte[] personalkananame = form.getPersonalkananame().getBytes(StandardCharsets.UTF_8);
+		    byte[] mobiletel = form.getMobiletel().getBytes(StandardCharsets.UTF_8);
+		    byte[] email = form.getEmail().getBytes(StandardCharsets.UTF_8);
+		
+		    // 画像ファイルパスをバイナリ形式に変換
+		    byte[] photoOmoteData = photoomotePath.getBytes(StandardCharsets.UTF_8);
+		    byte[] photoUraData = photouraPath.getBytes(StandardCharsets.UTF_8);
+		
+		    // 暗号化処理
+		    byte[] encryptedPersonalName = encryptData(personalname);
+		    byte[] encryptedPersonalKanaName = encryptData(personalkananame);
+		    byte[] encryptedMobileTel = encryptData(mobiletel);
+		    byte[] encryptedEmail = encryptData(email);
+		    byte[] encryptedPhotoOmotePath = encryptData(photoOmoteData);
+		    byte[] encryptedPhotoUraPath = encryptData(photoUraData);
+		
+		    meishisRepository.saveMeishi(
+		            form.getCompanyname(),
+		            form.getCompanykananame(),
+		            encryptedPersonalName,
+		            encryptedPersonalKanaName,
+		            form.getBelong(),
+		            form.getPosition(),
+		            form.getAddress(),
+		            form.getCompanytel(),
+		            encryptedMobileTel,
+		            encryptedEmail,
+		            encryptedPhotoOmotePath,
+		            encryptedPhotoUraPath,
+		            form.getSavedate() // savedate 追加
+		    );
+		}*/
+                
+	
 	
 	
 	/*public void saveMeishi(MeishiForm form, String photoomotePath, String photouraPath) {

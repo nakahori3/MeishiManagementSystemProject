@@ -50,64 +50,59 @@ public class MeishiController {
         return new MeishiForm();
     }
 
-    // 名刺情報登録画面へ遷移
     @GetMapping("/inputMeishi")
     public String registerMeishi(Model model) {
         model.addAttribute("meishiForm", new MeishiForm());
         return "/meishi/registerMeishi";
     }
 
-    // 名刺情報検索画面へ遷移
     @GetMapping("/searchMeishi")
     public String serachMeishi(Model model) {
         return "/meishi/searchMeishi";
     }
 
-    // データベースからMeishiEntityの一覧を取得する
     public List<MeishiEntity> getAllDecryptedMeishis() {
         return meishiService.getAllDecryptedMeishis();
     }
 
-    // エラーありの場合、新規登録画面、エラーなしの場合、確認画面へ遷移
+       
+    
     @PostMapping("/confirmMeishi")
-    public String meishiConfirm(@Validated MeishiForm meishiForm, BindingResult result, Model model, HttpSession session) {
+    public String meishiConfirm(@Validated @ModelAttribute MeishiForm meishiForm, BindingResult result, Model model, HttpSession session) {
         if (result.hasErrors()) {
-            logger.error("Validation errors occurred: " + result.getAllErrors());
+            System.out.println("Validation errors occurred: " + result.getAllErrors());
             model.addAttribute("meishiForm", meishiForm);
             return "/meishi/registerMeishi";
         }
 
-        logger.debug("Received photoomote: " + meishiForm.getPhotoomote().getOriginalFilename());
-        logger.debug("Received photoura: " + (meishiForm.getPhotoura() != null ? meishiForm.getPhotoura().getOriginalFilename() : "ファイルが選択されていません。"));
-
         String photoomotePath = saveFile(UPLOAD_DIR, meishiForm.getPhotoomote());
-        String photouraPath = null;
-        if (meishiForm.getPhotoura() != null && !meishiForm.getPhotoura().isEmpty()) {
-            photouraPath = saveFile(UPLOAD_DIR, meishiForm.getPhotoura());
-        }
+        System.out.println("photoomotePath: " + photoomotePath);
+
+        String photouraPath = saveFile(UPLOAD_DIR, meishiForm.getPhotoura());
+        System.out.println("photouraPath: " + photouraPath);
 
         if (photoomotePath == null) {
-            logger.error("Failed to save photoomote file: photoomotePath=" + photoomotePath);
+            System.out.println("Failed to save photoomote file");
             model.addAttribute("message", "表面のファイルの保存に失敗しました。もう一度お試しください。");
             return "/meishi/registerMeishi";
         }
 
-        if (photouraPath == null) {
-            logger.warn("No file selected for photoura. Continuing without photoura.");
-        }
+        // ファイルパスを meishiForm に設定
+        meishiForm.setPhotoomotePath(photoomotePath);
+        meishiForm.setPhotouraPath(photouraPath);
 
         session.setAttribute("photoomotePath", photoomotePath);
         session.setAttribute("photouraPath", photouraPath);
+        session.setAttribute("meishiForm", meishiForm);
+
+        System.out.println("Set session attributes: photoomotePath=" + photoomotePath + ", photouraPath=" + photouraPath);
 
         model.addAttribute("photoomoteFileName", meishiForm.getPhotoomote().getOriginalFilename());
-        model.addAttribute("photouraFileName", meishiForm.getPhotoura() != null && !meishiForm.getPhotoura().isEmpty()
-                ? meishiForm.getPhotoura().getOriginalFilename() : "ファイルが選択されていません。");
-
-        logger.info("Transitioning to confirmMeishi page with photoomoteFileName=" + meishiForm.getPhotoomote().getOriginalFilename()
-                + " and photouraFileName=" + (meishiForm.getPhotoura() != null ? meishiForm.getPhotoura().getOriginalFilename() : "ファイルが選択されていません。"));
+        model.addAttribute("photouraFileName", meishiForm.getPhotoura() != null ? meishiForm.getPhotoura().getOriginalFilename() : "ファイルが選択されていません。");
 
         return "/meishi/confirmMeishi";
     }
+
 
     private String saveFile(String uploadDir, MultipartFile file) {
         if (file.isEmpty()) {
@@ -119,9 +114,11 @@ public class MeishiController {
                 Files.createDirectories(uploadPath);
             }
             String originalFileName = file.getOriginalFilename();
+            System.out.println("Original file name: " + originalFileName);
             String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
             String fileName = timestamp + "_" + originalFileName;
             Path filePath = uploadPath.resolve(fileName);
+            System.out.println("Saving file to path: " + filePath.toString());
             Files.copy(file.getInputStream(), filePath);
             return filePath.toString();
         } catch (IOException e) {
@@ -130,35 +127,151 @@ public class MeishiController {
         }
     }
 
-    // 名刺情報をDBに保存
     @PostMapping("/completeMeishi")
-    public String meishiComplete(@Validated MeishiForm meishiForm, HttpSession session, Model model) {
+    public String meishiComplete(HttpSession session, Model model) {
+        MeishiForm meishiForm = (MeishiForm) session.getAttribute("meishiForm");
+        String photoomotePath = (String) session.getAttribute("photoomotePath");
+        String photouraPath = (String) session.getAttribute("photouraPath");
+
+        System.out.println("Retrieved session attributes: meishiForm=" + meishiForm + ", photoomotePath=" + photoomotePath + ", photouraPath=" + photouraPath);
+
+        if (meishiForm == null) {
+            System.out.println("meishiForm is null");
+            model.addAttribute("message", "フォームデータが見つかりません。もう一度お試しください。");
+            return "/meishi/registerMeishi";
+        }
+
+        if (photoomotePath == null) {
+            System.out.println("photoomotePath is null");
+            model.addAttribute("message", "表面のファイルパスが見つかりません。もう一度お試しください。");
+            return "/meishi/registerMeishi";
+        }
+
         try {
-            // セッションからファイルパスを取得
-            String photoomotePath = (String) session.getAttribute("photoomotePath");
-            String photouraPath = (String) session.getAttribute("photouraPath");
-
-            // ファイルパスが存在するか確認
-            if (photoomotePath == null) {
-                logger.error("photoomotePath is null");
-                model.addAttribute("message", "表面のファイルパスが見つかりません。もう一度お試しください。");
-                return "/meishi/registerMeishi";
+            meishiForm.setPhotoomotePath(photoomotePath);
+            if (photouraPath != null) {
+                meishiForm.setPhotouraPath(photouraPath);
             }
 
-            if (photouraPath == null) {
-                logger.warn("photouraPath is null, continuing without it.");
-            }
+            // 現在の年月日を取得して設定
+            LocalDateTime today = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+            String formatDate = today.format(formatter);
+            meishiForm.setSavedate(formatDate);
 
-            // Meishiエンティティを作成して保存
+            System.out.println("Saving meishiForm: " + meishiForm);
             meishiService.saveMeishi(meishiForm, photoomotePath, photouraPath);
         } catch (Exception e) {
-            logger.error("Error occurred while saving the files", e);
+            System.out.println("Error occurred while saving the files: " + e.getMessage());
             model.addAttribute("message", "ファイルの保存中にエラーが発生しました。もう一度お試しください。");
             return "/meishi/registerMeishi";
         }
 
         return "/meishi/completeMeishi";
     }
+
+
+
+
+    
+    
+    
+	/* @PostMapping("/confirmMeishi")
+	public String meishiConfirm(@Validated @ModelAttribute MeishiForm meishiForm, BindingResult result, Model model, HttpSession session) {
+	    if (result.hasErrors()) {
+	        logger.error("Validation errors occurred: " + result.getAllErrors());
+	        model.addAttribute("meishiForm", meishiForm);
+	        return "/meishi/registerMeishi";
+	    }
+	
+	    String photoomotePath = saveFile(UPLOAD_DIR, meishiForm.getPhotoomote());
+	    String photouraPath = saveFile(UPLOAD_DIR, meishiForm.getPhotoura());
+	
+	    if (photoomotePath == null) {
+	        logger.error("Failed to save photoomote file");
+	        model.addAttribute("message", "表面のファイルの保存に失敗しました。もう一度お試しください。");
+	        return "/meishi/registerMeishi";
+	    }
+	
+	    session.setAttribute("photoomotePath", photoomotePath);
+	    session.setAttribute("photouraPath", photouraPath);
+	    session.setAttribute("meishiForm", meishiForm);
+	
+	    logger.debug("Set session attributes: photoomotePath=" + photoomotePath + ", photouraPath=" + photouraPath);
+	
+	    model.addAttribute("photoomoteFileName", meishiForm.getPhotoomote().getOriginalFilename());
+	    model.addAttribute("photouraFileName", meishiForm.getPhotoura() != null ? meishiForm.getPhotoura().getOriginalFilename() : "ファイルが選択されていません。");
+	
+	    return "/meishi/confirmMeishi";
+	}
+	
+	
+	
+	
+	private String saveFile(String uploadDir, MultipartFile file) {
+	    if (file.isEmpty()) {
+	        return null;
+	    }
+	    try {
+	        Path uploadPath = Paths.get(uploadDir);
+	        if (!Files.exists(uploadPath)) {
+	            Files.createDirectories(uploadPath);
+	        }
+	        String originalFileName = file.getOriginalFilename();
+	        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+	        String fileName = timestamp + "_" + originalFileName;
+	        Path filePath = uploadPath.resolve(fileName);
+	        Files.copy(file.getInputStream(), filePath);
+	        return filePath.toString();
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	        return null;
+	    }
+	}
+	
+	@PostMapping("/completeMeishi")
+	public String meishiComplete(HttpSession session, Model model) {
+	    MeishiForm meishiForm = (MeishiForm) session.getAttribute("meishiForm");
+	    String photoomotePath = (String) session.getAttribute("photoomotePath");
+	    String photouraPath = (String) session.getAttribute("photouraPath");
+	
+	    logger.debug("Retrieved session attributes: meishiForm=" + meishiForm + ", photoomotePath=" + photoomotePath + ", photouraPath=" + photouraPath);
+	
+	    if (meishiForm == null) {
+	        logger.error("meishiForm is null");
+	        model.addAttribute("message", "フォームデータが見つかりません。もう一度お試しください。");
+	        return "/meishi/registerMeishi";
+	    }
+	
+	    if (photoomotePath == null) {
+	        logger.error("photoomotePath is null");
+	        model.addAttribute("message", "表面のファイルパスが見つかりません。もう一度お試しください。");
+	        return "/meishi/registerMeishi";
+	    }
+	
+	    try {
+	        meishiForm.setPhotoomotePath(photoomotePath);
+	        meishiForm.setPhotouraPath(photouraPath);
+	
+	        meishiService.saveMeishi(meishiForm, photoomotePath, photouraPath);
+	    } catch (Exception e) {
+	        logger.error("Error occurred while saving the files", e);
+	        model.addAttribute("message", "ファイルの保存中にエラーが発生しました。もう一度お試しください。");
+	        return "/meishi/registerMeishi";
+	    }
+	
+	    return "/meishi/completeMeishi";
+	}*/
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -400,8 +513,8 @@ return "/meishi/completeMeishi";
     	                System.out.println("Company Tel: " + meishi.getCompanytel());
     	                System.out.println("Mobile Tel: " + meishi.getMobiletel());
     	                System.out.println("Email: " + meishi.getEmail());
-    	                System.out.println("Photo Omote: " + meishi.getPhotoomote());
-    	                System.out.println("Photo Ura: " + meishi.getPhotoura());
+    	                System.out.println("Photo Omote: " + meishi.getPhotoomotePath());
+    	                System.out.println("Photo Ura: " + meishi.getPhotouraPath());
     	            }
     	            model.addAttribute("meishis", searchResults);
     	        }
