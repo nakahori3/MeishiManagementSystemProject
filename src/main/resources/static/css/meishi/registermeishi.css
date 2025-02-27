@@ -67,10 +67,11 @@ h2 {
 	margin-bottom: 50px;
 }
 
-/*.errormsg {
+.errormsg {
 	display: inline-block;
 	text-align: left;
-}*/
+	margin-left: 30px;
+}
 
 
 /* 入力欄のスタイル */
