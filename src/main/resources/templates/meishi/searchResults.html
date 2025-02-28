@@ -70,7 +70,7 @@
         <div th:each="meishi : ${meishis}" class="result-container">
             <div class="meishi-info">
             <div class="result-item1">
-                <img th:src="@{${meishi.photoomote}}" alt="名刺写真（表面）">
+                <img th:src="@{${meishi.photoomotePath}}" alt="名刺写真（表面）">
             </div>
             
             <div class="result-info">
@@ -100,3 +100,4 @@
     <div th:replace="~{common/layout::common_footer}"></div>
 </body>
 </html>
+
