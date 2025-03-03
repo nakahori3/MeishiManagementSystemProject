@@ -50,15 +50,16 @@ public class MeishiService {
         System.out.println("Decrypted Meishi: " + meishi);
         System.out.println("photoomotePath: " + meishi.getPhotoomotePath()); // 追加: photoomotePathを出力
         
+        // 画像ファイル名を設定
+        String photoPath = meishi.getPhotoomotePath();
+        String fileName = photoPath.substring(photoPath.lastIndexOf("\\") + 1);
+        meishi.setPhotoomotePath(fileName);
+        
+        System.out.println("Extracted fileName: " + fileName); // 抽出されたファイル名を出力
+        
         return meishi;
     }
 
-
-	
-	/*public MeishiEntity getDecryptedMeishiById(int id) {
-	    return meishisRepository.findDecryptedById(id);
-	}*/
-	
 	
 	//UserEntityオブジェクトのリストを作成するメソッド
 	public List<UserEntity> makeUsersList() {
@@ -79,12 +80,17 @@ public class MeishiService {
         for (MeishiEntity meishi : meishiList) {
             System.out.println("Decrypted Meishi: " + meishi);
             System.out.println("photoomotePath: " + meishi.getPhotoomotePath()); // 追加: photoomotePathを出力
+            
+            // 画像ファイル名を設定
+            String photoPath = meishi.getPhotoomotePath();
+            String fileName = photoPath.substring(photoPath.lastIndexOf("\\") + 1);
+            meishi.setPhotoomotePath(fileName);
+            
+            System.out.println("Extracted fileName: " + fileName); // 抽出されたファイル名を出力
         }
         return meishiList;
     }
-
 	
-		
 	
 	public List<MeishiEntity> findByCompanykananame(String companykananame) {
 		System.out.println("Searching by companykananame: " + companykananame);
@@ -92,13 +98,6 @@ public class MeishiService {
 	    return meishisRepository.findByCompanykananame(companykananame, pgpassword);
 	}
 
-	
-	
-	/*//企業名（カナ）より名刺Entityを取得
-	public List<MeishiEntity> findByCompanykananame(String companykananame) {
-	    return meishisRepository.findByCompanykananame(companykananame);
-	}*/
-	
 	/*2月28日一旦、企業名（カナ）での検索優先にて、コメントアウト
 	 * 
 	 * //担当者名（カナ）より名刺Entityを取得
@@ -151,68 +150,53 @@ public class MeishiService {
     }
 
     	
-	
-	/*public void saveMeishi(MeishiForm form, String photoomotePath, String photouraPath) {
-			
-			    // 画像ファイルパスがNULLでないことを確認
-			    if (photoomotePath == null) {
-			        System.out.println("photoomotePath is NULL");
-			        throw new IllegalArgumentException("photoomotePath がNULLです。");
-			    }
-			
-			    // photouraPath が NULL でも問題ない場合、エラーチェックは不要
-			    if (photouraPath == null) {
-			        System.out.println("photouraPath is NULL");
-			    }
-			
-			    // 文字列データをバイナリ形式に変換
-			    byte[] personalname = form.getPersonalname().getBytes(StandardCharsets.UTF_8);
-			    byte[] personalkananame = form.getPersonalkananame().getBytes(StandardCharsets.UTF_8);
-			    byte[] mobiletel = form.getMobiletel() != null ? form.getMobiletel().getBytes(StandardCharsets.UTF_8) : null;
-			    byte[] email = form.getEmail().getBytes(StandardCharsets.UTF_8);
-			    byte[] photoOmoteData = photoomotePath.getBytes(StandardCharsets.UTF_8);
-			    byte[] photoUraData = photouraPath != null ? photouraPath.getBytes(StandardCharsets.UTF_8) : null;
-			
-			    // 暗号化処理
-			    byte[] encryptedPersonalName = encryptData(personalname);
-			    byte[] encryptedPersonalKanaName = encryptData(personalkananame);
-			    byte[] encryptedMobileTel = mobiletel != null ? encryptData(mobiletel) : null;
-			    byte[] encryptedEmail = encryptData(email);
-			    byte[] encryptedPhotoOmotePath = encryptData(photoOmoteData);
-			    byte[] encryptedPhotoUraPath = photoUraData != null ? encryptData(photoUraData) : null;
-			
-			    meishisRepository.saveMeishi(
-			            form.getCompanyname(),
-			            form.getCompanykananame(),
-			            encryptedPersonalName,
-			            encryptedPersonalKanaName,
-			            form.getBelong(),
-			            form.getPosition(),
-			            form.getAddress(),
-			            form.getCompanytel(),
-			            encryptedMobileTel,
-			            encryptedEmail,
-			            encryptedPhotoOmotePath,
-			            encryptedPhotoUraPath,
-			            form.getSavedate() // savedate 追加
-			    );
-			}*/
+	/* private byte[] encryptData(byte[] data) {
+	    // データ暗号化処理を実装
+	    // ここでは簡単なサンプルとして、データそのまま返します
+	    return data;
+	}*/
+    
+    
+ // 担当者名（カナ）より名刺Entityを取得
+    public List<MeishiEntity> findByPertialCompanyKanaName(String keyword) {
+        System.out.println("Searching by companyKanaPartial: " + keyword);
+        String pgpassword = "P4ssW0rd"; // パスワードを指定
+        List<MeishiEntity> meishiList = meishisRepository.findByPertialCompanyKanaName(keyword, pgpassword);
 
+        for (MeishiEntity meishi : meishiList) {
+            String photoPath = meishi.getPhotoomotePath();
+            String fileName = photoPath.substring(photoPath.lastIndexOf("\\") + 1);
+            meishi.setPhotoomotePath(fileName);
+            System.out.println("Extracted fileName: " + fileName); // 抽出されたファイル名を出力
+        }
 
-
-    private byte[] encryptData(byte[] data) {
-        // データ暗号化処理を実装
-        // ここでは簡単なサンプルとして、データそのまま返します
-        return data;
+        return meishiList;
     }
 
-	public List<MeishiEntity> findByPertialCompanyKanaName(String keyword) {
+    public List<MeishiEntity> findByPertialPersonalKanaName(String keyword) {
+        System.out.println("Searching by personalKanaPartial: " + keyword);
+        String pgpassword = "P4ssW0rd"; // パスワードを指定
+        List<MeishiEntity> meishiList = meishisRepository.findByPertialPersonalKanaName(keyword, pgpassword);
+
+        for (MeishiEntity meishi : meishiList) {
+            String photoPath = meishi.getPhotoomotePath();
+            String fileName = photoPath.substring(photoPath.lastIndexOf("\\") + 1);
+            meishi.setPhotoomotePath(fileName);
+            System.out.println("Extracted fileName: " + fileName); // 抽出されたファイル名を出力
+        }
+
+        return meishiList;
+    }
+    
+    
+
+	/*public List<MeishiEntity> findByPertialCompanyKanaName(String keyword) {
 		// TODO 自動生成されたメソッド・スタブ
 		return null;
 	}
-
+	
 	public List<MeishiEntity> findByPertialPersonalKanaName(String keyword) {
 		// TODO 自動生成されたメソッド・スタブ
 		return null;
-	}
+	}*/
 }

@@ -188,6 +188,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -242,8 +243,12 @@ public class MeishiEntity {
 
     @Column(name = "savedate")
     private String savedate;
+    
+    
+  //2025年3月3日　画像パスから画像ファイル名を取り出すために作成した箇所
+    @Transient
+    private String omoteImagePath; // 一時的なフィールドとして追加
 
-    // Getters and Setters
     public int getId() {
         return id;
     }
@@ -355,4 +360,16 @@ public class MeishiEntity {
     public void setSavedate(String savedate) {
         this.savedate = savedate;
     }
+    
+    //2025年3月3日　画像パスから画像ファイル名を取り出すために作成した箇所
+    public String getOmoteImagePath() {
+        return omoteImagePath;
+    }
+
+    public void setOmoteImagePath(String omoteImagePath) {
+        this.omoteImagePath = omoteImagePath;
+    }
+    
+    
+    
 }

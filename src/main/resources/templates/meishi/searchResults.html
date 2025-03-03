@@ -70,7 +70,11 @@
         <div th:each="meishi : ${meishis}" class="result-container">
             <div class="meishi-info">
             <div class="result-item1">
-                <img th:src="@{${meishi.photoomotePath}}" alt="名刺写真（表面）">
+				
+				
+				 <!-- 画像を表示 -->
+                    <img th:src="@{|${meishi.omoteImagePath}|}" height="100" width="200" alt="名刺写真（表面）">
+                    
             </div>
             
             <div class="result-info">
