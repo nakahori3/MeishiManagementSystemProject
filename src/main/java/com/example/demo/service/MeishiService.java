@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.entity.MeishiEntity;
 import com.example.demo.entity.UserEntity;
@@ -91,17 +92,21 @@ public class MeishiService {
         return meishiList;
     }
 	
+    
+    @Transactional
+    public List<MeishiEntity> findByCompanykananame(String companykananame, String pgpassword) {
+        System.out.println("Searching by companykananame: " + companykananame);
+        return meishisRepository.findByCompanykananame(companykananame, pgpassword);
+    }
 	
-	public List<MeishiEntity> findByCompanykananame(String companykananame) {
+	/*public List<MeishiEntity> findByCompanykananame(String companykananame) {
 		System.out.println("Searching by companykananame: " + companykananame);
 	    String pgpassword = "P4ssW0rd"; // パスワードを指定
 	    return meishisRepository.findByCompanykananame(companykananame, pgpassword);
-	}
+	}*/
 
-	/*2月28日一旦、企業名（カナ）での検索優先にて、コメントアウト
-	 * 
-	 * //担当者名（カナ）より名刺Entityを取得
-	public List<MeishiEntity> findByPersonalkananame(String personalkananame) {
+	//担当者名（カナ）より名刺Entityを取得
+	/*public List<MeishiEntity> findByPersonalkananame(String personalkananame) {
 		System.out.println("Searching by personalkananame: " + personalkananame);
 	    String pgpassword = "P4ssW0rd"; // パスワードを指定
 	    return meishisRepository.findByPersonalkananame(personalkananame, pgpassword);
@@ -157,36 +162,46 @@ public class MeishiService {
 	}*/
     
     
- // 担当者名（カナ）より名刺Entityを取得
-    public List<MeishiEntity> findByPertialCompanyKanaName(String keyword) {
-        System.out.println("Searching by companyKanaPartial: " + keyword);
-        String pgpassword = "P4ssW0rd"; // パスワードを指定
-        List<MeishiEntity> meishiList = meishisRepository.findByPertialCompanyKanaName(keyword, pgpassword);
-
-        for (MeishiEntity meishi : meishiList) {
-            String photoPath = meishi.getPhotoomotePath();
-            String fileName = photoPath.substring(photoPath.lastIndexOf("\\") + 1);
-            meishi.setPhotoomotePath(fileName);
-            System.out.println("Extracted fileName: " + fileName); // 抽出されたファイル名を出力
+ // 企業名（カナ）より名刺Entityを取得
+	
+	
+	
+	
+	
+	/*@Transactional
+	public List<MeishiEntity> findByPartialCompanyKanaName(String companykananame, String pgpassword) {
+	    try {
+	        System.out.println("Searching by companyKanaPartial: " + companykananame);
+	        List<MeishiEntity> results = meishisRepository.findByPartialCompanyKanaName(companykananame, pgpassword);
+	        System.out.println("Search results: " + results.size() + " results found.");
+	        for (MeishiEntity result : results) {
+	            System.out.println("Found: " + result.getCompanykananame());
+	        }
+	        return results;
+	    } catch (Exception e) {
+	        System.err.println("エラーが発生しました: " + e.getMessage());
+	        throw e;
+	    }
+	}*/
+	
+	
+    
+	@Transactional
+    public List<MeishiEntity> findByPartialPersonalKanaName(String personalkananame, String pgpassword) {
+        try {
+            System.out.println("Searching by personalKanaPartial: " + personalkananame);
+            List<MeishiEntity> results = meishisRepository.findByPartialPersonalKanaName(personalkananame, pgpassword);
+            System.out.println("Search results: " + results.size() + " results found.");
+            for (MeishiEntity result : results) {
+                System.out.println("Found: " + result.getPersonalkananame());
+            }
+            return results;
+        } catch (Exception e) {
+            System.err.println("エラーが発生しました: " + e.getMessage());
+            throw e;
         }
-
-        return meishiList;
     }
-
-    public List<MeishiEntity> findByPertialPersonalKanaName(String keyword) {
-        System.out.println("Searching by personalKanaPartial: " + keyword);
-        String pgpassword = "P4ssW0rd"; // パスワードを指定
-        List<MeishiEntity> meishiList = meishisRepository.findByPertialPersonalKanaName(keyword, pgpassword);
-
-        for (MeishiEntity meishi : meishiList) {
-            String photoPath = meishi.getPhotoomotePath();
-            String fileName = photoPath.substring(photoPath.lastIndexOf("\\") + 1);
-            meishi.setPhotoomotePath(fileName);
-            System.out.println("Extracted fileName: " + fileName); // 抽出されたファイル名を出力
-        }
-
-        return meishiList;
-    }
+   
     
     
 

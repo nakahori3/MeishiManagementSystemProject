@@ -1,6 +1,79 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
+    <title>名刺情報検索ページ</title>
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
+    <link rel="stylesheet" th:href="@{/css/meishi/searchmeishi.css}">
+    <link rel="stylesheet" th:href="@{/css/login/login.css}">
+</head>
+<body>
+    <div th:replace="~{common/layout::common_header}"></div>
+
+    <div id="errorMessage" class="error-message"></div>
+    <div class="content">
+        <form id="searchForm" class="search_form" method="get" th:action="@{/searchResults}" onsubmit="return validateForm()">
+            <h2 class="kensaku">検索ページ</h2>
+            <div class="search-type">
+                <div>
+                    <!--input type="radio" id="companyKanaExact" name="searchType" value="companyKanaExact" onclick="updateSearchForm()" checked>
+                    <label for="companyKanaExact">企業名（カナ）完全一致</label>-->
+                    <input type="radio" id="companyKanaExact" name="searchType" value="companyKanaExact" checked>
+					<label for="companyKanaExact">企業名（カナ）完全一致</label>
+                </div>
+                <div>
+                   <!-- <input type="radio" id="companyKanaPartial" name="searchType" value="companyKanaPartial" onclick="updateSearchForm()">
+                    <label for="companyKanaPartial">企業名（カナ）部分一致</label>-->
+                    <input type="radio" id="companyKanaPartial" name="searchType" value="companyKanaPartial">
+					<label for="companyKanaPartial">企業名（カナ）部分一致</label>
+                </div>
+                <div>
+                    <!--<input type="radio" id="personalKanaPartial" name="searchType" value="personalKanaPartial" onclick="updateSearchForm()">
+                    <label for="personalKanaPartial">担当者名（カナ）部分一致</label>-->
+                    <input type="radio" id="personalKanaPartial" name="searchType" value="personalKanaPartial">
+					<label for="personalKanaPartial">担当者名（カナ）部分一致</label>
+                </div>
+            </div>
+            <input type="text" id="keyword" name="keyword" class="search_box" placeholder="全角カナを入力" required>
+            <input type="image" class="searchicon3" th:src="@{/img/searchicon.png}" alt="検索マーク画像">
+        </form>
+    </div>
+
+    <div th:replace="~{common/layout::common_footer}"></div>
+
+    <script>
+        function validateForm() {
+        var keyword = document.getElementById("keyword").value;
+        var regex = /^[ァ-ヴー]+$/;
+        var errorMessage = document.getElementById("errorMessage");
+
+        console.log("Search keyword: " + keyword);
+        console.log("Form action before submission: " + document.getElementById("searchForm").getAttribute("action"));
+
+        if (!regex.test(keyword)) {
+            errorMessage.textContent = "※全角カナを入力してください。";
+            return false;
+        } else {
+            errorMessage.textContent = "";
+            return true;
+        }
+    }
+
+       
+        
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+<!--<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
 <meta charset="UTF-8">
 <title>名刺情報検索ページ</title>
 <link rel="stylesheet" th:href="@{/css/layout.css}">
@@ -61,4 +134,4 @@
     }
   </script>
 </body>
-</html>
+</html>-->

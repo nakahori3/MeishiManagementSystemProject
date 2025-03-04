@@ -12,20 +12,20 @@
 
     <div id="errorMessage" class="error-message"></div>
     <div class="content">
-        <form id="searchForm" class="search_form" method="get" th:action="@{/searchResults}" onsubmit="return validateForm()">
+        <form id="searchForm" class="search_form" method="get" th:action="@{/searchResults}">
             <h2 class="kensaku">検索ページ</h2>
              
             <div class="search-type">
                 <div>
-                    <input type="radio" id="companyKanaExact" name="searchType" value="companyKanaExact" onclick="updateSearchForm()" checked>
+                    <input type="radio" id="companyKanaExact" name="searchType" value="companyKanaExact" checked>
                     <label for="companyKanaExact">企業名（カナ）完全一致</label>
                 </div>
                 <div>
-                    <input type="radio" id="companyKanaPartial" name="searchType" value="companyKanaPartial" onclick="updateSearchForm()">
+                    <input type="radio" id="companyKanaPartial" name="searchType" value="companyKanaPartial" >
                     <label for="companyKanaPartial">企業名（カナ）部分一致</label>
                 </div>
                 <div>
-                    <input type="radio" id="personalKanaPartial" name="searchType" value="personalKanaPartial" onclick="updateSearchForm()">
+                    <input type="radio" id="personalKanaPartial" name="searchType" value="personalKanaPartial" >
                     <label for="personalKanaPartial">担当者名（カナ）部分一致</label>
                 </div>
             </div>
@@ -34,7 +34,7 @@
             <input type="image" class="searchicon3" th:src="@{/img/searchicon.png}" alt="検索マーク画像">
         </form>
 
-    <script>
+   <!-- <script>
         function validateForm() {
             var keyword = document.getElementById("keyword").value;
             var regex = /^[ァ-ヴー]+$/;
@@ -49,19 +49,7 @@
             }
         }
 
-        function updateSearchForm() {
-            var searchType = document.querySelector('input[name="searchType"]:checked').value;
-            var searchForm = document.getElementById("searchForm");
-
-            if (searchType === "companyKanaExact") {
-                searchForm.setAttribute("action", "@{/searchByCompanyKana}");
-            } else if (searchType === "companyKanaPartial") {
-                searchForm.setAttribute("action", "@{/searchByCompanyKanaPartial}");
-            } else if (searchType === "personalKanaPartial") {
-                searchForm.setAttribute("action", "@{/searchByPersonalKanaPartial}");
-            }
-        }
-    </script>
+    </script>-->
 
     <div th:if="${meishis != null}" class="meishiresult">
         <div th:if="${meishis.isEmpty()}">
@@ -71,10 +59,8 @@
             <div class="meishi-info">
             <div class="result-item1">
 				
-				
 				 <!-- 画像を表示 -->
                     <img th:src="@{|${meishi.omoteImagePath}|}" height="100" width="200" alt="名刺写真（表面）">
-                    
             </div>
             
             <div class="result-info">
@@ -87,6 +73,13 @@
             <div class="result-item2">
                 <span th:text="${meishi.email}"></span>
             </div>
+            
+            <!-- デバッグメッセージを追加 -->
+		        <!--<div class="result-item2">
+		            <span th:text="'デバッグ: ' + ${meishi.email}"></span>
+		        </div>-->
+            
+            
             </div>
             </div>
             
