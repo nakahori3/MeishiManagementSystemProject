@@ -164,25 +164,21 @@ public class MeishiService {
     
  // 企業名（カナ）より名刺Entityを取得
 	
-	
-	
-	
-	
-	/*@Transactional
-	public List<MeishiEntity> findByPartialCompanyKanaName(String companykananame, String pgpassword) {
-	    try {
-	        System.out.println("Searching by companyKanaPartial: " + companykananame);
-	        List<MeishiEntity> results = meishisRepository.findByPartialCompanyKanaName(companykananame, pgpassword);
-	        System.out.println("Search results: " + results.size() + " results found.");
-	        for (MeishiEntity result : results) {
-	            System.out.println("Found: " + result.getCompanykananame());
-	        }
-	        return results;
-	    } catch (Exception e) {
-	        System.err.println("エラーが発生しました: " + e.getMessage());
-	        throw e;
-	    }
-	}*/
+	@Transactional
+    public List<MeishiEntity> findByPartialCompanyKanaName(String companykananame, String pgpassword) {
+        try {
+            System.out.println("Searching by companyKanaPartial: " + companykananame);
+            List<MeishiEntity> results = meishisRepository.findByPartialCompanyKanaName(companykananame, pgpassword);
+            System.out.println("Search results: " + results.size() + " results found.");
+            for (MeishiEntity result : results) {
+                System.out.println("Found: " + result.getCompanykananame());
+            }
+            return results;
+        } catch (Exception e) {
+            System.err.println("エラーが発生しました: " + e.getMessage());
+            throw e;
+        }
+    }
 	
 	
     
