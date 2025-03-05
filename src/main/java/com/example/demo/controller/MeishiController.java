@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -177,7 +178,6 @@ public class MeishiController {
     //------------名刺情報検索------------------------	 
     
   //名刺情報の検索と復号化
-  //名刺情報の検索と復号化
     
     
         @GetMapping("/searchResults")
@@ -258,79 +258,135 @@ public class MeishiController {
     }
 
 
-    
-    
-	/*@GetMapping("/searchResults")
-	public String searchResults(@RequestParam("searchType") String searchType,
-	                            @RequestParam("keyword") String keyword,
-	                            @RequestParam(value = "pgpassword", defaultValue = "P4ssW0rd") String pgpassword,
-	                            Model model) {
-	    System.out.println("Received searchType: " + searchType);
-	    System.out.println("Received keyword: " + keyword);
-	    System.out.println("Received pgpassword: " + pgpassword);
+ //--------------名刺情報　詳細画面-------------------------
+        @PostMapping("/detailperson")
+        public String detailperson(Model model,
+                                   @RequestParam(name = "id", required = false) Integer id,
+                                   @RequestParam(name = "personalname", required = false) String personalname,
+                                   @RequestParam(name = "personalkananame", required = false) String personalkananame,
+                                   @RequestParam(name = "mobiletel", required = false) String mobiletel,
+                                   @RequestParam(name = "email", required = false) String email,
+                                   @RequestParam(name = "photoomotePath", required = false) String photoomotePath,
+                                   @RequestParam(name = "photouraPath", required = false) String photouraPath) {
+
+            // モデルに暗号化された項目を追加
+            model.addAttribute("id", id);
+            model.addAttribute("personalname", personalname);
+            model.addAttribute("personalkananame", personalkananame);
+            model.addAttribute("mobiletel", mobiletel);
+            model.addAttribute("email", email);
+            model.addAttribute("photoomotePath", photoomotePath);
+            model.addAttribute("photouraPath", photouraPath);
+
+            // 受け取った値の確認
+            System.out.println("Received personalname: " + personalname);
+            System.out.println("Received personalkananame: " + personalkananame);
+            System.out.println("Received mobiletel: " + mobiletel);
+            System.out.println("Received email: " + email);
+            System.out.println("Received photoomotePath: " + photoomotePath);
+            System.out.println("Received photouraPath: " + photouraPath);
+
+            // データベースから名刺Entityの情報を取得する
+            Optional<MeishiEntity> meishiOpt = meishisRepository.findById(id);
+
+            if (meishiOpt.isPresent()) {
+                MeishiEntity meishi = meishiOpt.get();
+
+                // 暗号化されていない項目をモデルに追加
+                model.addAttribute("companyname", meishi.getCompanyname());
+                model.addAttribute("companykananame", meishi.getCompanykananame());
+                model.addAttribute("belong", meishi.getBelong());
+                model.addAttribute("position", meishi.getPosition());
+                model.addAttribute("address", meishi.getAddress());
+                model.addAttribute("companytel", meishi.getCompanytel());
+
+                // データベースから取得した値の確認
+                System.out.println("Database companyname: " + meishi.getCompanyname());
+                System.out.println("Database companykananame: " + meishi.getCompanykananame());
+                System.out.println("Database belong: " + meishi.getBelong());
+                System.out.println("Database position: " + meishi.getPosition());
+                System.out.println("Database address: " + meishi.getAddress());
+                System.out.println("Database companytel: " + meishi.getCompanytel());
+
+                // 画像パスの処理
+                try {
+                    if (photoomotePath != null && !photoomotePath.isEmpty()) {
+                        String omoteFileName = photoomotePath.substring(photoomotePath.lastIndexOf("\\") + 1);
+                        String omoteImagePath = "/images/" + omoteFileName;
+                        meishi.setOmoteImagePath(omoteImagePath);
+                        model.addAttribute("omoteImagePath", omoteImagePath);
+                        System.out.println("Processed omoteImagePath: " + omoteImagePath);
+                    }
+                    if (photouraPath != null && !photouraPath.isEmpty()) {
+                        String uraFileName = photouraPath.substring(photouraPath.lastIndexOf("\\") + 1);
+                        String uraImagePath = "/images/" + uraFileName;
+                        meishi.setUraImagePath(uraImagePath);
+                        model.addAttribute("uraImagePath", uraImagePath);
+                        System.out.println("Processed uraImagePath: " + uraImagePath);
+                    }
+                } catch (Exception e) {
+                    System.err.println("Error during photo path processing: " + e.getMessage());
+                    e.printStackTrace();
+                }
+            } else {
+                System.err.println("No MeishiEntity found for id: " + id);
+            }
+
+            System.out.println("id選択時は、" + id);
+
+            return "meishi/detailperson";
+        }
+
+
+        
+        
+        
+        
+	/*@PostMapping("/detailperson")
+	public String detailperson(Model model, @RequestParam(name = "id", required = false) Integer id
+			) {
+		
+		
+	    // データベースから名刺Entityの情報を取得する
+	    Optional<MeishiEntity> meishiOpt = meishisRepository.findById(id);
 	
-	    List<MeishiEntity> searchResults;
-	    try {
-	        if (searchType.equals("companyKanaExact")) {
-	            System.out.println("Exact match search for companyKanaName");
-	            searchResults = meishiService.findByCompanykananame(keyword, pgpassword);
-	        } else if (searchType.equals("companyKanaPartial")) {
-	            System.out.println("Partial match search for companyKanaName");
-	            searchResults = meishiService.findByPartialCompanyKanaName(keyword, pgpassword);
-	        } else if (searchType.equals("personalKanaPartial")) {
-	            System.out.println("Partial match search for personalKanaName");
-	            searchResults = meishiService.findByPartialPersonalKanaName(keyword, pgpassword);
-	        } else {
-	            searchResults = List.of();
-	        }
-	
-	        System.out.println("Search results: " + searchResults.size() + " results found.");
-	
-	        if (!searchResults.isEmpty()) {
-	            for (MeishiEntity meishi : searchResults) {
-	                System.out.println("Found result: " + meishi);
-	
-	                System.out.println("Before decryption:");
-	                System.out.println("Personal Name (bytea): " + meishi.getPersonalname());
-	                System.out.println("Personal Kana Name (bytea): " + meishi.getPersonalkananame());
-	                System.out.println("Mobile Tel (bytea): " + meishi.getMobiletel());
-	                System.out.println("Email (bytea): " + meishi.getEmail());
-	
-	                System.out.println("After decryption:");
-	                System.out.println("Personal Name: " + meishi.getPersonalname());
-	                System.out.println("Personal Kana Name: " + meishi.getPersonalkananame());
-	                System.out.println("Belong: " + meishi.getBelong());
-	                System.out.println("Position: " + meishi.getPosition());
-	                System.out.println("Address: " + meishi.getAddress());
-	                System.out.println("Company Tel: " + meishi.getCompanytel());
-	                System.out.println("Mobile Tel: " + meishi.getMobiletel());
-	                System.out.println("Email: " + meishi.getEmail());
-	                System.out.println("Photo OmotePath: " + meishi.getPhotoomotePath());
-	                System.out.println("Photo UraPath: " + meishi.getPhotouraPath());
-	
-	                try {
-	                    if (meishi.getPhotoomotePath() != null) {
-	                        String omoteFileName = meishi.getPhotoomotePath().substring(meishi.getPhotoomotePath().lastIndexOf("\\") + 1);
-	                        String omoteImagePath = "/images/" + omoteFileName;
-	                        meishi.setOmoteImagePath(omoteImagePath);
-	                    }
-	                } catch (Exception e) {
-	                    System.err.println("Error during photoomotePath processing: " + e.getMessage());
-	                    e.printStackTrace();
-	                }
+	    if (meishiOpt.isPresent()) {
+	        MeishiEntity meishi = meishiOpt.get();
+	        
+	        // 画像パスの処理
+	        try {
+	            if (meishi.getPhotoomotePath() != null) {
+	                String omoteFileName = meishi.getPhotoomotePath().substring(meishi.getPhotoomotePath().lastIndexOf("\\") + 1);
+	                String omoteImagePath = "/images/" + omoteFileName;
+	                meishi.setOmoteImagePath(omoteImagePath);
 	            }
-	            model.addAttribute("meishis", searchResults);
-	        } else {
-	            model.addAttribute("errorMessage", "検索結果がありません。");
+	            if (meishi.getPhotouraPath() != null) {
+	                String uraFileName = meishi.getPhotouraPath().substring(meishi.getPhotouraPath().lastIndexOf("\\") + 1);
+	                String uraImagePath = "/images/" + uraFileName;
+	                meishi.setUraImagePath(uraImagePath);
+	            }
+	        } catch (Exception e) {
+	            System.err.println("Error during photo path processing: " + e.getMessage());
+	            e.printStackTrace();
 	        }
-	    } catch (Exception e) {
-	        System.err.println("Error during search: " + e.getMessage());
-	        e.printStackTrace();
-	        model.addAttribute("errorMessage", "検索中にエラーが発生しました。");
+	        
+	        model.addAttribute("meishi", meishi);
+	    } else {
+	        System.err.println("No MeishiEntity found for id: " + id);
 	    }
 	
-	    return "meishi/searchResults";
+	    model.addAttribute("id", id);
+	    System.out.println("id選択時は、" + id);
+	
+	    return "meishi/detailperson";
 	}*/
+        
+       
+        
+        
+        
+    
+    
 }
   
     

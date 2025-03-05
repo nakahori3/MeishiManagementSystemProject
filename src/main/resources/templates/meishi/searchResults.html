@@ -70,7 +70,18 @@
                     <div class="btn-ctl">
                         <div class="button-container">
                             <form method="post" th:action="@{/detailperson}">
-                                <input type="hidden" name="id" th:value="${meishi.id}"/>
+                                <input type="hidden" name="id" th:value="${meishi.id}">
+			                    <input type="hidden" name="companyname"  th:value="${meishi.companyname}">
+			                    <input type="hidden" name="companykananame" th:value="${meishi.companykananame}">
+			                    <input type="hidden" name="personalname" th:value="${meishi.personalname}">
+			                    <input type="hidden" name="personalkananame" th:value="${meishi.personalkananame}">
+			                    <input type="hidden" name="belong" th:value="${meishi.belong}">
+			                    <input type="hidden" name="position" th:value="${meishi.position}">
+			                    <input type="hidden" name="address" th:value="${meishi.address}">
+			                    <input type="hidden" name="companytel" th:value="${meishi.companytel}">
+			                    <input type="hidden" name="mobiletel" th:value="${meishi.mobiletel}">
+			                    <input type="hidden" name="photoomotePath" th:value="${meishi.photoomotePath}">
+			                    <input type="hidden" name="photouraPath" th:value="${meishi.photouraPath}">
                                 <input type="image" th:src="@{/img/clickicon.png}" alt="選択クリック画像"  class="menu-gazou1">
                                 <input type="submit" value="選択" class="choice">
                             </form>
