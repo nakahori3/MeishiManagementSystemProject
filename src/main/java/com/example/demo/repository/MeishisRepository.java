@@ -77,16 +77,17 @@ public interface MeishisRepository extends JpaRepository<MeishiEntity, Integer> 
             "savedate FROM meishis WHERE pgp_sym_decrypt(personalkananame::bytea, :pgpassword)::text LIKE CONCAT('%', :personalkananame, '%')", nativeQuery = true)
 List<MeishiEntity> findByPartialPersonalKanaName(@Param("personalkananame") String personalkananame, @Param("pgpassword") String pgpassword);
 
-     
-    @Query(value = "SELECT id, companyname, companykananame, " +
-            "pgp_sym_decrypt(personalname::bytea, :pgpassword)::text AS personalname, " +
-            "pgp_sym_decrypt(personalkananame::bytea, :pgpassword)::text AS personalkananame, " +
-            "belong, position, address, companytel, " +
-            "pgp_sym_decrypt(mobiletel::bytea, :pgpassword)::text AS mobiletel, " +
-            "pgp_sym_decrypt(email::bytea, :pgpassword)::text AS email, " +
-            "pgp_sym_decrypt(photoomotePath::bytea, :pgpassword)::text AS photoomotePath, " +
-            "CASE WHEN photouraPath IS NOT NULL THEN pgp_sym_decrypt(photouraPath::bytea, :pgpassword)::text ELSE NULL END AS photouraPath, " +
-            "savedate FROM meishis WHERE companykananame LIKE CONCAT('%', :companykananame, '%')", nativeQuery = true)
+    
+         
+ @Query(value = "SELECT id, companyname, companykananame, " +
+        "pgp_sym_decrypt(personalname::bytea, :pgpassword)::text AS personalname, " +
+        "pgp_sym_decrypt(personalkananame::bytea, :pgpassword)::text AS personalkananame, " +
+        "belong, position, address, companytel, " +
+        "pgp_sym_decrypt(mobiletel::bytea, :pgpassword)::text AS mobiletel, " +
+        "pgp_sym_decrypt(email::bytea, :pgpassword)::text AS email, " +
+        "pgp_sym_decrypt(photoomotePath::bytea, :pgpassword)::text AS photoomotePath, " +
+        "CASE WHEN photouraPath IS NOT NULL THEN pgp_sym_decrypt(photouraPath::bytea, :pgpassword)::text ELSE NULL END AS photouraPath, " +
+        "savedate FROM meishis WHERE companykananame LIKE CONCAT('%', :companykananame, '%')", nativeQuery = true)
 List<MeishiEntity> findByPartialCompanyKanaName(@Param("companykananame") String companykananame, @Param("pgpassword") String pgpassword);
 
 

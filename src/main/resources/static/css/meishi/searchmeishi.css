@@ -54,10 +54,9 @@
  /*検索結果後のcss*/
  
  .meishiresult {
-	 width: 700px;
+	 width: 600px;
 	 margin: 0 auto;
-	 display: flex;
-	 justify-content: center;
+	 
 }
  
  
@@ -65,20 +64,65 @@
 	 margin-top: 45px;
 	 border: 1px solid black;
 	 	height: 125px;
-	 	width: 500px;
+	 	width: 450px;
+	 	display: flex;
+	 justify-content: center;
+	 gap: 15px;
  }
  
+ .result-item1 img {
+	margin-top: 15px;
+	margin-left: -20px;
+    height: 100px;
+    width: 200px;
+}
  
- .result-item1 {
-	 margin-top: 13px;
-	 margin-right: 100px;
+ .group-container {
+	 margin-top: 40px;
+	  border: 1.5px solid black;
+	  padding: 10px;
+	  /*width: 625px;*/
+	 
+ }
+ 
+ .compamytitle {
+	 margin-top: 10px;
+	 margin-bottom: -20px;
+	 text-align: center;
+	 font-size: 20px;
+	 font-weight: bold;
+	
+	
+ }
+ 
+ .result-container {
+	  margin-bottom: 10px;
+  	
+ }
+ 
+.copybutton {
+	position: absolute;
+	height: 30px;
+	width: 30px;
+	margin-top: -20px;
+	z-index: 1;
+}
 
- }
+.menu-gazou2 {
+	height: 25px;
+	width: 25px;
+	z-index: 2;
+	margin-left: -5px;;
+}
  
  .result-info {
-	 position: absolute;
+	 display: flex;
+    flex-direction: column;
+    gap: 5px;
+	 /*position: absolute;
 	 margin-left: 225px;
-	 margin-top: -110px;
+	 margin-top: -110px;*/
+	
 	
 	
  }
@@ -86,3 +130,31 @@
  .result-item2 {
 	 margin: 8px;
  }
+ 
+ .choice {
+	position: absolute;
+	 text-align: right;
+	 font-size: 17px;
+	 font-weight: bold;
+	 height: 65px;
+	 width:  90px;
+	 margin-left: 450px;
+	 margin-top: -65px;
+	 z-index: 1;
+	
+ }
+ 
+ .choice:hover {
+	background-color: #FFE200;
+  	
+}
+
+.menu-gazou1 {
+	position: absolute;
+	height: 50px;
+	width: 50px;
+	margin-left: 445px;
+	margin-top: -60px;
+	z-index: 2;
+
+}

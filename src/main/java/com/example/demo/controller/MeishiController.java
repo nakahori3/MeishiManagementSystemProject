@@ -7,6 +7,8 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -176,8 +178,10 @@ public class MeishiController {
     
   //名刺情報の検索と復号化
   //名刺情報の検索と復号化
-    @GetMapping("/searchResults")
-    public String searchResults(@RequestParam("searchType") String searchType,
+    
+    
+        @GetMapping("/searchResults")
+        public String searchResults(@RequestParam("searchType") String searchType,
                                 @RequestParam("keyword") String keyword,
                                 @RequestParam(value = "pgpassword", defaultValue = "P4ssW0rd") String pgpassword,
                                 Model model) {
@@ -235,7 +239,12 @@ public class MeishiController {
                         e.printStackTrace();
                     }
                 }
-                model.addAttribute("meishis", searchResults);
+
+                // グループ化して表示するための準備
+                Map<String, List<MeishiEntity>> groupedResults = searchResults.stream()
+                    .collect(Collectors.groupingBy(MeishiEntity::getCompanyname));
+
+                model.addAttribute("groupedResults", groupedResults);
             } else {
                 model.addAttribute("errorMessage", "検索結果がありません。");
             }
@@ -247,32 +256,40 @@ public class MeishiController {
 
         return "meishi/searchResults";
     }
-}
+
+
     
     
-    
-	/* @GetMapping("/searchResults")
+	/*@GetMapping("/searchResults")
 	public String searchResults(@RequestParam("searchType") String searchType,
 	                            @RequestParam("keyword") String keyword,
+	                            @RequestParam(value = "pgpassword", defaultValue = "P4ssW0rd") String pgpassword,
 	                            Model model) {
 	    System.out.println("Received searchType: " + searchType);
 	    System.out.println("Received keyword: " + keyword);
+	    System.out.println("Received pgpassword: " + pgpassword);
 	
 	    List<MeishiEntity> searchResults;
 	    try {
 	        if (searchType.equals("companyKanaExact")) {
-	            searchResults = meishiService.findByCompanykananame(keyword);
+	            System.out.println("Exact match search for companyKanaName");
+	            searchResults = meishiService.findByCompanykananame(keyword, pgpassword);
 	        } else if (searchType.equals("companyKanaPartial")) {
-	            searchResults = meishiService.findByPertialCompanyKanaName(keyword);
+	            System.out.println("Partial match search for companyKanaName");
+	            searchResults = meishiService.findByPartialCompanyKanaName(keyword, pgpassword);
 	        } else if (searchType.equals("personalKanaPartial")) {
-	            searchResults = meishiService.findByPertialPersonalKanaName(keyword);
+	            System.out.println("Partial match search for personalKanaName");
+	            searchResults = meishiService.findByPartialPersonalKanaName(keyword, pgpassword);
 	        } else {
-	            searchResults = new ArrayList<>();
+	            searchResults = List.of();
 	        }
 	
+	        System.out.println("Search results: " + searchResults.size() + " results found.");
+	
 	        if (!searchResults.isEmpty()) {
-	            // 復号化されたデータを表示
 	            for (MeishiEntity meishi : searchResults) {
+	                System.out.println("Found result: " + meishi);
+	
 	                System.out.println("Before decryption:");
 	                System.out.println("Personal Name (bytea): " + meishi.getPersonalname());
 	                System.out.println("Personal Kana Name (bytea): " + meishi.getPersonalkananame());
@@ -280,8 +297,6 @@ public class MeishiController {
 	                System.out.println("Email (bytea): " + meishi.getEmail());
 	
 	                System.out.println("After decryption:");
-	                // 復号化処理がある場合はここに記述
-	                // 例: String decryptedPersonalName = decrypt(meishi.getPersonalname());
 	                System.out.println("Personal Name: " + meishi.getPersonalname());
 	                System.out.println("Personal Kana Name: " + meishi.getPersonalkananame());
 	                System.out.println("Belong: " + meishi.getBelong());
@@ -292,22 +307,18 @@ public class MeishiController {
 	                System.out.println("Email: " + meishi.getEmail());
 	                System.out.println("Photo OmotePath: " + meishi.getPhotoomotePath());
 	                System.out.println("Photo UraPath: " + meishi.getPhotouraPath());
-	              
-	                // 画像名を抽出して /images/ パスに変換
+	
 	                try {
 	                    if (meishi.getPhotoomotePath() != null) {
 	                        String omoteFileName = meishi.getPhotoomotePath().substring(meishi.getPhotoomotePath().lastIndexOf("\\") + 1);
 	                        String omoteImagePath = "/images/" + omoteFileName;
-	                        meishi.setOmoteImagePath(omoteImagePath);  // MeishiクラスにomoteImagePathフィールドを追加
+	                        meishi.setOmoteImagePath(omoteImagePath);
 	                    }
 	                } catch (Exception e) {
 	                    System.err.println("Error during photoomotePath processing: " + e.getMessage());
-	                    e.printStackTrace(); // 詳細なエラーメッセージを出力
+	                    e.printStackTrace();
 	                }
-	
 	            }
-	            
-	         
 	            model.addAttribute("meishis", searchResults);
 	        } else {
 	            model.addAttribute("errorMessage", "検索結果がありません。");
@@ -320,6 +331,8 @@ public class MeishiController {
 	
 	    return "meishi/searchResults";
 	}*/
+}
+  
     
     
     	  
