@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>名刺情報削除完了画面</title>
+    <link rel="stylesheet" th:href="@{/css/layout.css}" />
+    <link rel="stylesheet" th:href="@{/css/meishi/detailmeishi.css}">-->
+</head>
+<body>
+    <div th:replace="~{common/layout::common_header}"></div>
+
+    <p class="deletecomp">削除完了しました。</p>
+
+    <div th:if="${errorMessage != null}">
+        <p th:text="${errorMessage}" class="errormessage"></p>
+    </div>
+
+    <br><br>
+
+    <div class="btn-ctl">
+        <div class="button-container">
+            <a th:href="@{/return_top}" class="btn-return">トップページへ戻る</a>
+            <br>
+        </div>
+    </div>
+    <div th:replace="~{common/layout::common_footer}"></div>
+</body>
+</html>
+
+
+
+
+
+<!--<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>名刺情報削除完了画面</title>
+<link rel="stylesheet" th:href="@{/css/layout.css}" />
+<link rel="stylesheet" th:href="@{/css/meishi/fixmeishi.css}">
+
+
+</head>
+<body>
+	<div th:replace="~{common/layout::common_header}"></div>
+ 
+
+	<p class="deletecomp">削除完了しました。</p>
+
+<div th:if="${errorMessage != null}">
+   <p th:text="${errorMessage}" class="errormessage"></p>
+</div>
+
+<br>
+<br>
+
+	<div class="btn-ctl">
+  	<div class="button-container">
+     	<a th:href="@{/return_top}" class="btn-return">トップページへ戻る</a>
+     	<br>
+  	</div>
+  	</div>
+	<div th:replace="~{common/layout::common_footer}"></div>
+	
+
+</body>
+</html>-->

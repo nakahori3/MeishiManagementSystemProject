@@ -1,10 +1,120 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
+    <title>名刺情報 詳細ページ</title>
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
+    <link rel="stylesheet" th:href="@{/css/meishi/detailperson.css}">
+</head>
+<body>
+    <div th:replace="~{common/layout::common_header}"></div>
+
+    <form class="detailMeishiForm">
+        <div class="all-inputmeishi">
+            <div class="meishi-form">
+                <div class="detail-meishiform">
+                    <div>
+                        <label for="companyname">企業名</label>
+                        <br>
+                        <input class="input" type="text" id="companyname" name="companyname" th:value="${companyname}" readonly />
+                    </div>
+                    <div>
+                        <label for="companykananame">企業名（カナ）</label>
+                        <br>
+                        <input class="input" type="text" id="companykananame" name="companykananame" th:value="${companykananame}" readonly />
+                    </div>
+                    <div>
+                        <label for="personalname">担当者名</label>
+                        <br>
+                        <input class="input" type="text" id="personalname" name="personalname" th:value="${personalname}" readonly />
+                    </div>
+                    <div>
+                        <label for="personalkananame">担当者名（カナ）</label>
+                        <br>
+                        <input class="input" type="text" id="personalkananame" name="personalkananame" th:value="${personalkananame}" readonly />
+                    </div>
+                    <div>
+                        <label for="belong">所属</label>
+                        <br>
+                        <input class="input2" type="text" id="belong" name="belong" th:value="${belong}" readonly />
+                    </div>
+                    <div>
+                        <label for="position">役職</label>
+                        <br>
+                        <input class="input2" type="text" id="position" name="position" th:value="${position}" readonly />
+                    </div>
+                    <div>
+                        <label for="address">所在地</label>
+                        <br>
+                        <input class="input" type="text" id="address" name="address" th:value="${address}" readonly />
+                    </div>
+                    <div>
+                        <label for="companytel">会社電話番号</label>
+                        <br>
+                        <input class="input" type="text" id="companytel" name="companytel" th:value="${companytel}" readonly />
+                    </div>
+                    <div>
+                        <label for="mobiletel">携帯電話番号</label>
+                        <br>
+                        <input class="input" type="text" id="mobiletel" name="mobiletel" th:value="${mobiletel}" readonly />
+                    </div>
+                    <div>
+                        <label for="email">Eメールアドレス</label>
+                        <br>
+                        <input class="input" type="text" id="email" name="email" th:value="${email}" readonly />
+                    </div>
+                </div>
+                <div class="photolook">
+                    <div>
+                        <img th:src="@{${omoteImagePath}}" height="100" width="200" alt="名刺写真（表面）">
+                    </div>
+                    <div class="photoura">
+                        <div th:if="${uraImagePath != null}">
+                            <img th:src="@{${uraImagePath}}" height="100" width="200" alt="名刺写真（裏面）">
+                        </div>
+                        <div th:if="${uraImagePath == null}">
+                            <span>名刺写真（裏面）なし</span>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" id="id" name="id" th:value="${id}">
+            </div>
+        </div>
+    </form>
+
+    <div class="flexbox">
+        <div class="flex-item item01">
+            <form method="post" th:action="@{/deleteMeishi}">
+                <img class="deleteicon" th:src="@{/img/deleteicon.png}" alt="削除マーク">
+                <input type="submit" value="削除" class="add01" onclick="return confirm('本当に削除しますか？');">
+                <input type="hidden" name="id" th:value="${id}">
+            </form>
+        </div>
+        <div class="flex-item item02">
+            <form method="post" th:action="@{/fixmeishi}" class="inline-form">
+                <img class="syuuseiicon" th:src="@{/img/syuuseiicon.png}" alt="修正マーク">
+                <input type="submit" name="fix_meishi" value="修正" class="add02">
+                <input type="hidden" name="id" th:value="${id}">
+            </form>
+        </div>
+    </div>
+
+    <div th:replace="~{common/layout::common_footer}"></div>
+</body>
+</html>
+
+
+
+
+
+
+<!--<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
 <meta charset="UTF-8">
 <title>名刺情報　詳細ページ</title>
     <link rel="stylesheet" th:href="@{/css/layout.css}">
-    <link rel="stylesheet" th:href="@{/css/meishi/searchmeishi.css}">
+    <link rel="stylesheet" th:href="@{/css/meishi/detailperson.css}">
 </head>
 <body>
      <div th:replace="~{common/layout::common_header}"></div>
@@ -15,160 +125,151 @@
         <div class="detail-meishiform">
         <div>
             <label for="companyname">企業名</label>
+            <br>
             <input class="input" type="text" id="companyname" name="companyname" th:value="${companyname}" readonly />
         </div>
         
         <div>
             <label for="companykananame">企業名（カナ）</label>
+            <br>
             <input class="input" type="text" id="companykananame" name="companykananame" th:value="${companykananame}" readonly />
         </div>
         
         <div>
             <label for="personalname">担当者名</label>
+            <br>
             <input class="input" type="text" id="personalname" name="personalname" th:value="${personalname}" readonly />
         </div>
         
         <div>
             <label for="personalkananame">担当者名（カナ）</label>
+            <br>
             <input class="input" type="text" id="personalkananame" name="personalkananame" th:value="${personalkananame}" readonly />
         </div>
         
         <div>
             <label for="belong">所属</label>
-            <input class="input" type="text" id="belong" name="belong" th:value="${belong}" readonly />
+            <br>
+            <input class="input2" type="text" id="belong" name="belong" th:value="${belong}" readonly />
         </div>
         
         <div>
             <label for="position">役職</label>
-            <input class="input" type="text" id="position" name="position" th:value="${position}" readonly />
+            <br>
+            <input class="input2" type="text" id="position" name="position" th:value="${position}" readonly />
         </div>
         
         <div>
             <label for="address">所在地</label>
+            <br>
             <input class="input" type="text" id="address" name="address" th:value="${address}" readonly />
         </div>
         
         <div>
             <label for="companytel">会社電話番号</label>
+            <br>
             <input class="input" type="text" id="companytel" name="companytel" th:value="${companytel}" readonly />
         </div>
         
         <div>
             <label for="mobiletel">携帯電話番号</label>
+            <br>
             <input class="input" type="text" id="mobiletel" name="mobiletel" th:value="${mobiletel}" readonly />
         </div>
         
         <div>
             <label for="email">Eメールアドレス</label>
+            <br>
             <input class="input" type="text" id="email" name="email" th:value="${email}" readonly />
         </div>
+        </div>
         
+        <div class="photolook">
         <div>
             <img th:src="@{${omoteImagePath}}" height="100" width="200" alt="名刺写真（表面）">
         </div>
-        <div>
+        <div class="photoura">
 			<div th:if="${uraImagePath != null}">
             <img th:src="@{${uraImagePath}}" height="100" width="200" alt="名刺写真（裏面）">
             </div>
             <div th:if="${uraImagePath == null}">
-				<span>画像なし</span>
+				<span>名刺写真（裏面）なし</span>
             </div>
+        </div>
         </div>
         
         <input type="hidden" id="id" name="id" th:value="${id}" > 
         
-        </div>
+        
       </div>
       </div>
+      
+      <div class="flexbox">
+	     <div class="flex-item item01">
+        <form id="deleteForm">
+            <img class="deleteicon" th:src="@{/img/deleteicon.png}" alt="削除マーク">
+            <input type="button" value="削除" class="add01" onclick="confirmDelete([[${id}]])">
+            <input type="hidden" id="id" th:value="${id}">
+        </form>
+    </div>
+    
+	    <div class="flex-item item02">
+	        <form method="post" th:action="@{/fixmeishi}" class="inline-form">
+	            <img class="syuuseiicon" th:src="@{/img/syuuseiicon.png}" alt="修正マーク">
+	            <input type="submit" name="fix_meishi" value="修正" class="add02">
+	            <input type="hidden" name="id" th:value="${id}">
+	        </form>
+	    </div>
+	</div>
+
+
+
+
+
+      
+      <div class="flexbox">
+      <div class="flex-item item01">
+		<form method="post" th:action="@(/deleteMeishi}">
+		<img class="deleteicon"  th:src="@{/img/deleteicon.png}" alt="削除マーク">
+		<input type="submit" value="削除" class="add01" onclick="return confirm('本当に削除しますか？');">
+        <input type="hidden" name="id" th:value="${id}">
+    	</form>
+    </div>
+    
+    <div class="flex-item item02">
+    <form method="post" th:action="@{/fixmeishi}" class="inline-form">
+		<img class="syuuseiicon"  th:src="@{/img/syuuseiicon.png}" alt="修正マーク">
+		<input type="submit" name="fix_meishi" value="修正" class="add02" >
+       <input type="hidden" name="id" th:value="${id}">
+    </form>
+    </div>
+    
+    </div>
+    
+   
+	<script>
+	    function confirmDelete(id) {
+	        if (confirm('本当に削除しますか？')) {
+	            fetch('/meishi/deleteMeishi', {
+	                method: 'POST', // POST メソッドを使用
+	                headers: {
+	                    'Content-Type': 'application/x-www-form-urlencoded'
+	                },
+	                body: new URLSearchParams({ id: id })
+	            })
+	            .then(response => {
+	                if (response.ok) {
+	                    window.location.href = '/deleteMeishi';
+	                } else {
+	                    console.error('Delete failed');
+	                }
+	            })
+	            .catch(error => console.error('Error:', error));
+	        }
+	    }
+	</script>
     
     <div th:replace="~{common/layout::common_footer}"></div>
 </body>
 </html>
-
-
-
-
-
-<!--<!DOCTYPE html>
-<html　xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta charset="UTF-8">
-<title>名刺情報　詳細ページ</title>
-    <link rel="stylesheet" th:href="@{/css/layout.css}">
-    <link rel="stylesheet" th:href="@{/css/meishi/searchmeishi.css}">
-</head>
-<body>
-	 <div th:replace="~{common/layout::common_header}"></div>
-	 
-	 
-	 <form class="detailMeishiForm">
-  <div class="all-inputmeishi">
-    <div class="meishi-form">
-	<div class="detail-meishiform">
-	<div>
-            <label for="companyname">企業名</label>
-            <input class="input" type="text" id="companyname" name="companyname" th:value="${meishi.companyname}" readonly />
-    </div>
-    
-    <div>
-            <label for="companykananame">企業名（カナ）</label>
-            <input class="input" type="text" id="companykananame" name="companykananame" th:value="${meishi.companykananame}" readonly />
-    </div>
-    
-    <div>
-            <label for="personalname">担当者名</label>
-            <input class="input" type="text" id="personalname" name="personalname" th:value="${meishi.personalname}" readonly />
-    </div>
-    
-    <div>
-            <label for="personalkananame">担当者名（カナ）</label>
-            <input class="input" type="text" id="personalkananame" name="personalkananame" th:value="${meishi.personalkananame}" readonly />
-    </div>
-    
-    <div>
-            <label for="belong">所属</label>
-            <input class="input" type="text" id="belong" name="belong" th:value="${meishi.belong}" readonly />
-    </div>
-    
-    <div>
-            <label for="position">役職</label>
-            <input class="input" type="text" id="position" name="position" th:value="${meishi.position}" readonly />
-    </div>
-    
-    <div>
-            <label for="address">所在地</label>
-            <input class="input" type="text" id="address" name="address" th:value="${meishi.address}" readonly />
-    </div>
-    
-    <div>
-            <label for="companytel">会社電話番号</label>
-            <input class="input" type="text" id="companytel" name="companytel" th:value="${meishi.companytel}" readonly />
-    </div>
-    
-    <div>
-            <label for="mobiletel">携帯電話番号</label>
-            <input class="input" type="text" id="mobiletel" name="mobiletel" th:value="${meishi.mobiletel}" readonly />
-    </div>
-    
-    <div>
-            <label for="email">Eメールアドレス</label>
-            <input class="input" type="text" id="email" name="email" th:value="${meishi.email}" readonly />
-    </div>
-    
-    <div>
-		<img th:src="@{|${meishi.omoteImagePath}|}" height="100" width="200" alt="名刺写真（表面）">
-    </div>
-    <div>
-		<img th:src="@{|${meishi.uraImagePath}|}" height="100" width="200" alt="名刺写真（裏面）">
-    </div>
-    
-    <input type="hidden" id="id" name="id" th:value="${id}" > 
-    
-    </div>
-  </div>
-  </div>
-	
-    
-    <div th:replace="~{common/layout::common_footer}"></div>
-</body>
-</html>-->
+-->

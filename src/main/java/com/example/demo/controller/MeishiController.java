@@ -338,51 +338,35 @@ public class MeishiController {
         }
 
 
+ //-----------名刺情報削除ボタン----------------
+     
+        @PostMapping("/deleteMeishi")
+        public String deleteMeishi(@RequestParam(name = "id") Integer id, Model model) {
+            logger.info("Start of deleteMeishi method");
+            logger.info("Received ID: {}", id);
+
+            meishiService.deleteMeishiById(id);
+            logger.info("Meishi deleted from database");
+
+            model.addAttribute("message", "削除が完了しました。");
+            logger.info("End of deleteMeishi method");
+
+            return "/meishi/deleteMeishi"; // deleteMeishi.html に遷移
+        }
         
-        
-        
-        
-	/*@PostMapping("/detailperson")
-	public String detailperson(Model model, @RequestParam(name = "id", required = false) Integer id
-			) {
-		
-		
-	    // データベースから名刺Entityの情報を取得する
-	    Optional<MeishiEntity> meishiOpt = meishisRepository.findById(id);
-	
-	    if (meishiOpt.isPresent()) {
-	        MeishiEntity meishi = meishiOpt.get();
-	        
-	        // 画像パスの処理
-	        try {
-	            if (meishi.getPhotoomotePath() != null) {
-	                String omoteFileName = meishi.getPhotoomotePath().substring(meishi.getPhotoomotePath().lastIndexOf("\\") + 1);
-	                String omoteImagePath = "/images/" + omoteFileName;
-	                meishi.setOmoteImagePath(omoteImagePath);
-	            }
-	            if (meishi.getPhotouraPath() != null) {
-	                String uraFileName = meishi.getPhotouraPath().substring(meishi.getPhotouraPath().lastIndexOf("\\") + 1);
-	                String uraImagePath = "/images/" + uraFileName;
-	                meishi.setUraImagePath(uraImagePath);
-	            }
-	        } catch (Exception e) {
-	            System.err.println("Error during photo path processing: " + e.getMessage());
-	            e.printStackTrace();
-	        }
-	        
-	        model.addAttribute("meishi", meishi);
-	    } else {
-	        System.err.println("No MeishiEntity found for id: " + id);
-	    }
-	
-	    model.addAttribute("id", id);
-	    System.out.println("id選択時は、" + id);
-	
-	    return "meishi/detailperson";
-	}*/
-        
-       
-        
+	/*@DeleteMapping("/deleteMeishi")
+	public String meishiDelete(@RequestParam(name = "id") Integer id,
+		Model model) {
+		System.out.println("id" + id);
+		model.addAttribute("id", id);
+	   
+		//名刺エンティティを削除する
+	    meishiService.deleteMeishiById(id);
+	    System.out.println("meishisテーブルの該当行を削除"); 
+	    model.addAttribute("message","削除が完了しました。"); 
+	    return "/meishi/deleteMeshi";
+	   }*/
+    
         
         
     

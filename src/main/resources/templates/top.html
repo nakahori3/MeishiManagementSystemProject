@@ -4,14 +4,11 @@
 <meta charset="UTF-8">
 <title>トップページ</title>
 <link rel="stylesheet" th:href="@{/css/layout.css}" />
-<!--<link rel="stylesheet" th:href="@{/css/menu.css}">-->
+
 </head>
 <body>
 	<div th:replace="~{common/layout::common_header}"></div>
-	
-<!-- <form th:action="@{/adminChange}" method="get">
-<input type="submit" sec:authorize="hasRole('ADMIN')" class="menu-button" value="ユーザー管理権限">
-</form>-->
+
 	<div class="inline2">
 	<!--ヘッダー部分のメニューボタン-->
 	<form method="Get" class="inputMeishi2" th:action="@{/inputMeishi}">
