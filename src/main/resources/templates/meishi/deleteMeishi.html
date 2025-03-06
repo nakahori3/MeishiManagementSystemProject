@@ -4,25 +4,31 @@
     <meta charset="UTF-8">
     <title>名刺情報削除完了画面</title>
     <link rel="stylesheet" th:href="@{/css/layout.css}" />
-    <link rel="stylesheet" th:href="@{/css/meishi/detailmeishi.css}">-->
+    <link rel="stylesheet" th:href="@{/css/meishi/detailperson.css}">
 </head>
 <body>
     <div th:replace="~{common/layout::common_header}"></div>
+	
+	<form class="form-deletecomplete">
+	<img class="completeicon" th:src="@{/img/completeicon.png}" alt="登録完了マーク">
+    <p class="deletecomp">名刺情報の削除完了しました。</p>
+    
+    <p class="h5">名刺情報の削除が完了しました。</p>
+    <p class="h5">上記メニューバーより引き続きご利用ください。</p>
 
-    <p class="deletecomp">削除完了しました。</p>
-
-    <div th:if="${errorMessage != null}">
-        <p th:text="${errorMessage}" class="errormessage"></p>
     </div>
 
     <br><br>
 
     <div class="btn-ctl">
-        <div class="button-container">
+        <div class="button-container4">
+			<img class="toppage" th:src="@{/img/toppage.png}" alt="トップページ画像">
             <a th:href="@{/return_top}" class="btn-return">トップページへ戻る</a>
             <br>
         </div>
     </div>
+    
+    </form>
     <div th:replace="~{common/layout::common_footer}"></div>
 </body>
 </html>
