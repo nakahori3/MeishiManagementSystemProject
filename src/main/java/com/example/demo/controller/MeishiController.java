@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.entity.MeishiEntity;
@@ -36,6 +37,7 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @Transactional
 @RequiredArgsConstructor
+@SessionAttributes({"personalname", "personalkananame", "mobiletel", "email", "photoomotePath", "photouraPath"})
 public class MeishiController {
 
     private static final String UPLOAD_DIR = "src/main/resources/static/images";
@@ -259,84 +261,75 @@ public class MeishiController {
 
 
  //--------------名刺情報　詳細画面-------------------------
-        @PostMapping("/detailperson")
-        public String detailperson(Model model,
-                                   @RequestParam(name = "id", required = false) Integer id,
-                                   @RequestParam(name = "personalname", required = false) String personalname,
-                                   @RequestParam(name = "personalkananame", required = false) String personalkananame,
-                                   @RequestParam(name = "mobiletel", required = false) String mobiletel,
-                                   @RequestParam(name = "email", required = false) String email,
-                                   @RequestParam(name = "photoomotePath", required = false) String photoomotePath,
-                                   @RequestParam(name = "photouraPath", required = false) String photouraPath) {
-
-            // モデルに暗号化された項目を追加
-            model.addAttribute("id", id);
-            model.addAttribute("personalname", personalname);
-            model.addAttribute("personalkananame", personalkananame);
-            model.addAttribute("mobiletel", mobiletel);
-            model.addAttribute("email", email);
-            model.addAttribute("photoomotePath", photoomotePath);
-            model.addAttribute("photouraPath", photouraPath);
-
-            // 受け取った値の確認
-            System.out.println("Received personalname: " + personalname);
-            System.out.println("Received personalkananame: " + personalkananame);
-            System.out.println("Received mobiletel: " + mobiletel);
-            System.out.println("Received email: " + email);
-            System.out.println("Received photoomotePath: " + photoomotePath);
-            System.out.println("Received photouraPath: " + photouraPath);
-
-            // データベースから名刺Entityの情報を取得する
-            Optional<MeishiEntity> meishiOpt = meishisRepository.findById(id);
-
-            if (meishiOpt.isPresent()) {
-                MeishiEntity meishi = meishiOpt.get();
-
-                // 暗号化されていない項目をモデルに追加
-                model.addAttribute("companyname", meishi.getCompanyname());
-                model.addAttribute("companykananame", meishi.getCompanykananame());
-                model.addAttribute("belong", meishi.getBelong());
-                model.addAttribute("position", meishi.getPosition());
-                model.addAttribute("address", meishi.getAddress());
-                model.addAttribute("companytel", meishi.getCompanytel());
-
-                // データベースから取得した値の確認
-                System.out.println("Database companyname: " + meishi.getCompanyname());
-                System.out.println("Database companykananame: " + meishi.getCompanykananame());
-                System.out.println("Database belong: " + meishi.getBelong());
-                System.out.println("Database position: " + meishi.getPosition());
-                System.out.println("Database address: " + meishi.getAddress());
-                System.out.println("Database companytel: " + meishi.getCompanytel());
-
-                // 画像パスの処理
-                try {
-                    if (photoomotePath != null && !photoomotePath.isEmpty()) {
-                        String omoteFileName = photoomotePath.substring(photoomotePath.lastIndexOf("\\") + 1);
-                        String omoteImagePath = "/images/" + omoteFileName;
-                        meishi.setOmoteImagePath(omoteImagePath);
-                        model.addAttribute("omoteImagePath", omoteImagePath);
-                        System.out.println("Processed omoteImagePath: " + omoteImagePath);
-                    }
-                    if (photouraPath != null && !photouraPath.isEmpty()) {
-                        String uraFileName = photouraPath.substring(photouraPath.lastIndexOf("\\") + 1);
-                        String uraImagePath = "/images/" + uraFileName;
-                        meishi.setUraImagePath(uraImagePath);
-                        model.addAttribute("uraImagePath", uraImagePath);
-                        System.out.println("Processed uraImagePath: " + uraImagePath);
-                    }
-                } catch (Exception e) {
-                    System.err.println("Error during photo path processing: " + e.getMessage());
-                    e.printStackTrace();
-                }
-            } else {
-                System.err.println("No MeishiEntity found for id: " + id);
-            }
-
-            System.out.println("id選択時は、" + id);
-
-            return "meishi/detailperson";
-        }
-
+     @PostMapping("/detailperson")
+	public String detailperson(Model model,
+	                           @RequestParam(name = "id", required = false) Integer id,
+	                           @RequestParam(name = "personalname", required = false) String personalname,
+	                           @RequestParam(name = "personalkananame", required = false) String personalkananame,
+	                           @RequestParam(name = "mobiletel", required = false) String mobiletel,
+	                           @RequestParam(name = "email", required = false) String email,
+	                           @RequestParam(name = "photoomotePath", required = false) String photoomotePath,
+	                           @RequestParam(name = "photouraPath", required = false) String photouraPath) {
+	    
+	    // 受け取った値の確認
+	    System.out.println("詳細画面 - 受け取ったid: " + id);
+	    System.out.println("詳細画面 - 受け取ったpersonalname: " + personalname);
+	    System.out.println("詳細画面 - 受け取ったpersonalkananame: " + personalkananame);
+	    System.out.println("詳細画面 - 受け取ったmobiletel: " + mobiletel);
+	    System.out.println("詳細画面 - 受け取ったemail: " + email);
+	    System.out.println("詳細画面 - 受け取ったphotoomotePath: " + photoomotePath);
+	    System.out.println("詳細画面 - 受け取ったphotouraPath: " + photouraPath);
+	
+	    // モデルに復号化された項目を追加（セッションに保存）
+	    model.addAttribute("id", id);
+	    model.addAttribute("personalname", personalname);
+	    model.addAttribute("personalkananame", personalkananame);
+	    model.addAttribute("mobiletel", mobiletel);
+	    model.addAttribute("email", email);
+	    model.addAttribute("photoomotePath", photoomotePath);
+	    model.addAttribute("photouraPath", photouraPath);
+	
+	    // データベースから名刺Entityの情報を取得する
+	    Optional<MeishiEntity> meishiOpt = meishisRepository.findById(id);
+	
+	    if (meishiOpt.isPresent()) {
+	        MeishiEntity meishi = meishiOpt.get();
+	        System.out.println("詳細画面 - 名刺情報が見つかりました: " + meishi);
+	
+	        // 暗号化されていない項目をモデルに追加
+	        model.addAttribute("companyname", meishi.getCompanyname());
+	        model.addAttribute("companykananame", meishi.getCompanykananame());
+	        model.addAttribute("belong", meishi.getBelong());
+	        model.addAttribute("position", meishi.getPosition());
+	        model.addAttribute("address", meishi.getAddress());
+	        model.addAttribute("companytel", meishi.getCompanytel());
+	
+	        // 画像パスの処理
+	        try {
+	            if (photoomotePath != null && !photoomotePath.isEmpty()) {
+	                String omoteFileName = photoomotePath.substring(photoomotePath.lastIndexOf("\\") + 1);
+	                String omoteImagePath = "/images/" + omoteFileName;
+	                meishi.setOmoteImagePath(omoteImagePath);
+	                model.addAttribute("omoteImagePath", omoteImagePath);
+	                System.out.println("詳細画面 - 処理されたomoteImagePath: " + omoteImagePath);
+	            }
+	            if (photouraPath != null && !photouraPath.isEmpty()) {
+	                String uraFileName = photouraPath.substring(photouraPath.lastIndexOf("\\") + 1);
+	                String uraImagePath = "/images/" + uraFileName;
+	                meishi.setUraImagePath(uraImagePath);
+	                model.addAttribute("uraImagePath", uraImagePath);
+	                System.out.println("詳細画面 - 処理されたuraImagePath: " + uraImagePath);
+	            }
+	        } catch (Exception e) {
+	            System.err.println("詳細画面 - 写真パス処理中のエラー: " + e.getMessage());
+	            e.printStackTrace();
+	        }
+	    } else {
+	        System.err.println("詳細画面 - 該当する名刺情報が見つかりません: " + id);
+	    }
+	
+	    return "meishi/detailperson";
+	}
 
  //-----------名刺情報削除ボタン----------------
      
@@ -354,21 +347,110 @@ public class MeishiController {
             return "/meishi/deleteMeishi"; // deleteMeishi.html に遷移
         }
         
-	/*@DeleteMapping("/deleteMeishi")
-	public String meishiDelete(@RequestParam(name = "id") Integer id,
-		Model model) {
-		System.out.println("id" + id);
-		model.addAttribute("id", id);
-	   
-		//名刺エンティティを削除する
-	    meishiService.deleteMeishiById(id);
-	    System.out.println("meishisテーブルの該当行を削除"); 
-	    model.addAttribute("message","削除が完了しました。"); 
-	    return "/meishi/deleteMeshi";
-	   }*/
-    
+
+
+//-------------名刺情報修正画面-----------------------
+       
+/*@GetMapping("/fixMeishiForm")
+public String fixMeishiForm(HttpSession session, Model model) {
+    model.addAttribute("id", session.getAttribute("id"));
+    model.addAttribute("personalname", session.getAttribute("personalname"));
+    model.addAttribute("personalkananame", session.getAttribute("personalkananame"));
+    model.addAttribute("mobiletel", session.getAttribute("mobiletel"));
+    model.addAttribute("email", session.getAttribute("email"));
+    model.addAttribute("photoomotePath", session.getAttribute("photoomotePath"));
+    model.addAttribute("photouraPath", session.getAttribute("photouraPath"));
+
+    model.addAttribute("companyname", session.getAttribute("companyname"));
+    model.addAttribute("companykananame", session.getAttribute("companykananame"));
+    model.addAttribute("belong", session.getAttribute("belong"));
+    model.addAttribute("position", session.getAttribute("position"));
+    model.addAttribute("address", session.getAttribute("address"));
+    model.addAttribute("companytel", session.getAttribute("companytel"));
+
+    String photoomotePath = (String) session.getAttribute("photoomotePath");
+    String photouraPath = (String) session.getAttribute("photouraPath");
+
+    String omoteFileName = (photoomotePath != null && !photoomotePath.isEmpty())
+            ? photoomotePath.substring(photoomotePath.lastIndexOf("\\") + 1)
+            : "";
+    String uraFileName = (photouraPath != null && !photouraPath.isEmpty())
+            ? photouraPath.substring(photouraPath.lastIndexOf("\\") + 1)
+            : "";
+
+    model.addAttribute("photoomotePath", omoteFileName);
+    model.addAttribute("photouraPath", uraFileName);
+    model.addAttribute("photouraFileName", uraFileName.isEmpty() ? "ファイルが選択されていません" : uraFileName);
+
+    return "meishi/fixMeishi";
+}*/
+
+
+//--------名刺情報の修正画面-------------------------------        
         
-        
+        @PostMapping("/fixMeishi")
+        public String fixMeishi(@RequestParam(name = "id", required = false) Integer id,
+                                @RequestParam(name = "personalname", required = false) String personalname,
+                                @RequestParam(name = "personalkananame", required = false) String personalkananame,
+                                @RequestParam(name = "mobiletel", required = false) String mobiletel,
+                                @RequestParam(name = "email", required = false) String email,
+                                @RequestParam(name = "photoomotePath", required = false) String photoomotePath,
+                                @RequestParam(name = "photouraPath", required = false) String photouraPath,
+                                @RequestParam(value = "photoomote", required = false) MultipartFile photoomote,
+                                @RequestParam(value = "photoura", required = false) MultipartFile photoura,
+                                Model model) {
+
+            // デバッグ用のログ出力
+            System.out.println("修正画面 - 受け取ったid: " + id);
+            System.out.println("修正画面 - 受け取ったpersonalname: " + personalname);
+            System.out.println("修正画面 - 受け取ったpersonalkananame: " + personalkananame);
+            System.out.println("修正画面 - 受け取ったmobiletel: " + mobiletel);
+            System.out.println("修正画面 - 受け取ったemail: " + email);
+            System.out.println("修正画面 - 受け取ったphotoomotePath: " + photoomotePath);
+            System.out.println("修正画面 - 受け取ったphotouraPath: " + photouraPath);
+
+            // データベースから暗号化されていない項目を取得
+            Optional<MeishiEntity> meishiOpt = meishisRepository.findById(id);
+            if (!meishiOpt.isPresent()) {
+                System.err.println("修正画面 - 該当する名刺情報が見つかりません: " + id);
+                return "meishi/fixMeishi";
+            }
+            MeishiEntity meishi = meishiOpt.get();
+
+            // 画像ファイルの保存（新しい画像がアップロードされた場合）
+            String newPhotoomotePath = (photoomote != null && !photoomote.isEmpty()) ? saveFile(UPLOAD_DIR, photoomote) : photoomotePath;
+            String newPhotouraPath = (photoura != null && !photoura.isEmpty()) ? saveFile(UPLOAD_DIR, photoura) : photouraPath;
+
+            // ファイル名の抽出
+            String omoteFileName = (newPhotoomotePath != null && !newPhotoomotePath.isEmpty())
+                    ? newPhotoomotePath.substring(newPhotoomotePath.lastIndexOf("\\") + 1)
+                    : "";
+            String uraFileName = (newPhotouraPath != null && !newPhotouraPath.isEmpty())
+                    ? newPhotouraPath.substring(newPhotouraPath.lastIndexOf("\\") + 1)
+                    : "";
+
+            // モデルに復号化された項目を追加
+            model.addAttribute("id", id);
+            model.addAttribute("personalname", personalname);
+            model.addAttribute("personalkananame", personalkananame);
+            model.addAttribute("mobiletel", mobiletel);
+            model.addAttribute("email", email);
+            model.addAttribute("photoomotePath", omoteFileName);
+            model.addAttribute("photouraPath", uraFileName);
+            model.addAttribute("photouraFileName", uraFileName.isEmpty() ? "ファイルが選択されていません" : uraFileName);
+
+            // 追加のデータベース項目
+            model.addAttribute("companyname", meishi.getCompanyname());
+            model.addAttribute("companykananame", meishi.getCompanykananame());
+            model.addAttribute("belong", meishi.getBelong());
+            model.addAttribute("position", meishi.getPosition());
+            model.addAttribute("address", meishi.getAddress());
+            model.addAttribute("companytel", meishi.getCompanytel());
+
+            return "meishi/fixMeishi";
+        }
+
+
     
     
 }
