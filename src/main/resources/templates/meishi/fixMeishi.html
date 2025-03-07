@@ -9,7 +9,7 @@
 <body>
     <div th:replace="~{common/layout::common_header}"></div>
 
-    <form class="fixMeishiForm" th:action="@{/fixMeishi}" method="post" enctype="multipart/form-data">
+    <form class="fixMeishiForm" th:action="@{/fixMeishiConfirm}" method="post" enctype="multipart/form-data">
         <div class="all-inputmeishi">
             <div class="meishi-form">
 				<h2 class="syuusei">名刺情報修正ページ</h2>
@@ -18,8 +18,8 @@
 					
 					
 						<!--エラーメッセージ表示設定-->
-						<div class="error">
-						<div class="errormsg">
+						<div class="error" >
+						<div class="errormsg">			
 							<div id="validate_msg1" style="color: red;"></div>
 							<div id="validate_msg2" style="color: red;"></div>
 							<div id="validate_msg3" style="color: red;"></div>
@@ -33,22 +33,22 @@
 						<input type="hidden" name="id" th:value="${id}">
 					
                     <div>
-                        <label for="companyname">企業名</label>
+                        <label for="companyname">企業名 ※必須</label>
                         <br>
                         <input class="input" type="text" id="companyname" name="companyname" th:value="${companyname}" >
                     </div>
                     <div>
-                        <label for="companykananame">企業名（カナ）</label>
+                        <label for="companykananame">企業名（カナ） ※必須</label>
                         <br>
                         <input class="input" type="text" id="companykananame" name="companykananame" th:value="${companykananame}" >
                     </div>
                     <div>
-                        <label for="personalname">担当者名</label>
+                        <label for="personalname">担当者名 ※必須</label>
                         <br>
                         <input class="input" type="text" id="personalname" name="personalname" th:value="${personalname}" >
                     </div>
                     <div>
-                        <label for="personalkananame">担当者名（カナ）</label>
+                        <label for="personalkananame">担当者名（カナ） ※必須</label>
                         <br>
                         <input class="input" type="text" id="personalkananame" name="personalkananame" th:value="${personalkananame}" >
                     </div>
@@ -63,12 +63,12 @@
                         <input class="input2" type="text" id="position" name="position" th:value="${position}" >
                     </div>
                     <div>
-                        <label for="address">所在地</label>
+                        <label for="address">所在地 ※必須</label>
                         <br>
                         <input class="input" type="text" id="address" name="address" th:value="${address}" >
                     </div>
                     <div>
-                        <label for="companytel">会社電話番号</label>
+                        <label for="companytel">会社電話番号 ※必須</label>
                         <br>
                         <input class="input" type="text" id="companytel" name="companytel" th:value="${companytel}"/>
                     </div>
@@ -78,25 +78,31 @@
                         <input class="input" type="text" id="mobiletel" name="mobiletel" th:value="${mobiletel}">
                     </div>
                     <div>
-                        <label for="email">Eメールアドレス</label>
+                        <label for="email">Eメールアドレス ※必須</label>
                         <br>
                         <input class="input" type="text" id="email" name="email" th:value="${email}" >
 
                     </div>
-                    <div>
-                        <label>名刺写真（表面） ※必須
-                        <span class="mini">ファイル形式は.pngのみ</span> </label>
-                        <div class="confirm_text" th:if="${photoomotePath != null}" th:text="${photoomotePath}"></div>
-                        <input class="file" type="file" id="photoomote" name="photoomote">
-                        <input type="hidden" name="photoomotePath" th:value="${photoomotePath}">
-                    </div>
-                    <div>
-                        <label>名刺写真（裏面）
-                        <span class="mini">ファイル形式は.pngのみ</span> </label>
-                        <div class="confirm_text" th:if="${photouraFileName != null}" th:text="${photouraFileName}"></div>
-                        <input class="file" type="file" id="photofile" name="photoura">
-                        <input type="hidden" name="photouraPath" th:value="${photouraPath}">
-                    </div>
+                 
+					    <!-- 表面の画像 -->
+					    <div>
+					        <label>名刺写真（表面）:</label>
+					        <div class="confirm_text" th:if="${photoomoteFileName != null}" th:text="${photoomoteFileName}"></div>
+					        <div class="confirm_text" th:if="${photoomoteFileName == null}">ファイルが選択されていません。</div>
+					        <input type="hidden" name="photoomotePath" th:value="${photoomotePath}">
+					        <input type="file" id="photoomote" name="photoomote">
+					    </div>
+					
+					    <!-- 裏面の画像 -->
+					    <div>
+					        <label>名刺写真（裏面）:</label>
+					        <div class="confirm_text" th:if="${photouraFileName != null}" th:text="${photouraFileName}"></div>
+					        <div class="confirm_text" th:if="${photouraFileName == null}">ファイルが選択されていません。</div>
+					        <input type="hidden" name="photouraPath" th:value="${photouraPath}">
+					        <input type="file" id="photoura" name="photoura">
+					    </div>
+
+   
                 </div>
                 
                 <input type="hidden" id="id" name="id" th:value="${id}">
@@ -106,17 +112,49 @@
         
         <div class="btn">
             <div class="button-container2">
-                <a th:href="@{/return_top}" class="btn-return2">戻る</a>
-                <input type="submit" class="btn-submit2"onclick="testCheck1();testCheck2();testCheck3();testCheck4();testCheck5();testCheck6();testCheck7()" value="修正確認">
+                <button type="button" class="btn-return2" onclick="returnToPreviousPage()">戻る</button>
+                <input type="submit" class="btn-submit2"onclick="testCheck1();testCheck2();testCheck3();testCheck4();testCheck5();testCheck6();testCheck7()"  value="修正確認">
+           
             </div>
         </div>
+        
+        
+        <script>
+        function returnToPreviousPage() {
+            // 隠しフィールドの値を保持しつつ、前の画面（detailperson.html）に移動
+            const form = document.createElement('form');
+            form.method = 'post';
+            form.action = '/detailperson'; // 適切なエンドポイントを設定
+
+            const fields = [
+                { name: 'id', value: document.querySelector('input[name="id"]').value },
+                { name: 'personalname', value: document.querySelector('input[name="personalname"]').value },
+                { name: 'personalkananame', value: document.querySelector('input[name="personalkananame"]').value },
+                { name: 'mobiletel', value: document.querySelector('input[name="mobiletel"]').value },
+                { name: 'email', value: document.querySelector('input[name="email"]').value },
+                { name: 'photoomotePath', value: document.querySelector('input[name="photoomotePath"]').value },
+                { name: 'photouraPath', value: document.querySelector('input[name="photouraPath"]').value }
+            ];
+
+            fields.forEach(field => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = field.name;
+                input.value = field.value;
+                form.appendChild(input);
+            });
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+    </script>
         
         
         
         <script>
 		    function testCheck1(){
 		  	var companyname = document.getElementById("companyname").value;
-		  	if(dankaname.length == 0){
+		  	if(companyname.length == 0){
 		    var validate = "※企業名を入力して下さい";
 		  document.getElementById("validate_msg1").innerHTML = validate; 
 		  return false; 
@@ -127,7 +165,7 @@
 		<script>
 		    function testCheck2(){
 		    var companykananame = document.getElementById("companykananame").value;
-		  	if(dankakananame.length == 0){
+		  	if(companykananame.length == 0){
 		    var validate = "※企業名(カナ）を入力して下さい";
 		   	document.getElementById("validate_msg2").innerHTML = validate;
 		   	return false; 
@@ -139,7 +177,7 @@
 		<script>  
 		    function testCheck3(){
 		    var personalname = document.getElementById("personalname").value;
-		  	if(address1.length == 0){
+		  	if(personalname.length == 0){
 		    var validate = "※担当者名を入力してください";
 		    document.getElementById("validate_msg3").innerHTML = validate;
 		    return false; 
@@ -151,7 +189,7 @@
 		 <script>
 		    function testCheck4(){
 		  	var personalkananame = document.getElementById("personalkananame").value;
-		  	if(tel.length == 0){
+		  	if(personalkananame.length == 0){
 		    var validate = "※担当者名（カナ）を入力してください";
 		    
 		    document.getElementById("validate_msg5").innerHTML = validate; 
@@ -163,8 +201,8 @@
         
         <script>
 		    function testCheck5(){
-		  	var address = document.getElementById("").value;
-		  	if(tel.length == 0){
+		  	var adddress = document.getElementById("address").value;
+		  	if(address.length == 0){
 		    var validate = "※所在地を入力してください";
 		    
 		    document.getElementById("validate_msg5").innerHTML = validate; 
@@ -177,7 +215,7 @@
         <script>
 		    function testCheck6(){
 		  	var companytel = document.getElementById("companytel").value;
-		  	if(tel.length == 0){
+		  	if(companytel.length == 0){
 		    var validate = "※会社電話番号を入力してください";
 		    
 		    document.getElementById("validate_msg6").innerHTML = validate; 
@@ -190,7 +228,7 @@
         <script>
 		    function testCheck7(){
 		  	var email = document.getElementById("email").value;
-		  	if(tel.length == 0){
+		  	if(email.length == 0){
 		    var validate = "※Eメールアドレスを入力してください";
 		    
 		    document.getElementById("validate_msg7").innerHTML = validate; 

@@ -59,6 +59,7 @@ label {
 .error{
 	text-align: center;
 	font-size: 15px;
+	color: red;
 }
 
 .errormsg {
@@ -114,4 +115,64 @@ label {
 	border: 1px solid #999;
 	
 	
+}
+
+
+/*名刺情報修正確認画面のCSS*/
+
+.meishi-form2 {
+	margin: auto;
+	font-size: 25px;
+    margin-top: -50px;
+   	border: 2px solid black;
+	height: 1050px;
+	width: 550px;
+	margin-bottom: 20px;
+}
+
+/*名刺情報修正完了画面のCSS*/
+
+.form-fixfix {
+	text-align: center;
+	border: 2px solid black;
+	width: 600px;
+	height: 220px;
+	margin: auto;
+	margin-bottom: 100px;
+}
+
+.completeicon {
+	position: absolute;
+	height: 75px;
+	width: 75px;
+	margin-left: -235px;
+	margin-top: 75px;
+}
+
+.toppage {
+	position: absolute;
+	height: 25px;
+	width: 25px;
+	margin-left: -35px;
+	
+}
+
+.button-container3{
+	position: absolute;
+	text-align: center;
+	margin-top: -50px;
+	margin-left: 180px;
+	border: 1px solid black;
+	width: 245px;
+	height: 28px;
+	max-height: 100%;
+}
+
+.btn-return {
+	margin: 3px;
+}
+
+.btn-ctl {
+	margin-top: 80px;
+	margin-bottom: 100px;
 }

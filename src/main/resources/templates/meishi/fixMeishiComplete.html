@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	
+<head>
+<meta charset="UTF-8">
+<title>名刺情報　修正完了画面</title>
+<link rel="stylesheet" th:href="@{/css/layout.css}" />
+<link rel="stylesheet" th:href="@{/css/login/login.css}">
+<link rel="stylesheet" th:href="@{/css/meishi/fixmeishi.css}">
+</head>
+
+ <div th:replace="~{common/layout::common_header}"></div>
+ 
+	<form class="form-fixfix">
+	<img class="completeicon" th:src="@{/img/completeicon.png}" alt="登録完了マーク">
+	<p class="inputcomp">名刺情報修正完了</p>
+		<p class="h5">名刺情報の修正が完了しました。</p>
+    <p class="h5">上記メニューバーより引き続きご利用ください。</p>
+
+
+<div class="btn-ctl">
+  	<div class="button-container3">
+		 <img class="toppage" th:src="@{/img/toppage.png}" alt="トップページ画像">
+      <a th:href="@{/return_top}" class="btn-return">トップページへ</a>
+  	</div>
+  	
+  
+</div>
+<div th:replace="~{common/layout::common_footer}"></div>
+</body>
+</html>

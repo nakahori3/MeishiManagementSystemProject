@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	
+<head>
+<meta charset="UTF-8">
+<title>名刺情報　修正確認画面</title>
+<link rel="stylesheet" th:href="@{/css/layout.css}" />
+<link rel="stylesheet" th:href="@{/css/meishi/fixMeishi.css}">
+
+</head>
+<body>
+	<div th:replace="~{common/layout::common_header}"></div>
+	
+	<div class="content">
+		
+		<form class="fixMeishiform" th:action="@{/fixMeishiComplete}" method="post">
+		<input type="hidden" name="id" th:value="${id}">
+		    <div class="all-inputmeishi">
+		      	<div class="meishi-form2">
+					  <h2 class="syuusei">名刺情報修正確認ページ</h2>
+		        <div class="fix-meishiform">
+					
+					<div>
+                        <label for="companyname">企業名 ※必須</label>
+                        <br>
+                        <input class="input" type="text" id="companyname" name="companyname" th:value="${meishiForm.companyname}" >
+                    </div>
+                    <div>
+                        <label for="companykananame">企業名（カナ） ※必須</label>
+                        <br>
+                        <input class="input" type="text" id="companykananame" name="companykananame" th:value="${meishiForm.companykananame}" >
+                    </div>
+                    <div>
+                        <label for="personalname">担当者名 ※必須</label>
+                        <br>
+                        <input class="input" type="text" id="personalname" name="personalname" th:value="${meishiForm.personalname}" >
+                    </div>
+                    <div>
+                        <label for="personalkananame">担当者名（カナ） ※必須</label>
+                        <br>
+                        <input class="input" type="text" id="personalkananame" name="personalkananame" th:value="${meishiForm.personalkananame}" >
+                    </div>
+                    <div>
+                        <label for="belong">所属</label>
+                        <br>
+                        <input class="input2" type="text" id="belong" name="belong" th:value="${meishiForm.belong}" >
+                    </div>
+                    <div>
+                        <label for="position">役職</label>
+                        <br>
+                        <input class="input2" type="text" id="position" name="position" th:value="${meishiForm.position}" >
+                    </div>
+                    <div>
+                        <label for="address">所在地 ※必須</label>
+                        <br>
+                        <input class="input" type="text" id="address" name="address" th:value="${meishiForm.address}" >
+                    </div>
+                    <div>
+                        <label for="companytel">会社電話番号 ※必須</label>
+                        <br>
+                        <input class="input" type="text" id="companytel" name="companytel" th:value="${meishiForm.companytel}"/>
+                    </div>
+                    <div>
+                        <label for="mobiletel">携帯電話番号</label>
+                        <br>
+                        <input class="input" type="text" id="mobiletel" name="mobiletel" th:value="${meishiForm.mobiletel}">
+                    </div>
+                    <div>
+                        <label for="email">Eメールアドレス ※必須</label>
+                        <br>
+                        <input class="input" type="text" id="email" name="email" th:value="${meishiForm.email}" >
+
+                    </div>
+                    
+                    
+                    <div>
+					    <label>名刺写真（表面）:</label>
+					    <div class="confirm_text" th:if="${photoomoteFileName != null}" th:text="${photoomoteFileName}"></div>
+					    <div class="confirm_text" th:if="${photoomoteFileName == null}">ファイルが選択されていません。</div>
+						<input type="hidden" name="photoomotePath" th:value="${photoomotePath}">
+					</div>
+				
+					<div>
+					    <label>名刺写真（裏面）:</label>
+					    <div class="confirm_text" th:if="${photouraFileName != null}" th:text="${photouraFileName}"></div>
+					    <div class="confirm_text" th:if="${photouraFileName == null}">ファイルが選択されていません。</div>
+						<input type="hidden" name="photoomotePath" th:value="${photouraPath}">
+					</div>
+
+                    
+                    
+                    <!--<div>
+                        <label>名刺写真（表面） ※必須
+                        <span class="mini">ファイル形式は.pngのみ</span> </label>
+                        <div class="confirm_text" th:if="${photoomoteFileName != null}" th:text="${photoomoteFileName}"></div>
+                        <div class="confirm_text" th:if="${photoomoteFileName == null}">ファイルが選択されていません。</div>
+                        <input type="hidden" name="photoomotePath" th:value="${photoomotePath}">
+                    </div>
+                    <div>
+                        <label>名刺写真（裏面）
+                        <span class="mini">ファイル形式は.pngのみ</span> </label>
+                        <div class="confirm_text" th:if="${photouraFileName != null}" th:text="${photouraFileName}"></div>
+                        <div class="confirm_text" th:if="${photouraFileName == null}">ファイルが選択されていません。</div>
+                        <input type="hidden" name="photouraPath" th:value="${photouraPath}">
+                    </div>-->
+                </div>
+                </div>
+		    </div>
+                
+             <!--入力内容確認画面に遷移するボタン -->
+            <div class="btn">
+                <div class="button-container2">
+                    <a th:href="@{/return_top}" class="btn-return2">トップページへに戻る</a>
+                    
+                    <input type="hidden" th:field="*{companyname}">
+                    <input type="hidden" th:field="*{companykananame}">
+                    <input type="hidden" th:field="*{personalname}">
+                    <input type="hidden" th:field="*{personalkananame}">
+                    <input type="hidden" th:field="*{belong}">
+                    <input type="hidden" th:field="*{position}">
+                    <input type="hidden" th:field="*{address}">
+                    <input type="hidden" th:field="*{companytel}">
+                    <input type="hidden" th:field="*{mobiletel}">
+                    <input type="hidden" th:field="*{email}">
+                    <input type="hidden" th:field="*{photoomotePath}">
+                    <input type="hidden" th:field="*{photouraPath}">
+                    <input type="submit" class="btn-submit2" value="登録">
+                </div>
+            </div>
+        </form>
+    </div>
+                
+<div th:replace="~{common/layout::common_footer}"></div>
+</body>
+</html>
