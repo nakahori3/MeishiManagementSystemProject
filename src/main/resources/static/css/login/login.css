@@ -187,9 +187,18 @@ h3{
 
 }
 
+.btn-success2:hover {
+	background-color: #FFE200;
+}
 
 .btn-submit2{
 	font-size: 25px;
+
+
+}
+
+.btn-submit2:hover{
+	background-color: #FFE200;
 
 
 }

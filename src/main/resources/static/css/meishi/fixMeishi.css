@@ -105,6 +105,14 @@ label {
 
 }
 
+.btn-return2:hover {
+	background-color: #FFE200;
+	
+
+}
+
+
+
 /*入力ページの確認ボタン*/
 .btn-submit2{
 	font-size: 25px;
@@ -115,6 +123,10 @@ label {
 	border: 1px solid #999;
 	
 	
+}
+
+.btn-submit2:hover {
+	background-color: #FFE200;
 }
 
 
@@ -139,6 +151,12 @@ label {
 	height: 220px;
 	margin: auto;
 	margin-bottom: 100px;
+}
+
+.inputcomp {
+	text-align: center;
+	font-size: 30px;
+	margin-top: 20px;
 }
 
 .completeicon {

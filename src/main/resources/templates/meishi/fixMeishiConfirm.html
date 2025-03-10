@@ -88,21 +88,6 @@
 					</div>
 
                     
-                    
-                    <!--<div>
-                        <label>名刺写真（表面） ※必須
-                        <span class="mini">ファイル形式は.pngのみ</span> </label>
-                        <div class="confirm_text" th:if="${photoomoteFileName != null}" th:text="${photoomoteFileName}"></div>
-                        <div class="confirm_text" th:if="${photoomoteFileName == null}">ファイルが選択されていません。</div>
-                        <input type="hidden" name="photoomotePath" th:value="${photoomotePath}">
-                    </div>
-                    <div>
-                        <label>名刺写真（裏面）
-                        <span class="mini">ファイル形式は.pngのみ</span> </label>
-                        <div class="confirm_text" th:if="${photouraFileName != null}" th:text="${photouraFileName}"></div>
-                        <div class="confirm_text" th:if="${photouraFileName == null}">ファイルが選択されていません。</div>
-                        <input type="hidden" name="photouraPath" th:value="${photouraPath}">
-                    </div>-->
                 </div>
                 </div>
 		    </div>
@@ -111,7 +96,7 @@
             <div class="btn">
                 <div class="button-container2">
                     <a th:href="@{/return_top}" class="btn-return2">トップページへに戻る</a>
-                    
+                
                     <input type="hidden" th:field="*{companyname}">
                     <input type="hidden" th:field="*{companykananame}">
                     <input type="hidden" th:field="*{personalname}">
@@ -124,7 +109,7 @@
                     <input type="hidden" th:field="*{email}">
                     <input type="hidden" th:field="*{photoomotePath}">
                     <input type="hidden" th:field="*{photouraPath}">
-                    <input type="submit" class="btn-submit2" value="登録">
+                    <input type="submit" class="btn-submit2" value="修正登録">
                 </div>
             </div>
         </form>
