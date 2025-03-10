@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>トップページ（管理者用）</title>
+<link rel="stylesheet" th:href="@{/css/layout.css}" />
+<link rel="stylesheet" th:href="@{/css/adminChange.css}">
+</head>
+<body>
+	<div th:replace="~{common/layout::common_header}"></div>
+    
+	
+	
+	<table align="center" border="1">
+		<thead>
+		<tr>
+			<th>ユーザー名</th>
+			<th>権限切り替えボタン</th>
+		</tr>
+		</thead>
+		
+		<!--各ユーザー名、管理権限状態の表示-->
+		<tbody>
+		<div th:each="auth : ${AuthorityList}" th:object="${auth}">
+			<tr>
+				<td th:text="${auth.username}"></td>
+				<td >
+			         <form>
+				            <input class="toggleButton_input" th:value="${auth.username}" type='checkbox' th:checked="${auth.authority == 'ROLE_ADMIN'}">
+				            <label class="toggleButton_label"></label>
+				            <br>
+				            <input type="hidden" name="authority" th:value="${auth.authority}">
+				            <input type="hidden" name="username" th:value="${auth.username}" autocomplete="username">
+			         </form>
+					
+				</td>
+				
+			</tr>
+			
+		</div>
+		</tbody>
+		
+	</table>
+	
+
+<div th:replace="~{common/layout::common_footer}"></div>
+</body>
+</html>

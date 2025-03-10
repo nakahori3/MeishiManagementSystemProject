@@ -24,31 +24,59 @@ public class WebSecurityConfig {
 	
 	@Autowired
 	private DataSource dataSource;
-
+	
+	
 	@Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception {
-        http.authorizeHttpRequests(authorize -> authorize
-            .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-            .requestMatchers(new AntPathRequestMatcher("/img/**")).permitAll()
-            .requestMatchers(new MvcRequestMatcher(introspector,"/new/**")).permitAll() 
-            .requestMatchers(new AntPathRequestMatcher("/logout/confirm")).permitAll()
-            .anyRequest().authenticated()
-        ).formLogin(login -> login
-            .loginProcessingUrl("/login")
-            .loginPage("/")
-            .defaultSuccessUrl("/success", true)
-            .failureUrl("/login?error")
-            .permitAll()
-        ).logout(logout -> logout
-        	.logoutRequestMatcher(new AntPathRequestMatcher("/perform_logout"))
-            .logoutSuccessUrl("/afterlogout")
-            .deleteCookies("JSESSIONID")
-            .invalidateHttpSession(true)
-            .permitAll()
-        	).csrf().disable(); // CSRFを無効化してテスト
+	SecurityFilterChain securityFilterChain(HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception {
+	    http.authorizeHttpRequests(authorize -> authorize
+	        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+	        .requestMatchers(new AntPathRequestMatcher("/img/**")).permitAll()
+	        .requestMatchers(new MvcRequestMatcher(introspector, "/new/**")).permitAll()
+	        .requestMatchers(new AntPathRequestMatcher("/logout/confirm")).permitAll()
+	        .requestMatchers(new AntPathRequestMatcher("/adminChange")).permitAll() // 管理ページを許可
+	        .anyRequest().authenticated()
+	    ).formLogin(login -> login
+	        .loginProcessingUrl("/login")
+	        .loginPage("/")
+	        .defaultSuccessUrl("/success", true)
+	        .failureUrl("/login?error")
+	        .permitAll()
+	    ).logout(logout -> logout
+	        .logoutRequestMatcher(new AntPathRequestMatcher("/perform_logout"))
+	        .logoutSuccessUrl("/afterlogout")
+	        .deleteCookies("JSESSIONID")
+	        .invalidateHttpSession(true)
+	        .permitAll()
+	    ).csrf().disable(); // CSRFを無効化してテスト
 
-        return http.build();
-    }
+	    return http.build();
+	}
+
+	
+	/*@Bean
+	SecurityFilterChain securityFilterChain(HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception {
+	    http.authorizeHttpRequests(authorize -> authorize
+	        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+	        .requestMatchers(new AntPathRequestMatcher("/img/**")).permitAll()
+	        .requestMatchers(new MvcRequestMatcher(introspector,"/new/**")).permitAll() 
+	        .requestMatchers(new AntPathRequestMatcher("/logout/confirm")).permitAll()
+	        .anyRequest().authenticated()
+	    ).formLogin(login -> login
+	        .loginProcessingUrl("/login")
+	        .loginPage("/")
+	        .defaultSuccessUrl("/success", true)
+	        .failureUrl("/login?error")
+	        .permitAll()
+	    ).logout(logout -> logout
+	    	.logoutRequestMatcher(new AntPathRequestMatcher("/perform_logout"))
+	        .logoutSuccessUrl("/afterlogout")
+	        .deleteCookies("JSESSIONID")
+	        .invalidateHttpSession(true)
+	        .permitAll()
+	    	).csrf().disable(); // CSRFを無効化してテスト
+	
+	    return http.build();
+	}*/
     
  // UserDetailsManagerの設定
  	@Bean

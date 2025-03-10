@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>トップページ（管理者用）</title>
+<link rel="stylesheet" th:href="@{/css/layout.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/adminChange.css}">
+<script src="/js/toggle_button.js"></script>
+</head>
+<body>
+	<div th:replace="~{common/layout::common_header}"></div>
+    
+    <div class="border">	
+		<h2 class="admintitle">ユーザー管理権限一覧表</h2>
+	<table align="center" border="1">
+		<thead>
+		<tr>
+			<th>ユーザー名</th>
+			<th>権限切り替えボタン</th>
+		</tr>
+		</thead>
+		
+		<!--ユーザー名と管理権限の表-->
+		<tbody>
+	    <tr th:each="auth : ${authorityList}" th:object="${auth}">
+	    <td th:text="${auth.username}"></td>
+        <td>
+          <form th:id="'infoUsers' + ${auth.id}" method="post" th:action="@{/change_admin}">
+            <input th:id="'toggleButton' + ${auth.id}" class="toggleButton_input" th:value="${auth.username}" type='checkbox' th:checked="${auth.authority == 'ROLE_ADMIN'}" th:onchange="toggleValue([[${auth.id}]])">
+            <label th:for="'toggleButton' + ${auth.id}" class="toggleButton_label"></label>
+            <br>
+            <input type="hidden" th:id="'dynamicInput' + ${auth.id}" name="authority" th:value="${auth.authority}">
+            <input type="hidden" name="username" th:value="${auth.username}" autocomplete="username">
+          </form>
+        </td>
+        
+        
+    
+	    <td>
+	        <!-- 削除ボタン -->
+	        <form method="post" th:action="@{/delete_user}">
+	            <input type="hidden" name="username" th:value="${auth.username}"> <!-- ユーザー名を送信 -->
+	            <input type="submit" value="削除" class="delete-button" onclick="return confirm('本当に削除しますか？');"> <!-- 確認ダイアログ付きの削除ボタン -->
+	        </form>
+	     </td>
+    
+    </tr>
+    </tbody>
+		
+	</table>
+	</div>
+
+<div th:replace="~{common/layout::common_footer}"></div>
+</body>
+</html>

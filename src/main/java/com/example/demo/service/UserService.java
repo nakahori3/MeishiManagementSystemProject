@@ -99,7 +99,42 @@ public class UserService {
 	}
 
 
+ // 権限をADMINからGENERALにする
+    public void updateAuthorityToGeneral(String username) {
+        // ユーザーの権限情報を取得
+        AuthorityEntity authorityEntity = authRepository.findByUsername(username);
+        // GENERALへの権限変更
+        authorityEntity.setAuthority("ROLE_GENERAL");
+        // 権限情報を保存
+        authRepository.save(authorityEntity);
+    }
+    
+    // 権限をGENERALからADMINにする
+    public void updateAuthorityToAdmin(String username) {
+        // ユーザーの権限情報を取得
+        AuthorityEntity authorityEntity = authRepository.findByUsername(username);
+        // ADMINへの権限変更
+        authorityEntity.setAuthority("ROLE_ADMIN");
+        // 権限情報を保存
+        authRepository.save(authorityEntity);
+    }
     
     
+    
+    public void deleteUserByUsername(String username) {
+        // ユーザー削除処理
+        AuthorityEntity authorityEntity = authRepository.findByUsername(username);
+        if (authorityEntity != null) {
+            authRepository.delete(authorityEntity); // 権限情報を削除
+        }
+
+        UserEntity userEntity = usersRepository.findByUsernameOrderByIdAsc(username);
+        if (userEntity != null) {
+            usersRepository.delete(userEntity); // ユーザー情報を削除
+        }
+
+        System.out.println("ユーザー削除完了: " + username);
+    }
+
 
 }

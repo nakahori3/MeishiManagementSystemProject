@@ -30,9 +30,17 @@
   		</form>
   		
   		<form th:action="@{/adminChange}" method="get">
+		    <!--<input type="hidden" name="id" th:value="${id}">-->
+		    <img class="adminicon" sec:authorize="hasRole('ADMIN')" th:src="@{/img/adminicon.png}" alt="管理権限画像">
+		    <input type="submit" sec:authorize="hasRole('ADMIN')" class="menu-button3" value="ユーザー管理権限">
+		</form>
+
+  		
+  		
+  		<!--<form th:action="@{/adminChange}" method="get">
 			<img class="adminicon" sec:authorize="hasRole('ADMIN')" th:src="@{/img/adminicon.png}" alt="管理権限画像">
 			<input type="submit" sec:authorize="hasRole('ADMIN')" class="menu-button3" value="ユーザー管理権限">
-		</form>
+		</form>-->
   		
   		
   		<!-- ログアウトボタンの表示 -->
