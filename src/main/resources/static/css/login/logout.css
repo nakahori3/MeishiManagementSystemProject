@@ -56,6 +56,10 @@
 	margin-top: 20px;
 }
 
+.btn-top:hover {
+	background-color: #FFE200;
+}
+
 .logoutmark {
 	height: 50px;
 	width: 50px;
@@ -75,6 +79,9 @@
 	margin-top: 12px;
 }
 
+.btn-logout:hover {
+	background-color: #FFE200;
+}
 
 .logoutwaku {
 	margin: auto;
@@ -119,4 +126,6 @@
 	width: 200px;
 }
 
-
+.login-button:hover {
+	background-color: #FFE200;
+}
