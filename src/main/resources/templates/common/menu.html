@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" th:href="@{/css/menu.css}">
+</head>
+<body>
+	
+	<div th:fragment="navigation">
+
+	<div class="menunavi">  
+  <!--検索結果後の各メニューボタン -->
+  <form method="Get" th:action="@{/output_csv}" class="output_csv">
+	  	<img class="csvicon" th:src="@{/img/csvicon.png}" alt="CSV画像">
+        <input type="submit" value="CSVへ出力" class="menu-button">
+  </form>
+  <br>
+  <form method="Get" th:action="@{/nayose}">
+	  	<img class="nayose" th:src="@{/img/nayose.png}" alt="名寄せ画像">
+        <input type="submit" value="名寄せ" class="menu-button">
+  </form>
+  
+  <br>
+  
+  <form method="Get" th:action="@{/print_pdf}">
+	  	<img class="print_pdf" th:src="@{/img/printer.png}" alt="プリンター画像">
+        <input type="submit" value="印刷" class="menu-button">
+  </form>
+	</div>
+</div>
+
+</body>
+</html>
