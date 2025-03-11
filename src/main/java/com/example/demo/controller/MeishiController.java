@@ -47,7 +47,8 @@ public class MeishiController {
 
     @Autowired
     MeishisRepository meishisRepository;
-
+    
+    
     private static final Logger logger = LoggerFactory.getLogger(MeishiController.class);
 
     @ModelAttribute("meishiForm")
@@ -481,64 +482,6 @@ public class MeishiController {
             System.out.println("修正確認画面 - メソッド終了");
             return "/meishi/fixMeishiConfirm";
         }
-
-        
-        
-		/*@PostMapping("/fixMeishiConfirm")
-		public String fixMeishiConfirm(@RequestParam(name = "id") int id,
-		                                @ModelAttribute MeishiForm meishiForm,
-		                                HttpSession session,
-		                                Model model) {
-		
-		    System.out.println("修正確認画面 - メソッド開始");
-		
-		    // セッションから既存のパスを取得
-		    String photoomotePath = (String) session.getAttribute("photoomotePath");
-		    String photouraPath = (String) session.getAttribute("photouraPath");
-		
-		    // ファイル名を抽出
-		    System.out.println("修正確認画面 - photoomotePathからファイル名を抽出開始");
-		    String photoomoteFileName = (photoomotePath != null && !photoomotePath.isEmpty())
-		            ? photoomotePath.substring(Math.max(photoomotePath.lastIndexOf("/"), photoomotePath.lastIndexOf("\\")) + 1)
-		            : null;
-		    System.out.println("修正確認画面 - 抽出したphotoomoteFileName: " + photoomoteFileName);
-		
-		    System.out.println("修正確認画面 - photouraPathからファイル名を抽出開始");
-		    String photouraFileName = (photouraPath != null && !photouraPath.isEmpty())
-		            ? photouraPath.substring(Math.max(photouraPath.lastIndexOf("/"), photouraPath.lastIndexOf("\\")) + 1)
-		            : null;
-		    System.out.println("修正確認画面 - 抽出したphotouraFileName: " + photouraFileName);
-		
-		    // モデルにファイル名を渡す
-		    model.addAttribute("photoomoteFileName", photoomoteFileName);
-		    model.addAttribute("photouraFileName", photouraFileName);
-		
-		    // データベースから暗号化されていない情報を取得
-		    Optional<MeishiEntity> meishiOpt = meishisRepository.findById(id);
-		    if (meishiOpt.isPresent()) {
-		        MeishiEntity meishi = meishiOpt.get();
-		
-		        // 暗号化されていない情報をモデルに追加
-		        model.addAttribute("companyname", meishi.getCompanyname());
-		        model.addAttribute("companykananame", meishi.getCompanykananame());
-		        model.addAttribute("belong", meishi.getBelong());
-		        model.addAttribute("position", meishi.getPosition());
-		        model.addAttribute("address", meishi.getAddress());
-		        model.addAttribute("companytel", meishi.getCompanytel());
-		    } else {
-		        System.err.println("修正確認画面 - 該当する名刺情報が見つかりません: " + id);
-		        return "/meishi/fixMeishi"; // エラーハンドリングとして修正画面に戻す
-		    }
-		
-		    // その他のフォームデータをモデルに追加
-		    model.addAttribute("meishiForm", meishiForm);
-		
-		    System.out.println("修正確認画面 - メソッド終了");
-		    return "/meishi/fixMeishiConfirm";
-		}*/
-		
-		
-		//檀家情報とDBへの接続と修正の登録
         
         
         
@@ -596,51 +539,46 @@ public class MeishiController {
             return "/meishi/fixMeishiComplete";
         }
 
+ 
         
         
+ //-------名寄せ機能-----------------
         
-        
-		/*@PostMapping("/fixMeishiComplete")
-		public String fixMeishiComplete(@RequestParam(name = "id") int id, 
-										HttpSession session, Model model) {
-		
-		        MeishiForm meishiForm = (MeishiForm) session.getAttribute("meishiForm");
-		        String photoomotePath = (String) session.getAttribute("photoomotePath");
-		        String photouraPath = (String) session.getAttribute("photouraPath");
-		
-		        System.out.println("Retrieved session attributes: meishiForm=" + meishiForm + ", photoomotePath=" + photoomotePath + ", photouraPath=" + photouraPath);
-		
-		        if (meishiForm == null) {
-		            System.out.println("meishiForm is null");
-		            model.addAttribute("message", "フォームデータが見つかりません。もう一度お試しください。");
-		            return "/meishi/registerMeishi";
-		        }
-		
-		        if (photoomotePath == null) {
-		            System.out.println("photoomotePath is null");
-		            model.addAttribute("message", "表面のファイルパスが見つかりません。もう一度お試しください。");
-		            return "/meishi/registerMeishi";
-		        }
-		
-		        try {
-		            meishiForm.setPhotoomotePath(photoomotePath);
-		            if (photouraPath != null) {
-		                meishiForm.setPhotouraPath(photouraPath);
-		            }
-		
-		
-		            System.out.println("SavingFiXing meishiForm: " + meishiForm);    	            
-		            meishiService.saveMeishi(meishiForm, photoomotePath, photouraPath);
-		        } catch (Exception e) {
-		            System.out.println("Error occurred while saving the files: " + e.getMessage());
-		            model.addAttribute("message", "ファイルの保存中にエラーが発生しました。もう一度お試しください。");
-		            return "/meishi/registerMeishi";
-		        }
-		
-		        return "/meishi/fixMeishiComplete";
-		    }
-		*/
-        
+        @GetMapping("/nayose")
+        public String showDuplicateMeishi(Model model) {
+            // 復号化された全名刺データを取得
+            List<MeishiEntity> decryptedMeishiList = meishiService.getAllDecryptedMeishis();
+
+            // 重複登録されている担当者を抽出
+            List<MeishiEntity> duplicateMeishi = decryptedMeishiList.stream()
+                    .collect(Collectors.groupingBy(MeishiEntity::getPersonalkananame))
+                    .values().stream()
+                    .filter(list -> list.size() > 1) // 重複データのみフィルタ
+                    .flatMap(List::stream) // フラットなリストに変換
+                    .collect(Collectors.toList());
+
+            // 画像パスを生成してセット
+            for (MeishiEntity meishi : duplicateMeishi) {
+                try {
+                    if (meishi.getPhotoomotePath() != null) {
+                        // パスからファイル名を抽出
+                        String omoteFileName = meishi.getPhotoomotePath().substring(meishi.getPhotoomotePath().lastIndexOf("\\") + 1);
+                        String omoteImagePath = "/images/" + omoteFileName; // 静的リソースのパスに変換
+                        meishi.setOmoteImagePath(omoteImagePath);
+                    }
+                } catch (Exception e) {
+                    System.err.println("Error during photoomotePath processing: " + e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+
+            // モデルにデータを追加
+            model.addAttribute("duplicateMeishi", duplicateMeishi);
+
+            // nayose.htmlを表示
+            return "/meishi/nayose";
+        }
+
     
 }
 

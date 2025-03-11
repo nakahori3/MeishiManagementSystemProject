@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -188,6 +189,21 @@ public class MeishiService {
 		// TODO 自動生成されたメソッド・スタブ
 		return null;
 	}
+	
+	
+	// 担当者名で重複している名刺を取得
+	public List<MeishiEntity> findDuplicateMeishi(List<MeishiEntity> meishiList) {
+        return meishiList.stream()
+                .collect(Collectors.groupingBy(MeishiEntity::getPersonalkananame))
+                .values().stream()
+                .filter(list -> list.size() > 1)
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+    }
+	
+	
+	
+	
 }
 
 

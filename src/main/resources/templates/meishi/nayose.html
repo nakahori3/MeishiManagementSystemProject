@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>名刺情報検索結果ページ</title>
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
+    <link rel="stylesheet" th:href="@{/css/meishi/nayose.css}">
+</head>
+<body>
+    <div th:replace="~{common/layout::common_header}"></div>
+
+    <div class="content">
+		<h2 class="nayosetitle">名寄せ</h2>
+		<p class="nayosesetumei">下記担当者名が重複してます。<br>
+			削除及び確認をする場合、ご希望の選択ボタンを押してください。
+		</p>
+		
+		
+        <div th:each="meishi : ${duplicateMeishi}" class="result-container">
+            <div class="meishi-info">
+                <div class="result-item1">
+                    <!-- 画像を表示 -->
+                    <img th:src="@{${meishi.omoteImagePath}}" height="100" width="200" alt="名刺写真（表面）">
+
+                </div>
+                <div class="savedate">
+                    登録日
+                    <br>
+                    <span th:text="${meishi.savedate}"></span>
+                </div>
+
+                <div class="result-info">
+                    <div class="result-item2">
+                        <span th:text="${meishi.companyname}"></span>
+                    </div>
+                    <div class="result-item2">
+                        <span th:text="${meishi.personalname}"></span>
+                    </div>
+
+                    <div class="result-item2">
+                        <span th:text="${meishi.email}">メールアドレス</span>
+                        <button class="copybutton" th:attr="data-email=${meishi.email}">
+                            <img th:src="@{/img/copyicon.png}" alt="コピー画像" class="menu-gazou2">
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            	<div class="btn-ctl">
+                        <div class="button-container">
+                            <form method="post" th:action="@{/detailperson}">
+                                <input type="hidden" name="id" th:value="${meishi.id}">
+			                    <input type="hidden" name="companyname"  th:value="${meishi.companyname}">
+			                    <input type="hidden" name="companykananame" th:value="${meishi.companykananame}">
+			                    <input type="hidden" name="personalname" th:value="${meishi.personalname}">
+			                    <input type="hidden" name="personalkananame" th:value="${meishi.personalkananame}">
+			                    <input type="hidden" name="belong" th:value="${meishi.belong}">
+			                    <input type="hidden" name="position" th:value="${meishi.position}">
+			                    <input type="hidden" name="address" th:value="${meishi.address}">
+			                    <input type="hidden" name="companytel" th:value="${meishi.companytel}">
+			                    <input type="hidden" name="mobiletel" th:value="${meishi.mobiletel}">
+			                    <input type="hidden" name="email" th:value="${meishi.email}">
+			                    <input type="hidden" name="photoomotePath" th:value="${meishi.photoomotePath}">
+			                    <input type="hidden" name="photouraPath" th:value="${meishi.photouraPath}">
+                                <input type="image" th:src="@{/img/clickicon.png}" alt="選択クリック画像"  class="menu-gazou1">
+                                <input type="submit" value="選択" class="choice">
+                            </form>
+                        </div>
+                    </div>
+            
+            
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var copyButtons = document.querySelectorAll('.copybutton');
+            copyButtons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    var email = button.getAttribute('data-email');
+                    navigator.clipboard.writeText(email).then(function() {
+                        alert('コピーしました: ' + email);
+                    }, function(err) {
+                        alert('コピーに失敗しました: ' + err);
+                    });
+                });
+            });
+        });
+    </script>
+
+    <div th:replace="~{common/layout::common_footer}"></div>
+</body>
+</html>

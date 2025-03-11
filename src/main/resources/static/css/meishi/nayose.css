@@ -1,0 +1,91 @@
+@charset "UTF-8";
+
+.nayosetitle {
+	text-align: center;
+	font-size: 25px;
+	font-weight: bold;
+	margin-left: -550px;
+	margin-top: -25px;
+}
+
+.nayosesetumei {
+	font-size: 17px;;
+}
+
+.result-container {
+	width: 80%;
+  	margin: 0 auto;
+  	max-width: 500px;
+	
+}
+
+.meishi-info {
+	 margin-top: 45px;
+	 border: 2px solid black;
+	width: 450px;;
+
+ }
+ 
+ 
+ .choice {
+	position: absolute;
+	 text-align: right;
+	 font-size: 17px;
+	 font-weight: bold;
+	 height: 65px;
+	 width:  90px;
+	 margin-left: 453px;
+	 margin-top: -65px;
+	 z-index: 1;
+	
+ }
+ 
+ .choice:hover {
+	background-color: #FFE200;
+  	
+}
+
+.menu-gazou1 {
+	position: absolute;
+	height: 50px;
+	width: 50px;
+	margin-left: 448px;
+	margin-top: -60px;
+	z-index: 2;
+
+}
+
+.result-item1 img {
+	margin-top: 15px;
+	
+    height: 100px;
+    width: 200px;
+}
+.savedate {
+	margin-left:20px;
+}
+
+.copybutton {
+	position: absolute;
+	height: 30px;
+	width: 30px;
+	margin-top: -21px;
+	z-index: 1;
+}
+
+.menu-gazou2 {
+	height: 25px;
+	width: 25px;
+	z-index: 2;
+	margin-left: -5px;;
+}
+
+.result-info {
+	position: absolute;
+	margin-left: 230px;
+	margin-top: -150px;
+}
+
+.result-item2 {
+	 margin: 8px;
+} 
