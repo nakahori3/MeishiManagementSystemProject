@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -31,6 +32,7 @@ import com.example.demo.form.MeishiForm;
 import com.example.demo.repository.MeishisRepository;
 import com.example.demo.service.MeishiService;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
@@ -579,6 +581,29 @@ public class MeishiController {
             return "/meishi/nayose";
         }
 
+        
+
+ //---------CSV出力機能---------------------
+        
+        @GetMapping("/output_csv")
+        public void exportCsv(HttpServletResponse response) {
+            response.setContentType("text/csv; charset=UTF-8");
+            response.setHeader("Content-Disposition", "attachment; filename=\"meishi.csv\"");
+
+            try (PrintWriter writer = response.getWriter()) {
+                meishiService.writeCsv(writer); // サービス層でCSVを生成
+            } catch (Exception e) {
+                e.printStackTrace();
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            }
+        }
+
+
+
+        
+        
+        
+        
     
 }
 

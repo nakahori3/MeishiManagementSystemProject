@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -8,6 +9,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -191,7 +194,7 @@ public class MeishiService {
 	}
 	
 	
-	// 担当者名で重複している名刺を取得
+	// 名寄せ機能：担当者名で重複している名刺を取得
 	public List<MeishiEntity> findDuplicateMeishi(List<MeishiEntity> meishiList) {
         return meishiList.stream()
                 .collect(Collectors.groupingBy(MeishiEntity::getPersonalkananame))
@@ -202,8 +205,41 @@ public class MeishiService {
     }
 	
 	
+
+	//CSV出力：復号化とCSVフォーマットへの書き込み
 	
-	
+	public void writeCsv(PrintWriter writer) throws Exception {
+        // データベースから復号化されたデータを取得
+        List<MeishiEntity> meishiList = meishisRepository.findAllDecrypted(PGPASSWORD);
+
+        // CSVフォーマット設定（BOM付き UTF-8 エンコーディング対応）
+        writer.write("\uFEFF"); // BOM を追加して文字化けを防止
+        try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.withHeader(
+                "ID", "Company Name", "Company Kana Name", "Personal Name",
+                "Personal Kana Name", "Belong", "Position", "Address",
+                "Company Tel", "Mobile Tel", "Email", "Photo Omote Path",
+                "Photo Ura Path", "Save Date"))) {
+
+            for (MeishiEntity meishi : meishiList) {
+                csvPrinter.printRecord(
+                        meishi.getId(),
+                        meishi.getCompanyname(),
+                        meishi.getCompanykananame(),
+                        meishi.getPersonalname(),
+                        meishi.getPersonalkananame(),
+                        meishi.getBelong(),
+                        meishi.getPosition(),
+                        meishi.getAddress(),
+                        "'" + meishi.getCompanytel(),  // 電話番号の先頭の0を保持するためシングルクォートを追加
+                        "'" + meishi.getMobiletel(),   // 同上
+                        meishi.getEmail(),
+                        meishi.getPhotoomotePath(),
+                        meishi.getPhotouraPath(),
+                        meishi.getSavedate()
+                );
+            }
+        }
+    }
 }
 
 
