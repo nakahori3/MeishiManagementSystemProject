@@ -261,85 +261,7 @@ public class MeishiController {
 
 
 
-    
-    
-	/*@GetMapping("/searchResults")
-	public String searchResults(@RequestParam("searchType") String searchType,
-			@RequestParam("keyword") String keyword,
-			@RequestParam(value = "pgpassword", defaultValue = "P4ssW0rd") String pgpassword,
-			Model model) {
-		System.out.println("Received searchType: " + searchType);
-		System.out.println("Received keyword: " + keyword);
-		System.out.println("Received pgpassword: " + pgpassword);
-	
-		List<MeishiEntity> searchResults;
-		try {
-			if (searchType.equals("companyKanaExact")) {
-				System.out.println("Exact match search for companyKanaName");
-				searchResults = meishiService.findByCompanykananame(keyword, pgpassword);
-			} else if (searchType.equals("companyKanaPartial")) {
-				System.out.println("Partial match search for companyKanaName");
-				searchResults = meishiService.findByPartialCompanyKanaName(keyword, pgpassword);
-			} else if (searchType.equals("personalKanaPartial")) {
-				System.out.println("Partial match search for personalKanaName");
-				searchResults = meishiService.findByPartialPersonalKanaName(keyword, pgpassword);
-			} else {
-				searchResults = List.of();
-			}
-	
-			System.out.println("Search results: " + searchResults.size() + " results found.");
-	
-			if (!searchResults.isEmpty()) {
-				for (MeishiEntity meishi : searchResults) {
-					System.out.println("Found result: " + meishi);
-	
-					System.out.println("Before decryption:");
-					System.out.println("Personal Name (bytea): " + meishi.getPersonalname());
-					System.out.println("Personal Kana Name (bytea): " + meishi.getPersonalkananame());
-					System.out.println("Mobile Tel (bytea): " + meishi.getMobiletel());
-					System.out.println("Email (bytea): " + meishi.getEmail());
-	
-					System.out.println("After decryption:");
-					System.out.println("Personal Name: " + meishi.getPersonalname());
-					System.out.println("Personal Kana Name: " + meishi.getPersonalkananame());
-					System.out.println("Belong: " + meishi.getBelong());
-					System.out.println("Position: " + meishi.getPosition());
-					System.out.println("Address: " + meishi.getAddress());
-					System.out.println("Company Tel: " + meishi.getCompanytel());
-					System.out.println("Mobile Tel: " + meishi.getMobiletel());
-					System.out.println("Email: " + meishi.getEmail());
-					System.out.println("Photo OmotePath: " + meishi.getPhotoomotePath());
-					System.out.println("Photo UraPath: " + meishi.getPhotouraPath());
-	
-					try {
-						if (meishi.getPhotoomotePath() != null) {
-							String omoteFileName = meishi.getPhotoomotePath().substring(meishi.getPhotoomotePath().lastIndexOf("\\") + 1);
-							String omoteImagePath = "/images/" + omoteFileName;
-							meishi.setOmoteImagePath(omoteImagePath);
-						}
-					} catch (Exception e) {
-						System.err.println("Error during photoomotePath processing: " + e.getMessage());
-						e.printStackTrace();
-					}
-				}
-	
-				// グループ化して表示するための準備
-				Map<String, List<MeishiEntity>> groupedResults = searchResults.stream()
-						.collect(Collectors.groupingBy(MeishiEntity::getCompanyname));
-	
-				model.addAttribute("groupedResults", groupedResults);
-			} else {
-				model.addAttribute("errorMessage", "検索結果がありません。");
-			}
-		} catch (Exception e) {
-			System.err.println("Error during search: " + e.getMessage());
-			e.printStackTrace();
-			model.addAttribute("errorMessage", "検索中にエラーが発生しました。");
-		}
-	
-		return "meishi/searchResults";
-	}
-	*/
+   
 
  //--------------名刺情報　詳細画面-------------------------
      @PostMapping("/detailperson")
@@ -708,6 +630,40 @@ public class MeishiController {
 
 
 
+//--------PDF化：検索結果後に表示されている画面のPDF化バージョン------
+         
+         @GetMapping("/print_pdf")
+         public void generateSearchResultPdf(HttpServletResponse response, HttpSession session) {
+             String pgpassword = "P4ssW0rd"; // サーバー側で鍵を保持
+
+             try {
+                 // セッションから検索結果を取得
+                 List<MeishiEntity> searchResults = (List<MeishiEntity>) session.getAttribute("searchResults");
+
+                 if (searchResults == null || searchResults.isEmpty()) {
+                     throw new IllegalStateException("検索結果が存在しません。");
+                 }
+
+                 // PDFデータを生成
+                 byte[] pdfData = pdfService.generateMultiResultPdf(searchResults, pgpassword);
+
+                 // HTTPレスポンスにPDFデータを設定
+                 response.setContentType("application/pdf");
+                 response.setHeader("Content-Disposition", "attachment; filename=\"search_results.pdf\"");
+                 response.getOutputStream().write(pdfData);
+             } catch (IOException | IllegalStateException e) {
+                 e.printStackTrace();
+                 try {
+                     response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "PDF生成中にエラーが発生しました: " + e.getMessage());
+                 } catch (IOException ex) {
+                     ex.printStackTrace();
+                 }
+             }
+         }
+
+
+
+ 
 
         
         
