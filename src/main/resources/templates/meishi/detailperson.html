@@ -8,7 +8,14 @@
 </head>
 <body>
     <div th:replace="~{common/layout::common_header}"></div>
-
+	<div class="menunavi"> 
+	<form method="Get" th:action="@{/downloadPdf}">
+	  	<img class="print_pdf" th:src="@{/img/printer.png}" alt="プリンター画像">
+        <input type="submit" value="印刷" class="menu-button">
+        <input type="hidden" name="id" th:value="${id}" />
+  	</form>
+	</div>
+	
     <form class="detailMeishiForm">
         <div class="all-inputmeishi">
             <div class="meishi-form">

@@ -8,6 +8,36 @@
 	margin-bottom: 25px;
 }
 
+.menunavi {
+ margin-top: 100px;
+  position: absolute;
+  right: 0;
+ 
+	
+}
+
+.print_pdf {
+	width: 50px;
+	height: 50px;
+	margin-bottom: -20px;
+}
+
+.menu-button {
+	background-color: white;
+	font-size: 100%;
+	font-weight: bold;
+	color: black;
+	margin-top: 20px;
+    width: 6em;
+    max-width: 100%;
+    height: 3em;
+    max-height: 100%;
+	}
+	
+.menu-button:hover {
+	background-color: #FFE200;
+}
+
 .detail-meishiform {
 	position: absolute;
 	margin-left: 325px;

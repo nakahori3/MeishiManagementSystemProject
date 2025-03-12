@@ -208,38 +208,73 @@ public class MeishiService {
 
 	//CSV出力：復号化とCSVフォーマットへの書き込み
 	
+	
+	public void writeCsv(PrintWriter writer, List<MeishiEntity> filteredResults) throws Exception {
+	    writer.write("\uFEFF"); // BOM を追加して文字化けを防止
+	    try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.withHeader(
+	            "ID", "Company Name", "Company Kana Name", "Personal Name",
+	            "Personal Kana Name", "Belong", "Position", "Address",
+	            "Company Tel", "Mobile Tel", "Email", "Photo Omote Path",
+	            "Photo Ura Path", "Save Date"))) {
+
+	        for (MeishiEntity meishi : filteredResults) {
+	            csvPrinter.printRecord(
+	                    meishi.getId(),
+	                    meishi.getCompanyname(),
+	                    meishi.getCompanykananame(),
+	                    meishi.getPersonalname(),
+	                    meishi.getPersonalkananame(),
+	                    meishi.getBelong(),
+	                    meishi.getPosition(),
+	                    meishi.getAddress(),
+	                    "'" + meishi.getCompanytel(),
+	                    "'" + meishi.getMobiletel(),
+	                    meishi.getEmail(),
+	                    meishi.getPhotoomotePath(),
+	                    meishi.getPhotouraPath(),
+	                    meishi.getSavedate()
+	            );
+	        }
+	    }
+	}
+
+	
+	
+	
+	
+	/*
 	public void writeCsv(PrintWriter writer) throws Exception {
-        // データベースから復号化されたデータを取得
-        List<MeishiEntity> meishiList = meishisRepository.findAllDecrypted(PGPASSWORD);
-
-        // CSVフォーマット設定（BOM付き UTF-8 エンコーディング対応）
-        writer.write("\uFEFF"); // BOM を追加して文字化けを防止
-        try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.withHeader(
-                "ID", "Company Name", "Company Kana Name", "Personal Name",
-                "Personal Kana Name", "Belong", "Position", "Address",
-                "Company Tel", "Mobile Tel", "Email", "Photo Omote Path",
-                "Photo Ura Path", "Save Date"))) {
-
-            for (MeishiEntity meishi : meishiList) {
-                csvPrinter.printRecord(
-                        meishi.getId(),
-                        meishi.getCompanyname(),
-                        meishi.getCompanykananame(),
-                        meishi.getPersonalname(),
-                        meishi.getPersonalkananame(),
-                        meishi.getBelong(),
-                        meishi.getPosition(),
-                        meishi.getAddress(),
-                        "'" + meishi.getCompanytel(),  // 電話番号の先頭の0を保持するためシングルクォートを追加
-                        "'" + meishi.getMobiletel(),   // 同上
-                        meishi.getEmail(),
-                        meishi.getPhotoomotePath(),
-                        meishi.getPhotouraPath(),
-                        meishi.getSavedate()
-                );
-            }
-        }
-    }
+	    // データベースから復号化されたデータを取得
+	    List<MeishiEntity> meishiList = meishisRepository.findAllDecrypted(PGPASSWORD);
+	
+	    // CSVフォーマット設定（BOM付き UTF-8 エンコーディング対応）
+	    writer.write("\uFEFF"); // BOM を追加して文字化けを防止
+	    try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.withHeader(
+	            "ID", "Company Name", "Company Kana Name", "Personal Name",
+	            "Personal Kana Name", "Belong", "Position", "Address",
+	            "Company Tel", "Mobile Tel", "Email", "Photo Omote Path",
+	            "Photo Ura Path", "Save Date"))) {
+	
+	        for (MeishiEntity meishi : meishiList) {
+	            csvPrinter.printRecord(
+	                    meishi.getId(),
+	                    meishi.getCompanyname(),
+	                    meishi.getCompanykananame(),
+	                    meishi.getPersonalname(),
+	                    meishi.getPersonalkananame(),
+	                    meishi.getBelong(),
+	                    meishi.getPosition(),
+	                    meishi.getAddress(),
+	                    "'" + meishi.getCompanytel(),  // 電話番号の先頭の0を保持するためシングルクォートを追加
+	                    "'" + meishi.getMobiletel(),   // 同上
+	                    meishi.getEmail(),
+	                    meishi.getPhotoomotePath(),
+	                    meishi.getPhotouraPath(),
+	                    meishi.getSavedate()
+	            );
+	        }
+	    }
+	}*/
 }
 
 

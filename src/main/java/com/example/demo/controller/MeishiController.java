@@ -31,10 +31,12 @@ import com.example.demo.entity.MeishiEntity;
 import com.example.demo.form.MeishiForm;
 import com.example.demo.repository.MeishisRepository;
 import com.example.demo.service.MeishiService;
+import com.example.demo.service.PdfService;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+
 
 @Controller
 @Transactional
@@ -50,6 +52,9 @@ public class MeishiController {
     @Autowired
     MeishisRepository meishisRepository;
     
+	@Autowired
+	private PdfService pdfService;
+	
     
     private static final Logger logger = LoggerFactory.getLogger(MeishiController.class);
 
@@ -66,7 +71,7 @@ public class MeishiController {
 
     @GetMapping("/searchMeishi")
     public String serachMeishi(Model model) {
-        return "/meishi/searchMeishi";
+        return "meishi/searchMeishi";
     }
 
     public List<MeishiEntity> getAllDecryptedMeishis() {
@@ -184,68 +189,60 @@ public class MeishiController {
     
   //名刺情報の検索と復号化
     
-    
-        @GetMapping("/searchResults")
-        public String searchResults(@RequestParam("searchType") String searchType,
+    @GetMapping("/searchResults")
+    public String searchResults(@RequestParam("searchType") String searchType,
                                 @RequestParam("keyword") String keyword,
                                 @RequestParam(value = "pgpassword", defaultValue = "P4ssW0rd") String pgpassword,
-                                Model model) {
+                                Model model,
+                                HttpSession session) {
+
         System.out.println("Received searchType: " + searchType);
         System.out.println("Received keyword: " + keyword);
         System.out.println("Received pgpassword: " + pgpassword);
 
-        List<MeishiEntity> searchResults;
+        List<MeishiEntity> searchResults = List.of();
+
         try {
-            if (searchType.equals("companyKanaExact")) {
-                System.out.println("Exact match search for companyKanaName");
+            // 検索タイプに応じた処理
+            if ("companyKanaExact".equals(searchType)) {
                 searchResults = meishiService.findByCompanykananame(keyword, pgpassword);
-            } else if (searchType.equals("companyKanaPartial")) {
-                System.out.println("Partial match search for companyKanaName");
+            } else if ("companyKanaPartial".equals(searchType)) {
                 searchResults = meishiService.findByPartialCompanyKanaName(keyword, pgpassword);
-            } else if (searchType.equals("personalKanaPartial")) {
-                System.out.println("Partial match search for personalKanaName");
+            } else if ("personalKanaPartial".equals(searchType)) {
                 searchResults = meishiService.findByPartialPersonalKanaName(keyword, pgpassword);
-            } else {
-                searchResults = List.of();
             }
 
             System.out.println("Search results: " + searchResults.size() + " results found.");
 
             if (!searchResults.isEmpty()) {
-                for (MeishiEntity meishi : searchResults) {
-                    System.out.println("Found result: " + meishi);
-
-                    System.out.println("Before decryption:");
-                    System.out.println("Personal Name (bytea): " + meishi.getPersonalname());
-                    System.out.println("Personal Kana Name (bytea): " + meishi.getPersonalkananame());
-                    System.out.println("Mobile Tel (bytea): " + meishi.getMobiletel());
-                    System.out.println("Email (bytea): " + meishi.getEmail());
-
-                    System.out.println("After decryption:");
-                    System.out.println("Personal Name: " + meishi.getPersonalname());
-                    System.out.println("Personal Kana Name: " + meishi.getPersonalkananame());
-                    System.out.println("Belong: " + meishi.getBelong());
-                    System.out.println("Position: " + meishi.getPosition());
-                    System.out.println("Address: " + meishi.getAddress());
-                    System.out.println("Company Tel: " + meishi.getCompanytel());
-                    System.out.println("Mobile Tel: " + meishi.getMobiletel());
-                    System.out.println("Email: " + meishi.getEmail());
-                    System.out.println("Photo OmotePath: " + meishi.getPhotoomotePath());
-                    System.out.println("Photo UraPath: " + meishi.getPhotouraPath());
-
+                // パスや画像処理の調整
+                searchResults.forEach(meishi -> {
                     try {
+                        // 表面画像パスの設定
                         if (meishi.getPhotoomotePath() != null) {
-                            String omoteFileName = meishi.getPhotoomotePath().substring(meishi.getPhotoomotePath().lastIndexOf("\\") + 1);
+                            String omoteFileName = meishi.getPhotoomotePath()
+                                .substring(meishi.getPhotoomotePath().lastIndexOf("\\") + 1);
                             String omoteImagePath = "/images/" + omoteFileName;
                             meishi.setOmoteImagePath(omoteImagePath);
                         }
+
+                        // 裏面画像パスの設定
+                        if (meishi.getPhotouraPath() != null) {
+                            String uraFileName = meishi.getPhotouraPath()
+                                .substring(meishi.getPhotouraPath().lastIndexOf("\\") + 1);
+                            String uraImagePath = "/images/" + uraFileName;
+                            meishi.setUraImagePath(uraImagePath);
+                        }
                     } catch (Exception e) {
-                        System.err.println("Error during photoomotePath processing: " + e.getMessage());
+                        System.err.println("Error during image path processing for Meishi ID: " + meishi.getId());
                         e.printStackTrace();
                     }
-                }
+                });
 
-                // グループ化して表示するための準備
+                // 検索結果をセッションに保存
+                session.setAttribute("searchResults", searchResults);
+
+                // グループ化処理
                 Map<String, List<MeishiEntity>> groupedResults = searchResults.stream()
                     .collect(Collectors.groupingBy(MeishiEntity::getCompanyname));
 
@@ -262,6 +259,87 @@ public class MeishiController {
         return "meishi/searchResults";
     }
 
+
+
+    
+    
+	/*@GetMapping("/searchResults")
+	public String searchResults(@RequestParam("searchType") String searchType,
+			@RequestParam("keyword") String keyword,
+			@RequestParam(value = "pgpassword", defaultValue = "P4ssW0rd") String pgpassword,
+			Model model) {
+		System.out.println("Received searchType: " + searchType);
+		System.out.println("Received keyword: " + keyword);
+		System.out.println("Received pgpassword: " + pgpassword);
+	
+		List<MeishiEntity> searchResults;
+		try {
+			if (searchType.equals("companyKanaExact")) {
+				System.out.println("Exact match search for companyKanaName");
+				searchResults = meishiService.findByCompanykananame(keyword, pgpassword);
+			} else if (searchType.equals("companyKanaPartial")) {
+				System.out.println("Partial match search for companyKanaName");
+				searchResults = meishiService.findByPartialCompanyKanaName(keyword, pgpassword);
+			} else if (searchType.equals("personalKanaPartial")) {
+				System.out.println("Partial match search for personalKanaName");
+				searchResults = meishiService.findByPartialPersonalKanaName(keyword, pgpassword);
+			} else {
+				searchResults = List.of();
+			}
+	
+			System.out.println("Search results: " + searchResults.size() + " results found.");
+	
+			if (!searchResults.isEmpty()) {
+				for (MeishiEntity meishi : searchResults) {
+					System.out.println("Found result: " + meishi);
+	
+					System.out.println("Before decryption:");
+					System.out.println("Personal Name (bytea): " + meishi.getPersonalname());
+					System.out.println("Personal Kana Name (bytea): " + meishi.getPersonalkananame());
+					System.out.println("Mobile Tel (bytea): " + meishi.getMobiletel());
+					System.out.println("Email (bytea): " + meishi.getEmail());
+	
+					System.out.println("After decryption:");
+					System.out.println("Personal Name: " + meishi.getPersonalname());
+					System.out.println("Personal Kana Name: " + meishi.getPersonalkananame());
+					System.out.println("Belong: " + meishi.getBelong());
+					System.out.println("Position: " + meishi.getPosition());
+					System.out.println("Address: " + meishi.getAddress());
+					System.out.println("Company Tel: " + meishi.getCompanytel());
+					System.out.println("Mobile Tel: " + meishi.getMobiletel());
+					System.out.println("Email: " + meishi.getEmail());
+					System.out.println("Photo OmotePath: " + meishi.getPhotoomotePath());
+					System.out.println("Photo UraPath: " + meishi.getPhotouraPath());
+	
+					try {
+						if (meishi.getPhotoomotePath() != null) {
+							String omoteFileName = meishi.getPhotoomotePath().substring(meishi.getPhotoomotePath().lastIndexOf("\\") + 1);
+							String omoteImagePath = "/images/" + omoteFileName;
+							meishi.setOmoteImagePath(omoteImagePath);
+						}
+					} catch (Exception e) {
+						System.err.println("Error during photoomotePath processing: " + e.getMessage());
+						e.printStackTrace();
+					}
+				}
+	
+				// グループ化して表示するための準備
+				Map<String, List<MeishiEntity>> groupedResults = searchResults.stream()
+						.collect(Collectors.groupingBy(MeishiEntity::getCompanyname));
+	
+				model.addAttribute("groupedResults", groupedResults);
+			} else {
+				model.addAttribute("errorMessage", "検索結果がありません。");
+			}
+		} catch (Exception e) {
+			System.err.println("Error during search: " + e.getMessage());
+			e.printStackTrace();
+			model.addAttribute("errorMessage", "検索中にエラーが発生しました。");
+		}
+	
+		return "meishi/searchResults";
+	}
+	*/
 
  //--------------名刺情報　詳細画面-------------------------
      @PostMapping("/detailperson")
@@ -584,24 +662,53 @@ public class MeishiController {
         
 
  //---------CSV出力機能---------------------
+      
+         @GetMapping("/output_csv")
+	 public void exportCsv(HttpServletResponse response, HttpSession session) {
+	     response.setContentType("text/csv; charset=UTF-8");
+	     response.setHeader("Content-Disposition", "attachment; filename=\"filtered_meishi.csv\"");
+	
+	     try (PrintWriter writer = response.getWriter()) {
+	         writer.write("\uFEFF"); // BOMを追加して文字化けを防止
+	
+	         @SuppressWarnings("unchecked")
+	         List<MeishiEntity> searchResults = (List<MeishiEntity>) session.getAttribute("searchResults");
+	
+	         // セッションからデータが正しく取得できているか確認
+	         if (searchResults == null || searchResults.isEmpty()) {
+	             writer.write("検索結果がありません");
+	             return;
+	         }
+	
+	         // データをCSVに出力
+	         meishiService.writeCsv(writer, searchResults);
+	     } catch (Exception e) {
+	         e.printStackTrace();
+	         response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+	     }
+	 }
+
         
-        @GetMapping("/output_csv")
-        public void exportCsv(HttpServletResponse response) {
-            response.setContentType("text/csv; charset=UTF-8");
-            response.setHeader("Content-Disposition", "attachment; filename=\"meishi.csv\"");
-
-            try (PrintWriter writer = response.getWriter()) {
-                meishiService.writeCsv(writer); // サービス層でCSVを生成
-            } catch (Exception e) {
-                e.printStackTrace();
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            }
-        }
-
-
-
         
-        
+//------PDF化：印刷用にPDF化する。情報詳細画面のPDF化のバージョン------------------------
+         @GetMapping("/downloadPdf")
+         public void downloadPdf(HttpServletResponse response,
+                                 @RequestParam("id") int id) {
+
+             String pgpassword = "P4ssW0rd"; // サーバー側で鍵を保持
+             try {
+                 byte[] pdfData = pdfService.generatePdf(id, pgpassword);
+                 response.setContentType("application/pdf");
+                 response.setHeader("Content-Disposition", "attachment; filename=\"detailperson.pdf\"");
+                 response.getOutputStream().write(pdfData);
+             } catch (IOException e) {
+                 e.printStackTrace();
+             }
+         }
+
+
+
+
         
         
     
