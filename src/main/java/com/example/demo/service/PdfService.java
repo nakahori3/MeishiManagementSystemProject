@@ -18,6 +18,7 @@ import com.example.demo.entity.MeishiEntity;
 import com.example.demo.repository.MeishisRepository;
 
 
+
 @Service
 public class PdfService {
 
@@ -122,8 +123,8 @@ public class PdfService {
 
         return lineCount;
     }
-     
-
+    
+    
     
     public byte[] generateMultiResultPdf(List<MeishiEntity> searchResults, String pgpassword) throws IOException {
         System.out.println("Starting generateMultiResultPdf. Total results: " + searchResults.size());
@@ -135,64 +136,64 @@ public class PdfService {
             if (!fontFile.exists()) {
                 throw new IOException("フォントファイルが見つかりません: " + fontFile.getPath());
             }
-            System.out.println("Font file loaded successfully.");
             PDType0Font font = PDType0Font.load(document, fontFile);
 
-            int itemsPerPage = 8; // 1ページに表示する最大件数
-            int itemsPerColumn = 4; // 1列に表示する件数
-            float startXLeft = 40; // 左列の開始位置を左にずらす（余白を調整）
-            float startXRight = 320; // 右列の開始位置を調整して左右均等に
-            float startY = 750; // ページ上部の開始位置
-            float rowHeight = 140f; // 各アイテムの高さ（画像とテキストを含む）
+            int itemsPerPage = 8;
+            int itemsPerColumn = 4;
+            float startXLeft = 40;
+            float startXRight = 320;
+            float startY = 750;
+            float rowHeight = 160f; // 縦軸方向の高さを調整
 
             PDPage page = null;
             PDPageContentStream contentStream = null;
 
             try {
                 for (int i = 0; i < searchResults.size(); i++) {
-                    // 新しいページの作成
                     if (i % itemsPerPage == 0) {
                         if (contentStream != null) {
                             contentStream.close();
-                            System.out.println("Closed content stream for previous page.");
                         }
                         page = new PDPage(PDRectangle.A4);
                         document.addPage(page);
                         contentStream = new PDPageContentStream(document, page);
-                        contentStream.setFont(font, 10.5f); // フォントサイズを10.5に設定
-                        System.out.println("Created new page for items starting at index: " + i);
+                        contentStream.setFont(font, 10.5f);
                     }
 
                     MeishiEntity result = searchResults.get(i);
 
-                    // 列と行の位置を計算
-                    float columnX = (i % 2 == 0) ? startXLeft : startXRight; // 偶数インデックスは左列、奇数インデックスは右列
-                    float rowY = startY - (rowHeight * ((i % itemsPerPage) / 2)); // Y座標を計算（各列ごとの位置を調整）
+                    float columnX = (i % 2 == 0) ? startXLeft : startXRight;
+                    float rowY = startY - (rowHeight * ((i % itemsPerPage) / 2));
 
-                    System.out.println("Rendering entity at index: " + i + ", Column X: " + columnX + ", Row Y: " + rowY);
+                    // 黒い枠線を描画
+                    float boxX = columnX - 10;
+                    float boxY = rowY + 30;
+                    float boxWidth = 270;
+                    float boxHeight = rowHeight; // 高さを短縮
+                    contentStream.setStrokingColor(0, 0, 0);
+                    contentStream.addRect(boxX, boxY - boxHeight, boxWidth, boxHeight);
+                    contentStream.stroke();
 
-                    // 画像描画（名刺表面、左側半分）
+                    // 写真描画
                     if (result.getPhotoomotePath() != null && new File(result.getPhotoomotePath()).exists()) {
-                        System.out.println("Drawing image for entity at index: " + i);
                         PDImageXObject image = PDImageXObject.createFromFile(result.getPhotoomotePath(), document);
-                        contentStream.drawImage(image, columnX, rowY - 100, 80, 80); // 画像の位置を下げてサイズを小さく調整
-                    } else {
-                        System.err.println("Image file not found for entity at index: " + i);
+                        contentStream.drawImage(image, columnX, rowY - 100, 80, 80);
                     }
 
-                    // テキストと枠線描画（右側）
-                    float textStartX = columnX + 100; // 画像の右側にテキストを配置
-                    float textStartY = rowY; // 行の開始位置
-                    float boxWidth = 180; // 枠線の幅を短く調整
-                    float boxHeight = 20; // 各枠線の高さ
+                    // テキスト部分の描画
+                    float textStartX = columnX + 100;
+                    float textStartY = rowY;
+                    float boxWidthData = 150; // 灰色の枠線の幅を短縮
+                    float boxHeightData = 20;
 
-                    // 項目名と値（値のみに枠線を付ける）
-                    drawLabelAndBox(contentStream, font, "企業名:", result.getCompanyname(), textStartX, textStartY, boxWidth, boxHeight);
-                    drawLabelAndBox(contentStream, font, "担当者名:", result.getPersonalname(), textStartX, textStartY - 40, boxWidth, boxHeight);
-                    drawLabelAndBox(contentStream, font, "Eメール:", result.getEmail(), textStartX, textStartY - 80, boxWidth, boxHeight);
+                    drawLabelAndBox(contentStream, font, "企業名:", result.getCompanyname(), textStartX, textStartY, boxWidthData, boxHeightData);
+                    drawLabelAndBox(contentStream, font, "担当者名:", result.getPersonalname(), textStartX, textStartY - 40, boxWidthData, boxHeightData);
+                    drawLabelAndBox(contentStream, font, "Eメール:", result.getEmail(), textStartX, textStartY - 80, boxWidthData, boxHeightData);
                 }
             } finally {
-                if (contentStream != null) contentStream.close();
+                if (contentStream != null) {
+                    contentStream.close();
+                }
             }
 
             document.save(byteArrayOutputStream);
@@ -202,32 +203,132 @@ public class PdfService {
         return byteArrayOutputStream.toByteArray();
     }
 
- // 項目名と値を描画し、値のみに枠線を追加するヘルパーメソッド
+    // 項目名と値を描画し、値のみに枠線を追加するヘルパーメソッド
     private void drawLabelAndBox(PDPageContentStream contentStream, PDType0Font font, String label, String value, float x, float y, float width, float height) throws IOException {
-        // 項目名を描画（枠線なし）
         contentStream.beginText();
-        contentStream.setFont(font, 10.5f); // フォントサイズを10.5に設定
+        contentStream.setFont(font, 10.5f);
         contentStream.newLineAtOffset(x, y);
         contentStream.showText(label);
         contentStream.endText();
 
-        // 項目名と値（枠線）の間隔を設定
-        float valueY = y - 25; // 項目名から値までの間隔を追加
+        float valueY = y - 25;
         contentStream.beginText();
-        contentStream.newLineAtOffset(x + 10, valueY + 5); // 枠線内に収まるように調整
+        contentStream.newLineAtOffset(x + 10, valueY + 5);
         contentStream.showText(value != null ? value : "N/A");
         contentStream.endText();
 
-        // 値の枠線を描画
-        contentStream.setStrokingColor(211, 211, 211); // 薄い灰色
-        float adjustedWidth = width - 20; // 枠線の幅を短縮
+        contentStream.setStrokingColor(211, 211, 211);
+        float adjustedWidth = width - 10; // 灰色枠線の幅をさらに短縮
         contentStream.addRect(x, valueY, adjustedWidth, height);
         contentStream.stroke();
     }
 
-    
-    
 
+     
 
+	/*public byte[] generateMultiResultPdf(List<MeishiEntity> searchResults, String pgpassword) throws IOException {
+	    System.out.println("Starting generateMultiResultPdf. Total results: " + searchResults.size());
+	
+	    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+	
+	    try (PDDocument document = new PDDocument()) {
+	        File fontFile = new File("src/main/resources/fonts/Noto_Sans_JP/static/NotoSansJP-Regular.ttf");
+	        if (!fontFile.exists()) {
+	            throw new IOException("フォントファイルが見つかりません: " + fontFile.getPath());
+	        }
+	        System.out.println("Font file loaded successfully.");
+	        PDType0Font font = PDType0Font.load(document, fontFile);
+	
+	        int itemsPerPage = 8; // 1ページに表示する最大件数
+	        int itemsPerColumn = 4; // 1列に表示する件数
+	        float startXLeft = 40; // 左列の開始位置を左にずらす（余白を調整）
+	        float startXRight = 320; // 右列の開始位置を調整して左右均等に
+	        float startY = 750; // ページ上部の開始位置
+	        float rowHeight = 140f; // 各アイテムの高さ（画像とテキストを含む）
+	
+	        PDPage page = null;
+	        PDPageContentStream contentStream = null;
+	
+	        try {
+	            for (int i = 0; i < searchResults.size(); i++) {
+	                // 新しいページの作成
+	                if (i % itemsPerPage == 0) {
+	                    if (contentStream != null) {
+	                        contentStream.close();
+	                        System.out.println("Closed content stream for previous page.");
+	                    }
+	                    page = new PDPage(PDRectangle.A4);
+	                    document.addPage(page);
+	                    contentStream = new PDPageContentStream(document, page);
+	                    contentStream.setFont(font, 10.5f); // フォントサイズを10.5に設定
+	                    System.out.println("Created new page for items starting at index: " + i);
+	                }
+	
+	                MeishiEntity result = searchResults.get(i);
+	
+	                // 列と行の位置を計算
+	                float columnX = (i % 2 == 0) ? startXLeft : startXRight; // 偶数インデックスは左列、奇数インデックスは右列
+	                float rowY = startY - (rowHeight * ((i % itemsPerPage) / 2)); // Y座標を計算（各列ごとの位置を調整）
+	
+	                System.out.println("Rendering entity at index: " + i + ", Column X: " + columnX + ", Row Y: " + rowY);
+	
+	                // 画像描画（名刺表面、左側半分）
+	                if (result.getPhotoomotePath() != null && new File(result.getPhotoomotePath()).exists()) {
+	                    System.out.println("Drawing image for entity at index: " + i);
+	                    PDImageXObject image = PDImageXObject.createFromFile(result.getPhotoomotePath(), document);
+	                    contentStream.drawImage(image, columnX, rowY - 100, 80, 80); // 画像の位置を下げてサイズを小さく調整
+	                } else {
+	                    System.err.println("Image file not found for entity at index: " + i);
+	                }
+	
+	                // テキストと枠線描画（右側）
+	                float textStartX = columnX + 100; // 画像の右側にテキストを配置
+	                float textStartY = rowY; // 行の開始位置
+	                float boxWidth = 180; // 枠線の幅を短く調整
+	                float boxHeight = 20; // 各枠線の高さ
+	
+	                // 項目名と値（値のみに枠線を付ける）
+	                drawLabelAndBox(contentStream, font, "企業名:", result.getCompanyname(), textStartX, textStartY, boxWidth, boxHeight);
+	                drawLabelAndBox(contentStream, font, "担当者名:", result.getPersonalname(), textStartX, textStartY - 40, boxWidth, boxHeight);
+	                drawLabelAndBox(contentStream, font, "Eメール:", result.getEmail(), textStartX, textStartY - 80, boxWidth, boxHeight);
+	            }
+	        } finally {
+	            if (contentStream != null) contentStream.close();
+	        }
+	
+	        document.save(byteArrayOutputStream);
+	    }
+	
+	    System.out.println("Finished generateMultiResultPdf.");
+	    return byteArrayOutputStream.toByteArray();
+	}
+	
+	// 項目名と値を描画し、値のみに枠線を追加するヘルパーメソッド
+	private void drawLabelAndBox(PDPageContentStream contentStream, PDType0Font font, String label, String value, float x, float y, float width, float height) throws IOException {
+	    // 項目名を描画（枠線なし）
+	    contentStream.beginText();
+	    contentStream.setFont(font, 10.5f); // フォントサイズを10.5に設定
+	    contentStream.newLineAtOffset(x, y);
+	    contentStream.showText(label);
+	    contentStream.endText();
+	
+	    // 項目名と値（枠線）の間隔を設定
+	    float valueY = y - 25; // 項目名から値までの間隔を追加
+	    contentStream.beginText();
+	    contentStream.newLineAtOffset(x + 10, valueY + 5); // 枠線内に収まるように調整
+	    contentStream.showText(value != null ? value : "N/A");
+	    contentStream.endText();
+	
+	    // 値の枠線を描画
+	    contentStream.setStrokingColor(211, 211, 211); // 薄い灰色
+	    float adjustedWidth = width - 20; // 枠線の幅を短縮
+	    contentStream.addRect(x, valueY, adjustedWidth, height);
+	    contentStream.stroke();
+	}*/
 }
+    
+    
+
+
+
     
