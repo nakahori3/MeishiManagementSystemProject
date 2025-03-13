@@ -122,6 +122,10 @@ label {
 
 }
 
+.btn-return2:hover {
+	background-color: #FFE200;
+}
+
 /*入力ページの確認ボタン*/
 .btn-submit2{
 	font-size: 25px;
