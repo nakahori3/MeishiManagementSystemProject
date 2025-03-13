@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>名刺情報　検索結果なし</title>
+<link rel="stylesheet" th:href="@{/css/layout.css}" />
+<link rel="stylesheet" th:href="@{/css/meishi/emptyMeishi.css}">
+</head>
+<body>
+	<div th:replace="~{common/layout::common_header}"></div>
+    
+        
+    <div class="emptyMeishi">
+		
+	    <p class="inputcomp">名刺情報の登録データが見つかりません。</p>
+	 	    		<p class="h5">下記登録ボタンを押すか、上記メニューバー「名刺情報登録」より、<br>
+	 	    		名刺情報の登録をお願いします。</p>
+	    
+	    
+	    <div class="btn-ctl">
+	  	<div class="button-container">
+			<img class="registericon2" th:src="@{/img/newuser.png}" alt="名刺情報登録画像">
+			<form method="get" th:action="@{/inputMeishi}">
+			<input type="submit" name="register_meishi" value="登録" class="btn-return">			
+	      	<input type="hidden" id="id" name="id" th:value="${id}" >
+	      	</form>
+	  	</div>
+	  	</div>
+  	</div>
+<div th:replace="~{common/layout::common_footer}"></div>
+</body>
+</html>

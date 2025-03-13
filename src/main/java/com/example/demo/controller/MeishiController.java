@@ -247,16 +247,16 @@ public class MeishiController {
                     .collect(Collectors.groupingBy(MeishiEntity::getCompanyname));
 
                 model.addAttribute("groupedResults", groupedResults);
+                return "meishi/searchResults"; // 検索結果がある場合
             } else {
-                model.addAttribute("errorMessage", "検索結果がありません。");
+            	return "meishi/emptyMeishi"; // 検索結果がない場合
             }
         } catch (Exception e) {
             System.err.println("Error during search: " + e.getMessage());
             e.printStackTrace();
             model.addAttribute("errorMessage", "検索中にエラーが発生しました。");
+            return "meishi/emptyMeishi"; // 検索結果がない場合
         }
-
-        return "meishi/searchResults";
     }
 
 
